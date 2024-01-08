@@ -10,20 +10,29 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SplashRoute(
-    viewModel: SplashViewModel = koinViewModel()
+    viewModel: SplashViewModel = koinViewModel(),
+    onNavigate: () -> Unit
 ) {
     LaunchedEffect(Unit) {
         viewModel.initializeSplash()
     }
     val state = viewModel.state.collectAsState().value
-    SplashScreen(state = state)
+    SplashScreen(
+        state = state,
+        onNavigate = onNavigate
+    )
 }
 @Composable
 fun SplashScreen(
-    state: SplashState
+    state: SplashState,
+    onNavigate: () -> Unit
 ) {
     when(state) {
-        SplashState.Finished -> Text(text = "Finished")
+        SplashState.Finished -> {
+            LaunchedEffect(Unit) {
+                onNavigate()
+            }
+        }
         SplashState.Init -> Text(text = "Initialized")
     }
 }
