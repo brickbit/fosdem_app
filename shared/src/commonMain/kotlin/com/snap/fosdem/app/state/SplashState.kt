@@ -1,4 +1,4 @@
-package com.snap.fosdem.app.viewModel.state
+package com.snap.fosdem.app.state
 
 sealed class SplashState {
     data object Init: SplashState()

@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import com.snap.fosdem.app.viewModel.SplashViewModel
-import com.snap.fosdem.app.viewModel.state.SplashState
+import com.snap.fosdem.app.state.SplashState
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

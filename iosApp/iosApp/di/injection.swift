@@ -21,7 +21,7 @@ extension Resolver: ResolverRegistering {
         //Repositories
         
         //ViewModels
-        register {SplashViewModelSwift()}
+        register {SplashViewModel()}
 
     }
 }
