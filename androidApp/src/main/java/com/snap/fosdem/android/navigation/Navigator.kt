@@ -10,6 +10,7 @@ import com.snap.fosdem.android.screens.splash.PreferencesRoute
 import com.snap.fosdem.android.screens.splash.SpeakerRoute
 import com.snap.fosdem.android.screens.splash.SplashRoute
 import com.snap.fosdem.android.screens.splash.TalkRoute
+import com.snap.fosdem.app.navigation.Routes
 
 @Composable
 fun Navigator() {

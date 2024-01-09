@@ -2,23 +2,14 @@ import SwiftUI
 import shared
 import Resolver
 
-struct ContentView: View {
-    var body: some View {
-        SplashScreen()
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-	static var previews: some View {
-		ContentView()
-	}
-}
-
-struct SplashScreen: View {
+struct SplashView: View {
     @ObservedObject var viewModel: IOSSplashViewModel
+    @EnvironmentObject var navigator: Navigator
+
     init() {
         self.viewModel = IOSSplashViewModel()
     }
+    
     var body: some View {
         VStack {
             splashContent()
@@ -34,13 +25,17 @@ struct SplashScreen: View {
     func splashContent() -> AnyView {
         switch viewModel.state {
         case .initialized: return AnyView(Text("Initialized"))
-        case .finished: return AnyView(Text("Finished"))
+        case .finished:
+            Task{
+                navigator.navigate(to: .onBoarding)
+            }
+            return AnyView(EmptyView())
         }
     }
     
 }
 
-extension SplashScreen {
+extension SplashView {
     @MainActor class IOSSplashViewModel: ObservableObject {
         private let viewModel: SplashViewModel
                 
@@ -50,6 +45,7 @@ extension SplashScreen {
 
         init() {
             self.viewModel = SplashViewModel()
+            self.viewModel.initializeSplash()
         }
         
         // Observes to state changes
@@ -68,21 +64,9 @@ extension SplashScreen {
     }
 }
 
-enum SplashStateSwift {
-    case initialized
-    case finished
-}
-
-extension SplashStateSwift {
-    init?(_ value: SplashState) {
-        switch value {
-        case is SplashState.Init:
-            self = .initialized
-        case is SplashState.Finished:
-            self = .finished
-        default:
-            return nil
-        }
-        self = SplashStateSwift.finished
+struct SplashView_Previews: PreviewProvider {
+    static var previews: some View {
+        SplashView()
     }
 }
+

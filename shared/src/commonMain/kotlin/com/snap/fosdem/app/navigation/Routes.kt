@@ -1,4 +1,4 @@
-package com.snap.fosdem.android.navigation
+package com.snap.fosdem.app.navigation
 
 sealed class Routes(val name: String) {
     data object Splash: Routes("Splash")
