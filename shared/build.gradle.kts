@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    kotlin("plugin.serialization") version "1.9.0"
 }
 
 kotlin {
@@ -27,6 +28,8 @@ kotlin {
         commonMain.dependencies {
             //coroutines
             implementation(libs.kotlinx.coroutines.core)
+            //serialization
+            implementation(libs.kotlinx.serialization.json)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
