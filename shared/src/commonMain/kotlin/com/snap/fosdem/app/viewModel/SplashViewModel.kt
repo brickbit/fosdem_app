@@ -20,10 +20,16 @@ class SplashViewModel: BaseViewModel() {
 
     fun initializeSplash() {
         scope.launch {
-            delay(6000)
-            _state.update {
-                SplashState.Finished
-            }
+            delay(2000)
+            getSchedule.invoke()
+                .onSuccess {
+                    _stateSplash.update {
+                        SplashState.Finished
+                    }
+                }
+                .onFailure {
+                    SplashState.Error
+                }
         }
     }
 }
