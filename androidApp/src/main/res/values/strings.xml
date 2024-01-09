@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fosdem">Fosdem</string>
+    <string name="fosdem_logo_description">logo de Fosdem</string>
+</resources>

@@ -12,6 +12,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.googlefonts.Font
+import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -20,6 +22,18 @@ fun MyApplicationTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
+    val provider = GoogleFont.Provider(
+        providerAuthority = "com.google.android.gms.fonts",
+        providerPackage = "com.google.android.gms",
+        certificates = R.array.com_google_android_gms_fonts_certs
+    )
+
+    val fontName = GoogleFont("Signika")
+
+    val signikaFamily = FontFamily(
+        Font(googleFont = fontName, fontProvider = provider)
+    )
+
     val colors = if (darkTheme) {
         darkColorScheme(
             primary = Color(0xFFBB86FC),
@@ -38,6 +52,11 @@ fun MyApplicationTheme(
             fontFamily = FontFamily.Default,
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp
+        ),
+        titleLarge = TextStyle(
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 48.sp,
+            fontFamily = signikaFamily
         )
     )
     val shapes = Shapes(

@@ -1,4 +1,4 @@
-package com.snap.fosdem.android.screens.splash
+package com.snap.fosdem.android.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text

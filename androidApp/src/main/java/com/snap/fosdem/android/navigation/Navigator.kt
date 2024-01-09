@@ -4,12 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.snap.fosdem.android.screens.splash.MainRoute
-import com.snap.fosdem.android.screens.splash.OnBoardingRoute
-import com.snap.fosdem.android.screens.splash.PreferencesRoute
-import com.snap.fosdem.android.screens.splash.SpeakerRoute
-import com.snap.fosdem.android.screens.splash.SplashRoute
-import com.snap.fosdem.android.screens.splash.TalkRoute
+import com.snap.fosdem.android.screens.MainRoute
+import com.snap.fosdem.android.screens.OnBoardingRoute
+import com.snap.fosdem.android.screens.PreferencesRoute
+import com.snap.fosdem.android.screens.SpeakerRoute
+import com.snap.fosdem.android.screens.SplashRoute
+import com.snap.fosdem.android.screens.TalkRoute
 import com.snap.fosdem.app.navigation.Routes
 
 @Composable

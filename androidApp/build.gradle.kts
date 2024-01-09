@@ -51,5 +51,8 @@ dependencies {
     implementation(libs.koin.androidx.compose)
     //navigation
     implementation(libs.androidx.navigation.compose)
+    //fonts
+    implementation(libs.androidx.ui.text.google.fonts)
+
 
 }
