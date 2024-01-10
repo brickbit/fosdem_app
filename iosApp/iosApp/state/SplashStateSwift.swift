@@ -12,6 +12,7 @@ import shared
 enum SplashStateSwift {
     case initialized
     case finished
+    case error
 }
 
 extension SplashStateSwift {
@@ -21,6 +22,8 @@ extension SplashStateSwift {
             self = .initialized
         case is SplashState.Finished:
             self = .finished
+        case is SplashState.Error:
+            self = .error
         default:
             return nil
         }

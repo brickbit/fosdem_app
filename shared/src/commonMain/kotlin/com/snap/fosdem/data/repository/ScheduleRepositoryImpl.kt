@@ -17,7 +17,7 @@ import kotlinx.serialization.json.Json
 
 class ScheduleRepositoryImpl: ScheduleRepository {
 
-    private val client = HttpClient(CIO) {
+    private val client = HttpClient() {
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true

@@ -30,7 +30,10 @@ struct SplashView: View {
                 navigator.navigate(to: .onBoarding)
             }
             return AnyView(EmptyView())
+        case .error:
+            return AnyView(Text("Error"))
         }
+    
     }
 }
 
