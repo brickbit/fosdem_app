@@ -19,74 +19,130 @@ struct PreferencesView: View {
     }
     
     var body: some View {
-        VStack {
-            Text("Preferences")
-            Button("Next") {
-                Task {
-                    navigator.navigate(to: .main)
+        VStack(
+            alignment: .leading
+        ) {
+            Text("Tracks")
+                .font(.custom("Signika-Bold",size: 48))
+            Text("Selecciona los tracks en los que estés más interesado")
+                .font(.custom("Signika-Regular",size: 18))
+            preferencesContent()
+            HStack(
+                alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/
+            ) {
+                Button {
+                    Task {
+                        navigator.navigate(to: .main)
+                    }
+                } label: {
+                    Text("Continuar")
+                        .frame(maxWidth: .infinity)
                 }
+                .buttonStyle(.borderedProminent)
+                .tint(Color.purple)
+                .clipShape(Capsule())
             }
+        }
+        .padding(.horizontal, 16)
+        .padding(.bottom, 16)
+        .onAppear {
+            viewModel.startObserving()
+        }
+        .onDisappear {
+            viewModel.dispose()
+        }
+    }
+    
+    func preferencesContent() -> AnyView {
+        switch viewModel.state {
+        case .loading: 
+            return AnyView(
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            )
+        case .loaded(let tracks):
+            return AnyView(
+                List(tracks, id: \.self) { track in
+                    TrackItemView(
+                        track: track,
+                        action: viewModel.onTrackChecked(track:checked:)
+                    )
+                }.listStyle(PlainListStyle())
+            )
+        case .error:
+            return AnyView(Text("Error"))
         }
     }
 }
+
+struct TrackItemView: View {
+    
+    @State private var isOn = false
+    var track: TrackBo
+    var action: (TrackBo, Bool) -> ()
+    
+    init(
+        track: TrackBo,
+        action: @escaping (TrackBo, Bool) -> ()
+    ) {
+        self.track = track
+        self.isOn = track.checked
+        self.action = action
+    }
+    
+    var body: some View {
+        HStack {
+            Toggle(isOn: $isOn) {
+                Text(track.name)
+            }
+            .onChange(of: isOn) { value in
+                action(self.track, value)
+            }
+            .toggleStyle(.automatic)
+    
+        }
+    }
+}
+
+
 
 extension PreferencesView {
     @MainActor class IOSPreferencesViewModel: ObservableObject {
         private let viewModel: PreferencesViewModel
                 
-        //@Published var state: SplashStateSwift = SplashStateSwift.initialized
+        @Published var state: PreferencesStateSwift = PreferencesStateSwift.loading
         
         private var handle: DisposableHandle?
 
         init() {
-            self.viewModel = PreferencesViewModel()
-            //self.viewModel.initializeSplash()
+            self.viewModel = PreferencesViewModel(getTracks: GetTracksUseCase(repository: ScheduleRepositoryImpl()))
+            self.viewModel.getPreferences()
         }
         
         // Observes to state changes
         func startObserving() {
-            /*handle = viewModel.state.subscribe(onCollect: { state in
+            handle = viewModel.state.subscribe(onCollect: { state in
                 if let state = state {
-                    self.state = SplashStateSwift(state) ?? .initialized
+                    self.state = PreferencesStateSwift(state) ?? .loading
                 }
-            })*/
+            })
+        }
+        
+        func onTrackChecked(
+            track: TrackBo,
+            checked: Bool
+        ) {
+            viewModel.onTrackChecked(track: track, checked: checked)
         }
         
         // Removes the listener
         func dispose() {
             handle?.dispose()
+            
         }
     }
 }
 
-extension TalkView {
-    @MainActor class IOSTalkViewModel: ObservableObject {
-        private let viewModel: TalkViewModel
-                
-        //@Published var state: SplashStateSwift = SplashStateSwift.initialized
-        
-        private var handle: DisposableHandle?
-
-        init() {
-            self.viewModel = TalkViewModel()
-            //self.viewModel.initializeSplash()
-        }
-        
-        // Observes to state changes
-        func startObserving() {
-            /*handle = viewModel.state.subscribe(onCollect: { state in
-                if let state = state {
-                    self.state = SplashStateSwift(state) ?? .initialized
-                }
-            })*/
-        }
-        
-        // Removes the listener
-        func dispose() {
-            handle?.dispose()
-        }
-    }
-}
 
 #Preview {
     PreferencesView()

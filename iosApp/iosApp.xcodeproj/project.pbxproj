@@ -20,6 +20,7 @@
 		CE9839032B4EC668008A4D51 /* Signika-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE9838FE2B4EC668008A4D51 /* Signika-Light.ttf */; };
 		CE9839042B4EC668008A4D51 /* Signika-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE9838FF2B4EC668008A4D51 /* Signika-Bold.ttf */; };
 		CE9839052B4EC668008A4D51 /* Signika-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE9839002B4EC668008A4D51 /* Signika-Regular.ttf */; };
+		CE9839072B4F5201008A4D51 /* PreferencesStateSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9839062B4F5201008A4D51 /* PreferencesStateSwift.swift */; };
 		CEA302A42B4CB6610067F734 /* shared in Resources */ = {isa = PBXBuildFile; fileRef = CEA302A32B4CB6610067F734 /* shared */; };
 		CEA302A62B4D3B5B0067F734 /* OnBoardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA302A52B4D3B5B0067F734 /* OnBoardingView.swift */; };
 		CEA302A82B4D3B650067F734 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA302A72B4D3B650067F734 /* PreferencesView.swift */; };
@@ -57,6 +58,7 @@
 		CE9838FE2B4EC668008A4D51 /* Signika-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Signika-Light.ttf"; path = "../../../../Downloads/Signika 2/static/Signika-Light.ttf"; sourceTree = "<group>"; };
 		CE9838FF2B4EC668008A4D51 /* Signika-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Signika-Bold.ttf"; path = "../../../../Downloads/Signika 2/static/Signika-Bold.ttf"; sourceTree = "<group>"; };
 		CE9839002B4EC668008A4D51 /* Signika-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Signika-Regular.ttf"; path = "../../../../Downloads/Signika 2/static/Signika-Regular.ttf"; sourceTree = "<group>"; };
+		CE9839062B4F5201008A4D51 /* PreferencesStateSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesStateSwift.swift; sourceTree = "<group>"; };
 		CEA302A32B4CB6610067F734 /* shared */ = {isa = PBXFileReference; lastKnownFileType = folder; name = shared; path = ../../shared; sourceTree = "<group>"; };
 		CEA302A52B4D3B5B0067F734 /* OnBoardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingView.swift; sourceTree = "<group>"; };
 		CEA302A72B4D3B650067F734 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				CEAD3F2D2B4CAD2C00C3E1F4 /* SplashStateSwift.swift */,
+				CE9839062B4F5201008A4D51 /* PreferencesStateSwift.swift */,
 			);
 			path = state;
 			sourceTree = "<group>";
@@ -297,6 +300,7 @@
 			files = (
 				CE6D38762B4C1D880035003D /* injection.swift in Sources */,
 				CEA302AA2B4D3B6C0067F734 /* MainView.swift in Sources */,
+				CE9839072B4F5201008A4D51 /* PreferencesStateSwift.swift in Sources */,
 				CEAD3F332B4CAE2800C3E1F4 /* RoutesSwift.swift in Sources */,
 				CEA302A62B4D3B5B0067F734 /* OnBoardingView.swift in Sources */,
 				CEAD3F302B4CAE0200C3E1F4 /* Navigator.swift in Sources */,

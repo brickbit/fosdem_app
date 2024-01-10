@@ -33,7 +33,6 @@ struct SplashView: View {
         case .error:
             return AnyView(Text("Error"))
         }
-    
     }
 }
 
@@ -42,9 +41,9 @@ struct SplashScreen: View {
         VStack {
             Image("logo")
                 .resizable()
-                .frame(width: 120.0, height: 120.0)
+                .frame(width: 240.0, height: 240.0)
             Text("FOSDEM")
-                .font(.custom("Signika-Bold",size: 36))
+                .font(.custom("Signika-Bold",size: 48))
         }
     }
 }
