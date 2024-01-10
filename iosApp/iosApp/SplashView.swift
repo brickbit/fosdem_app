@@ -44,7 +44,7 @@ extension SplashView {
         private var handle: DisposableHandle?
 
         init() {
-            self.viewModel = SplashViewModel()
+            self.viewModel = SplashViewModel(getSchedule: GetScheduleDataUseCase(repository: ScheduleRepositoryImpl()))
             self.viewModel.initializeSplash()
         }
         

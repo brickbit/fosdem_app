@@ -15,13 +15,18 @@ extension Resolver: ResolverRegistering {
     public static func registerAllServices() {
         defaultScope = .application
         
+        //Repositories
+        //register {ScheduleRepositoryImpl()}.implements(ScheduleRepository.self)
 
         //Use cases
-        
-        //Repositories
-        
+        /*register {(_, args) in
+            GetScheduleDataUseCase(repository: args())
+        }*/
+
         //ViewModels
-        register {SplashViewModel()}
+        /*register {(_, args) in
+            SplashViewModel(getSchedule: args())
+        }*/
 
     }
 }

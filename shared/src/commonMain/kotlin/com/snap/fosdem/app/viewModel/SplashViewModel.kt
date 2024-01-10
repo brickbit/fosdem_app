@@ -2,6 +2,7 @@ package com.snap.fosdem.app.viewModel
 
 import com.snap.fosdem.app.flow.toCommonStateFlow
 import com.snap.fosdem.app.state.SplashState
+import com.snap.fosdem.domain.useCase.GetScheduleDataUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -9,7 +10,9 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SplashViewModel: BaseViewModel() {
+class SplashViewModel(
+    private val getSchedule: GetScheduleDataUseCase
+): BaseViewModel() {
 
     private val _state: MutableStateFlow<SplashState> = MutableStateFlow(SplashState.Init)
     val state = _state.stateIn(
@@ -23,7 +26,7 @@ class SplashViewModel: BaseViewModel() {
             delay(2000)
             getSchedule.invoke()
                 .onSuccess {
-                    _stateSplash.update {
+                    _state.update {
                         SplashState.Finished
                     }
                 }

@@ -42,6 +42,9 @@ fun SplashRoute(
         SplashState.Init -> {
             SplashScreen()
         }
+        SplashState.Error -> {
+            SplashScreen()
+        }
     }
 }
 
