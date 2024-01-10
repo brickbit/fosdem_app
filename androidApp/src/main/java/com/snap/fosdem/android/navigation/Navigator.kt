@@ -1,6 +1,7 @@
 package com.snap.fosdem.android.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -13,8 +14,9 @@ import com.snap.fosdem.android.screens.TalkRoute
 import com.snap.fosdem.app.navigation.Routes
 
 @Composable
-fun Navigator() {
-    val navController = rememberNavController()
+fun Navigator(
+    navController: NavHostController
+) {
     NavHost(
         navController = navController,
         startDestination = Routes.Splash.name

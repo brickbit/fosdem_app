@@ -49,13 +49,18 @@ fun MyApplicationTheme(
     }
     val typography = Typography(
         bodyMedium = TextStyle(
-            fontFamily = FontFamily.Default,
+            fontFamily = signikaFamily,
             fontWeight = FontWeight.Normal,
-            fontSize = 16.sp
+            fontSize = 18.sp
         ),
         titleLarge = TextStyle(
             fontWeight = FontWeight.SemiBold,
             fontSize = 48.sp,
+            fontFamily = signikaFamily
+        ),
+        titleMedium = TextStyle(
+            fontWeight = FontWeight.Normal,
+            fontSize = 32.sp,
             fontFamily = signikaFamily
         )
     )
