@@ -43,6 +43,10 @@ kotlin {
             //viewModel
             implementation(libs.androidx.lifecycle.viewmodel.compose)
         }
+        iosMain.dependencies {
+            //ktor
+            implementation(libs.ktor.client.darwin)
+        }
     }
 }
 

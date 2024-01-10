@@ -15,6 +15,11 @@
 		CE6D38702B4C1D3B0035003D /* Resolver-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = CE6D386F2B4C1D3B0035003D /* Resolver-Dynamic */; };
 		CE6D38722B4C1D3B0035003D /* Resolver-Static in Frameworks */ = {isa = PBXBuildFile; productRef = CE6D38712B4C1D3B0035003D /* Resolver-Static */; };
 		CE6D38762B4C1D880035003D /* injection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6D38752B4C1D880035003D /* injection.swift */; };
+		CE9839012B4EC668008A4D51 /* Signika-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE9838FC2B4EC668008A4D51 /* Signika-SemiBold.ttf */; };
+		CE9839022B4EC668008A4D51 /* Signika-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE9838FD2B4EC668008A4D51 /* Signika-Medium.ttf */; };
+		CE9839032B4EC668008A4D51 /* Signika-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE9838FE2B4EC668008A4D51 /* Signika-Light.ttf */; };
+		CE9839042B4EC668008A4D51 /* Signika-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE9838FF2B4EC668008A4D51 /* Signika-Bold.ttf */; };
+		CE9839052B4EC668008A4D51 /* Signika-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE9839002B4EC668008A4D51 /* Signika-Regular.ttf */; };
 		CEA302A42B4CB6610067F734 /* shared in Resources */ = {isa = PBXBuildFile; fileRef = CEA302A32B4CB6610067F734 /* shared */; };
 		CEA302A62B4D3B5B0067F734 /* OnBoardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA302A52B4D3B5B0067F734 /* OnBoardingView.swift */; };
 		CEA302A82B4D3B650067F734 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA302A72B4D3B650067F734 /* PreferencesView.swift */; };
@@ -47,6 +52,11 @@
 		7555FF82242A565900829871 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE6D38752B4C1D880035003D /* injection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = injection.swift; sourceTree = "<group>"; };
+		CE9838FC2B4EC668008A4D51 /* Signika-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Signika-SemiBold.ttf"; path = "../../../../Downloads/Signika 2/static/Signika-SemiBold.ttf"; sourceTree = "<group>"; };
+		CE9838FD2B4EC668008A4D51 /* Signika-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Signika-Medium.ttf"; path = "../../../../Downloads/Signika 2/static/Signika-Medium.ttf"; sourceTree = "<group>"; };
+		CE9838FE2B4EC668008A4D51 /* Signika-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Signika-Light.ttf"; path = "../../../../Downloads/Signika 2/static/Signika-Light.ttf"; sourceTree = "<group>"; };
+		CE9838FF2B4EC668008A4D51 /* Signika-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Signika-Bold.ttf"; path = "../../../../Downloads/Signika 2/static/Signika-Bold.ttf"; sourceTree = "<group>"; };
+		CE9839002B4EC668008A4D51 /* Signika-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Signika-Regular.ttf"; path = "../../../../Downloads/Signika 2/static/Signika-Regular.ttf"; sourceTree = "<group>"; };
 		CEA302A32B4CB6610067F734 /* shared */ = {isa = PBXFileReference; lastKnownFileType = folder; name = shared; path = ../../shared; sourceTree = "<group>"; };
 		CEA302A52B4D3B5B0067F734 /* OnBoardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingView.swift; sourceTree = "<group>"; };
 		CEA302A72B4D3B650067F734 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
@@ -101,18 +111,18 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				CE7FA5FB2B4EC09D003EA3C1 /* app */,
+				CE7FA5FA2B4EC04E003EA3C1 /* state */,
+				CE7FA5F92B4EC018003EA3C1 /* screen */,
 				CEAD3F312B4CAE0900C3E1F4 /* navigation */,
 				CE6D38732B4C1D6F0035003D /* di */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
-				7555FF82242A565900829871 /* SplashView.swift */,
-				CEA302A52B4D3B5B0067F734 /* OnBoardingView.swift */,
-				CEA302A72B4D3B650067F734 /* PreferencesView.swift */,
-				CEA302A92B4D3B6C0067F734 /* MainView.swift */,
-				CEA302AB2B4D3B760067F734 /* TalkView.swift */,
-				CEA302AD2B4D3B810067F734 /* SpeakerView.swift */,
-				CEAD3F2D2B4CAD2C00C3E1F4 /* SplashStateSwift.swift */,
+				CE9838FF2B4EC668008A4D51 /* Signika-Bold.ttf */,
+				CE9838FE2B4EC668008A4D51 /* Signika-Light.ttf */,
+				CE9838FD2B4EC668008A4D51 /* Signika-Medium.ttf */,
+				CE9839002B4EC668008A4D51 /* Signika-Regular.ttf */,
+				CE9838FC2B4EC668008A4D51 /* Signika-SemiBold.ttf */,
 				7555FF8C242A565B00829871 /* Info.plist */,
-				2152FB032600AC8F00CF470E /* iOSApp.swift */,
 				058557D7273AAEEB004C7B11 /* Preview Content */,
 			);
 			path = iosApp;
@@ -131,6 +141,35 @@
 				CE6D38752B4C1D880035003D /* injection.swift */,
 			);
 			path = di;
+			sourceTree = "<group>";
+		};
+		CE7FA5F92B4EC018003EA3C1 /* screen */ = {
+			isa = PBXGroup;
+			children = (
+				7555FF82242A565900829871 /* SplashView.swift */,
+				CEA302A52B4D3B5B0067F734 /* OnBoardingView.swift */,
+				CEA302A72B4D3B650067F734 /* PreferencesView.swift */,
+				CEA302A92B4D3B6C0067F734 /* MainView.swift */,
+				CEA302AB2B4D3B760067F734 /* TalkView.swift */,
+				CEA302AD2B4D3B810067F734 /* SpeakerView.swift */,
+			);
+			path = screen;
+			sourceTree = "<group>";
+		};
+		CE7FA5FA2B4EC04E003EA3C1 /* state */ = {
+			isa = PBXGroup;
+			children = (
+				CEAD3F2D2B4CAD2C00C3E1F4 /* SplashStateSwift.swift */,
+			);
+			path = state;
+			sourceTree = "<group>";
+		};
+		CE7FA5FB2B4EC09D003EA3C1 /* app */ = {
+			isa = PBXGroup;
+			children = (
+				2152FB032600AC8F00CF470E /* iOSApp.swift */,
+			);
+			path = app;
 			sourceTree = "<group>";
 		};
 		CEA302A22B4CB5EF0067F734 /* kotlin */ = {
@@ -220,6 +259,11 @@
 			files = (
 				058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */,
 				CEA302A42B4CB6610067F734 /* shared in Resources */,
+				CE9839032B4EC668008A4D51 /* Signika-Light.ttf in Resources */,
+				CE9839042B4EC668008A4D51 /* Signika-Bold.ttf in Resources */,
+				CE9839052B4EC668008A4D51 /* Signika-Regular.ttf in Resources */,
+				CE9839022B4EC668008A4D51 /* Signika-Medium.ttf in Resources */,
+				CE9839012B4EC668008A4D51 /* Signika-SemiBold.ttf in Resources */,
 				058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -389,6 +433,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20240110;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -396,11 +441,13 @@
 					"$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
 				);
 				INFOPLIST_FILE = iosApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Fosdem;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -418,6 +465,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20240110;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -425,11 +473,13 @@
 					"$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
 				);
 				INFOPLIST_FILE = iosApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Fosdem;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",

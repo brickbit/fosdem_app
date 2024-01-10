@@ -24,7 +24,7 @@ struct SplashView: View {
     
     func splashContent() -> AnyView {
         switch viewModel.state {
-        case .initialized: return AnyView(Text("Initialized"))
+        case .initialized: return AnyView(SplashScreen())
         case .finished:
             Task{
                 navigator.navigate(to: .onBoarding)
@@ -32,7 +32,18 @@ struct SplashView: View {
             return AnyView(EmptyView())
         }
     }
-    
+}
+
+struct SplashScreen: View {
+    var body: some View {
+        VStack {
+            Image("logo")
+                .resizable()
+                .frame(width: 120.0, height: 120.0)
+            Text("FOSDEM")
+                .font(.custom("Signika-Bold",size: 36))
+        }
+    }
 }
 
 extension SplashView {
