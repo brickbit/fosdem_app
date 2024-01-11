@@ -24,6 +24,7 @@ struct OnBoardingView: View {
             OnboardItemView(imageName: "logo", title: "Second page", description: "Something",actionEnabled: false, action: {})
             OnboardItemView(imageName: "logo", title: "Third page", description: "Something", actionEnabled: true, action: {
                 Task {
+                    viewModel.saveOnBoarding()
                     navigator.navigate(to: .preferences)
                 }
             })
@@ -81,7 +82,7 @@ extension OnBoardingView {
         private var handle: DisposableHandle?
 
         init() {
-            self.viewModel = OnBoardingViewModel()
+            self.viewModel = GetViewModels().getOnBoardingViewModel()
             //self.viewModel.initializeSplash()
         }
         
@@ -94,6 +95,10 @@ extension OnBoardingView {
             })*/
         }
         
+        func saveOnBoarding() {
+            viewModel.saveOnBoarding()
+        }
+        
         // Removes the listener
         func dispose() {
             handle?.dispose()
@@ -104,3 +109,4 @@ extension OnBoardingView {
 #Preview {
     OnBoardingView()
 }
+

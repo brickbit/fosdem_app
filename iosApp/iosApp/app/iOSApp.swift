@@ -1,9 +1,13 @@
 import SwiftUI
-
+import shared
 @main
 struct iOSApp: App {
     
     @ObservedObject var navigator = Navigator()
+    
+    init() {
+        HelperKt.doInitKoin()
+    }
     
 	var body: some Scene {
 		WindowGroup {

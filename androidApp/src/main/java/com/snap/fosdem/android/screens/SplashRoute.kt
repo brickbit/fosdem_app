@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.snap.fosdem.android.R
+import com.snap.fosdem.app.navigation.Routes
 import com.snap.fosdem.app.viewModel.SplashViewModel
 import com.snap.fosdem.app.state.SplashState
 import org.koin.androidx.compose.koinViewModel
@@ -27,16 +28,16 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun SplashRoute(
     viewModel: SplashViewModel = koinViewModel(),
-    onNavigate: () -> Unit
+    onNavigate: (Routes) -> Unit
 ) {
     LaunchedEffect(Unit) {
         viewModel.initializeSplash()
     }
     val state = viewModel.state.collectAsState().value
     when(state) {
-        SplashState.Finished -> {
+        is SplashState.Finished -> {
             LaunchedEffect(Unit) {
-                onNavigate()
+                onNavigate(state.route)
             }
         }
         SplashState.Init -> {

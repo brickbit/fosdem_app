@@ -1,6 +1,7 @@
 package com.snap.fosdem.android.app
 
 import android.app.Application
+import com.snap.fosdem.android.di.providerModule
 import com.snap.fosdem.android.di.repositoryModule
 import com.snap.fosdem.android.di.useCaseModule
 import com.snap.fosdem.android.di.viewModelModules
@@ -10,7 +11,12 @@ class FosdemApp: Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin {
-            modules(repositoryModule, useCaseModule, viewModelModules)
+            modules(
+                providerModule(this@FosdemApp),
+                repositoryModule,
+                useCaseModule,
+                viewModelModules
+            )
         }
     }
 }

@@ -60,7 +60,10 @@ fun OnBoardingRoute(
                     text = "Page: $page",
                 )
                 if(page == pagerState.pageCount - 1) {
-                    Button(onClick = { onNavigate() }) {
+                    Button(onClick = {
+                        viewModel.saveOnBoarding()
+                        onNavigate() }
+                    ) {
                         Text("Continuar")
                     }
                 }

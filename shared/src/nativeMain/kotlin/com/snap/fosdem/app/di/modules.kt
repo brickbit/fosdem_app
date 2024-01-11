@@ -1,6 +1,5 @@
-package com.snap.fosdem.android.di
+package com.snap.fosdem.app.di
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.snap.fosdem.app.viewModel.MainActivityViewModel
@@ -11,7 +10,6 @@ import com.snap.fosdem.app.viewModel.SpeakerViewModel
 import com.snap.fosdem.app.viewModel.SplashViewModel
 import com.snap.fosdem.app.viewModel.TalkViewModel
 import com.snap.fosdem.data.local.LocalRepositoryImpl
-import com.snap.fosdem.data.local.SETTINGS_PREFERENCES
 import com.snap.fosdem.data.local.dataStorePreferences
 import com.snap.fosdem.data.repository.ScheduleRepositoryImpl
 import com.snap.fosdem.domain.repository.LocalRepository
@@ -23,17 +21,17 @@ import com.snap.fosdem.domain.useCase.SaveOnBoardingUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.component.KoinComponent
 import org.koin.dsl.module
-import java.io.File
+import org.koin.core.component.get
 
-fun providerModule(context: Context) = module {
+val providerModule = module {
     single<DataStore<Preferences>> {
         dataStorePreferences(
             corruptionHandler = null,
-            coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
+            coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main),
             migrations = emptyList(),
-            calculatedPath = File(context.filesDir, "datastore/$SETTINGS_PREFERENCES").path
+            calculatedPath = ""
         )
     }
 }
@@ -48,11 +46,19 @@ val useCaseModule = module {
     single { GetOnBoardingStatusUseCase(get()) }
 }
 val viewModelModules = module {
-    viewModel { MainActivityViewModel() }
-    viewModel { SplashViewModel(get(), get()) }
-    viewModel { OnBoardingViewModel(get()) }
-    viewModel { PreferencesViewModel(get()) }
-    viewModel { MainViewModel() }
-    viewModel { SpeakerViewModel() }
-    viewModel { TalkViewModel() }
+    single { SplashViewModel(get(), get()) }
+    single { OnBoardingViewModel(get()) }
+    single { PreferencesViewModel(get()) }
+    single { MainViewModel() }
+    single { SpeakerViewModel() }
+    single { TalkViewModel() }
+}
+
+object GetViewModels: KoinComponent {
+    fun getSplashViewModel() = get<SplashViewModel>()
+    fun getOnBoardingViewModel() = get<OnBoardingViewModel>()
+    fun getPreferencesViewModel() = get<PreferencesViewModel>()
+    fun getMainViewModel() = get<MainViewModel>()
+    fun getSpeakerViewModel() = get<SpeakerViewModel>()
+    fun getTalkViewModel() = get<TalkViewModel>()
 }

@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.snap.fosdem.android.screens.MainRoute
 import com.snap.fosdem.android.screens.OnBoardingRoute
 import com.snap.fosdem.android.screens.PreferencesRoute
@@ -23,8 +22,8 @@ fun Navigator(
     ) {
         composable(Routes.Splash.name) {
             SplashRoute(
-                onNavigate = {
-                    navController.navigate(Routes.OnBoarding.name)
+                onNavigate = { route ->
+                    navController.navigate(route.name)
                 }
             )
         }

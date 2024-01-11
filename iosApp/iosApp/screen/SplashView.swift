@@ -1,6 +1,5 @@
 import SwiftUI
 import shared
-import Resolver
 
 struct SplashView: View {
     @ObservedObject var viewModel: IOSSplashViewModel
@@ -25,9 +24,9 @@ struct SplashView: View {
     func splashContent() -> AnyView {
         switch viewModel.state {
         case .initialized: return AnyView(SplashScreen())
-        case .finished:
+        case .finished(let route):
             Task{
-                navigator.navigate(to: .onBoarding)
+                navigator.navigate(to: route)
             }
             return AnyView(EmptyView())
         case .error:
@@ -57,7 +56,7 @@ extension SplashView {
         private var handle: DisposableHandle?
 
         init() {
-            self.viewModel = SplashViewModel(getSchedule: GetScheduleDataUseCase(repository: ScheduleRepositoryImpl()))
+            self.viewModel = GetViewModels().getSplashViewModel()
             self.viewModel.initializeSplash()
         }
         
@@ -82,4 +81,5 @@ struct SplashView_Previews: PreviewProvider {
         SplashView()
     }
 }
+
 

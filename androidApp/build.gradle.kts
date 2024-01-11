@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     //fonts
     implementation(libs.androidx.ui.text.google.fonts)
-
+    //datastore
+    implementation(libs.androidx.data.store.core)
 
 }

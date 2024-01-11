@@ -11,7 +11,7 @@ import shared
 
 enum SplashStateSwift {
     case initialized
-    case finished
+    case finished(route: RouteSwift)
     case error
 }
 
@@ -20,8 +20,8 @@ extension SplashStateSwift {
         switch value {
         case is SplashState.Init:
             self = .initialized
-        case is SplashState.Finished:
-            self = .finished
+        case let finished as SplashState.Finished:
+            self = .finished(route: RouteSwift(finished.route) ?? RouteSwift.onBoarding)
         case is SplashState.Error:
             self = .error
         default:
@@ -29,3 +29,4 @@ extension SplashStateSwift {
         }
     }
 }
+
