@@ -27,21 +27,6 @@ struct PreferencesView: View {
             Text("Selecciona los tracks en los que estés más interesado")
                 .font(.custom("Signika-Regular",size: 18))
             preferencesContent()
-            HStack(
-                alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/
-            ) {
-                Button {
-                    Task {
-                        navigator.navigate(to: .main)
-                    }
-                } label: {
-                    Text("Continuar")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(Color.purple)
-                .clipShape(Capsule())
-            }
         }
         .padding(.horizontal, 16)
         .padding(.bottom, 16)
@@ -61,13 +46,34 @@ struct PreferencesView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             )
         case .loaded(let tracks):
+            @State var enabled = tracks.filter({$0.checked}).count > 3
+
             return AnyView(
-                List(tracks, id: \.self) { track in
-                    TrackItemView(
-                        track: track,
-                        action: viewModel.onTrackChecked(track:checked:)
-                    )
-                }.listStyle(PlainListStyle())
+                VStack {
+                    
+                    List(tracks, id: \.self) { track in
+                        TrackItemView(
+                            track: track,
+                            action: { track,checked in viewModel.onTrackChecked(track: track, checked: checked) }
+                        )
+                    }.listStyle(PlainListStyle())
+                    HStack(
+                        alignment: .center
+                    ) {
+                        Button {
+                            Task {
+                                navigator.navigate(to: .main)
+                            }
+                        } label: {
+                            Text("Continuar")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .disabled(!enabled)
+                        .buttonStyle(.borderedProminent)
+                        .tint(.purple)
+                        .clipShape(Capsule())
+                    }
+                }
             )
         case .error:
             return AnyView(Text("Error"))
