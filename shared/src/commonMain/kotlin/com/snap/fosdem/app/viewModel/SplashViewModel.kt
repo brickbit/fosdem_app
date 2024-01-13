@@ -4,6 +4,7 @@ import com.snap.fosdem.app.flow.toCommonStateFlow
 import com.snap.fosdem.app.navigation.Routes
 import com.snap.fosdem.app.state.SplashState
 import com.snap.fosdem.domain.useCase.GetOnBoardingStatusUseCase
+import com.snap.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleDataUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +15,8 @@ import kotlinx.coroutines.launch
 
 class SplashViewModel(
     private val getSchedule: GetScheduleDataUseCase,
-    private val getOnBoardingStatus: GetOnBoardingStatusUseCase
+    private val getOnBoardingStatus: GetOnBoardingStatusUseCase,
+    private val getPreferredTask: GetPreferredTracksUseCase
 ): BaseViewModel() {
 
     private val _state: MutableStateFlow<SplashState> = MutableStateFlow(SplashState.Init)
@@ -31,8 +33,11 @@ class SplashViewModel(
                 .onSuccess {
                     _state.update {
                         val onBoardingShown = getOnBoardingStatus.invoke()
-                        val route = if(onBoardingShown) {
+                        val listTracks = getPreferredTask.invoke()
+                        val route = if(onBoardingShown && listTracks.isEmpty()) {
                             Routes.Preferences
+                        } else if(onBoardingShown && listTracks.isNotEmpty()){
+                            Routes.Main
                         } else {
                             Routes.OnBoarding
                         }

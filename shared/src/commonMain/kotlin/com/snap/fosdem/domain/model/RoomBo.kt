@@ -1,5 +1,8 @@
 package com.snap.fosdem.domain.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class RoomBo(
         val name: String,
         val capacity: String,

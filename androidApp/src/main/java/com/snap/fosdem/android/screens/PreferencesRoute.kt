@@ -44,11 +44,19 @@ fun PreferencesRoute(
             PreferenceScreen(
                 tracks = state.tracks,
                 onTackChecked = { track, checked -> viewModel.onTrackChecked(track, checked) },
-                onNavigate = onNavigate
+                enableContinueButton = { viewModel.enableContinueButton(it) },
+                onContinueButtonClicked = {
+                    viewModel.savePreferredTracks(state.tracks)
+                }
             )
         }
         PreferencesState.Loading -> {
             LoadingScreen()
+        }
+        PreferencesState.Saved -> {
+            LaunchedEffect(Unit) {
+                onNavigate()
+            }
         }
     }
 
@@ -58,7 +66,8 @@ fun PreferencesRoute(
 fun PreferenceScreen(
     tracks: List<TrackBo>,
     onTackChecked: (TrackBo, Boolean) -> Unit,
-    onNavigate: () -> Unit
+    enableContinueButton: (List<TrackBo>) -> Boolean,
+    onContinueButtonClicked: () -> Unit
 ) {
     Box(
         contentAlignment = Alignment.BottomEnd
@@ -90,11 +99,11 @@ fun PreferenceScreen(
                 .background(Color.White)
         ) {
             Button(
-                enabled = tracks.count { it.checked } > 3,
+                enabled = enableContinueButton(tracks),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                onClick = { onNavigate() }
+                onClick = { onContinueButtonClicked() }
             ) {
                 Text(text = "Continuar")
             }
@@ -116,7 +125,8 @@ fun PreferenceScreenPreview() {
                 TrackBo(name = "AI", events = emptyList()),
             ),
             onTackChecked = {_,_ ->},
-            onNavigate = {}
+            enableContinueButton = { true },
+            onContinueButtonClicked = {}
         )
     }
 }

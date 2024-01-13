@@ -1,12 +1,12 @@
 package com.snap.fosdem.domain.repository
 
 import androidx.datastore.preferences.core.Preferences
-import kotlinx.coroutines.flow.Flow
+import com.snap.fosdem.domain.model.TrackBo
 
 interface LocalRepository {
     suspend fun setOnBoardingSeen(): Preferences
     suspend fun isOnBoardingSeen(): Boolean
 
-    suspend fun setPreferences(preferences: List<String>)
-    suspend fun getPreferences(): List<String>
+    suspend fun setPreferences(preferences: List<TrackBo>)
+    suspend fun getPreferences(): List<TrackBo>
 }

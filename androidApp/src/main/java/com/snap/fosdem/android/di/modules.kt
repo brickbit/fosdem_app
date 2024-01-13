@@ -17,9 +17,11 @@ import com.snap.fosdem.data.repository.ScheduleRepositoryImpl
 import com.snap.fosdem.domain.repository.LocalRepository
 import com.snap.fosdem.domain.repository.ScheduleRepository
 import com.snap.fosdem.domain.useCase.GetOnBoardingStatusUseCase
+import com.snap.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleDataUseCase
 import com.snap.fosdem.domain.useCase.GetTracksUseCase
 import com.snap.fosdem.domain.useCase.SaveOnBoardingUseCase
+import com.snap.fosdem.domain.useCase.SavePreferredTracksUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -46,13 +48,15 @@ val useCaseModule = module {
     single { GetTracksUseCase(get()) }
     single { SaveOnBoardingUseCase(get()) }
     single { GetOnBoardingStatusUseCase(get()) }
+    single { SavePreferredTracksUseCase(get()) }
+    single { GetPreferredTracksUseCase(get()) }
 }
 val viewModelModules = module {
     viewModel { MainActivityViewModel() }
-    viewModel { SplashViewModel(get(), get()) }
+    viewModel { SplashViewModel(get(), get(), get()) }
     viewModel { OnBoardingViewModel(get()) }
-    viewModel { PreferencesViewModel(get()) }
-    viewModel { MainViewModel() }
+    viewModel { PreferencesViewModel(get(), get()) }
+    viewModel { MainViewModel(get()) }
     viewModel { SpeakerViewModel() }
     viewModel { TalkViewModel() }
 }
