@@ -37,23 +37,11 @@ val providerModule = module {
         )
     }
 }
-val repositoryModule = module {
-    factory<ScheduleRepository> { ScheduleRepositoryImpl() }
-    factory<LocalRepository> { LocalRepositoryImpl(get()) }
-}
-val useCaseModule = module {
-    single { GetScheduleDataUseCase(get()) }
-    single { GetTracksUseCase(get()) }
-    single { SaveOnBoardingUseCase(get()) }
-    single { GetOnBoardingStatusUseCase(get()) }
-    single { SavePreferredTracksUseCase(get()) }
-    single { GetPreferredTracksUseCase(get()) }
-}
 val viewModelModules = module {
-    single { SplashViewModel(get(), get()) }
+    single { SplashViewModel(get(), get(), get()) }
     single { OnBoardingViewModel(get()) }
     single { PreferencesViewModel(get(), get()) }
-    single { MainViewModel(get()) }
+    single { MainViewModel(get(),get(), get(), get()) }
     single { SpeakerViewModel() }
     single { TalkViewModel() }
 }

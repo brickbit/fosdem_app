@@ -39,7 +39,7 @@ extension MainView {
         private var handle: DisposableHandle?
 
         init() {
-            self.viewModel = MainViewModel()
+            self.viewModel = GetViewModels().getMainViewModel()
             //self.viewModel.initializeSplash()
         }
         

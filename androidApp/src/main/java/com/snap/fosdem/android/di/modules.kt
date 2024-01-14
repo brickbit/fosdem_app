@@ -18,6 +18,9 @@ import com.snap.fosdem.domain.repository.LocalRepository
 import com.snap.fosdem.domain.repository.ScheduleRepository
 import com.snap.fosdem.domain.useCase.GetOnBoardingStatusUseCase
 import com.snap.fosdem.domain.useCase.GetPreferredTracksUseCase
+import com.snap.fosdem.domain.useCase.GetScheduleByBuildingUseCase
+import com.snap.fosdem.domain.useCase.GetScheduleByHourUseCase
+import com.snap.fosdem.domain.useCase.GetScheduleByTrackUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleDataUseCase
 import com.snap.fosdem.domain.useCase.GetTracksUseCase
 import com.snap.fosdem.domain.useCase.SaveOnBoardingUseCase
@@ -39,24 +42,13 @@ fun providerModule(context: Context) = module {
         )
     }
 }
-val repositoryModule = module {
-    factory<ScheduleRepository> { ScheduleRepositoryImpl() }
-    factory<LocalRepository> { LocalRepositoryImpl(get()) }
-}
-val useCaseModule = module {
-    single { GetScheduleDataUseCase(get()) }
-    single { GetTracksUseCase(get()) }
-    single { SaveOnBoardingUseCase(get()) }
-    single { GetOnBoardingStatusUseCase(get()) }
-    single { SavePreferredTracksUseCase(get()) }
-    single { GetPreferredTracksUseCase(get()) }
-}
+
 val viewModelModules = module {
     viewModel { MainActivityViewModel() }
     viewModel { SplashViewModel(get(), get(), get()) }
     viewModel { OnBoardingViewModel(get()) }
     viewModel { PreferencesViewModel(get(), get()) }
-    viewModel { MainViewModel(get()) }
+    viewModel { MainViewModel(get(), get(), get(), get()) }
     viewModel { SpeakerViewModel() }
     viewModel { TalkViewModel() }
 }

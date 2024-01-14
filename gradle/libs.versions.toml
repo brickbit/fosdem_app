@@ -1,6 +1,7 @@
 [versions]
 agp = "8.2.0"
 androidx-datastorePreferencesCore = "1.1.0-dev01"
+coilCompose = "2.5.0"
 datastorePreferencesCore = "1.0.0"
 gson = "2.10.1"
 insert-koin-koinCore = "3.2.0"
@@ -23,6 +24,7 @@ androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-p
 androidx-datastore-preferences-core-v110dev01 = { module = "androidx.datastore:datastore-preferences-core", version.ref = "androidx-datastorePreferencesCore" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "compose" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 koin-core-v320 = { module = "io.insert-koin:koin-core", version.ref = "insert-koin-koinCore" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }

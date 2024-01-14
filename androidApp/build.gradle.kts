@@ -55,5 +55,7 @@ dependencies {
     implementation(libs.androidx.ui.text.google.fonts)
     //datastore
     implementation(libs.androidx.data.store.core)
+    //coil
+    implementation(libs.coil.compose)
 
 }

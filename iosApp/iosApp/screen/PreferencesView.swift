@@ -121,7 +121,7 @@ extension PreferencesView {
         private var handle: DisposableHandle?
 
         init() {
-            self.viewModel = PreferencesViewModel(getTracks: GetTracksUseCase(repository: ScheduleRepositoryImpl()))
+            self.viewModel = GetViewModels().getPreferencesViewModel()
             self.viewModel.getPreferences()
         }
         

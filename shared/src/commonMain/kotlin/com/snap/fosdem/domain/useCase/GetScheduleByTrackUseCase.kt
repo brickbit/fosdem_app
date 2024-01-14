@@ -3,7 +3,7 @@ package com.snap.fosdem.domain.useCase
 import com.snap.fosdem.domain.model.TrackBo
 import com.snap.fosdem.domain.repository.ScheduleRepository
 
-class GetScheduleByTrack(
+class GetScheduleByTrackUseCase(
     private val repository: ScheduleRepository
 ) {
     suspend operator fun invoke(trackName: String): Result<TrackBo> {

@@ -53,6 +53,11 @@ fun MyApplicationTheme(
             fontWeight = FontWeight.Normal,
             fontSize = 18.sp
         ),
+        bodySmall = TextStyle(
+            fontFamily = signikaFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp
+        ),
         titleLarge = TextStyle(
             fontWeight = FontWeight.SemiBold,
             fontSize = 48.sp,
@@ -60,7 +65,12 @@ fun MyApplicationTheme(
         ),
         titleMedium = TextStyle(
             fontWeight = FontWeight.Normal,
-            fontSize = 32.sp,
+            fontSize = 28.sp,
+            fontFamily = signikaFamily
+        ),
+        titleSmall = TextStyle(
+            fontWeight = FontWeight.Normal,
+            fontSize = 20.sp,
             fontFamily = signikaFamily
         )
     )

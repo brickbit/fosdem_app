@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.snap.fosdem.android.navigation.Navigator
+import com.snap.fosdem.android.screens.common.MainTopBar
 import com.snap.fosdem.android.screens.common.TextTopBar
 import com.snap.fosdem.app.navigation.Routes
 
@@ -20,7 +21,7 @@ fun FosdemScaffold(
         topBar = {
             if (visible) {
                 when(route) {
-                    Routes.Main ->  Box(modifier = Modifier)
+                    Routes.Main ->  MainTopBar()
                     Routes.Preferences ->  TextTopBar()
                     Routes.Speaker ->  Box(modifier = Modifier)
                     Routes.Talk ->  Box(modifier = Modifier)
