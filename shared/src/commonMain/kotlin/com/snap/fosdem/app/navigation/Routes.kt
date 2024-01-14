@@ -11,5 +11,4 @@ sealed class Routes(val name: String) {
     data object Settings: Routes("Settings")
     data object Schedule: Routes("Schedule")
     data object Language: Routes("Language")
-
 }

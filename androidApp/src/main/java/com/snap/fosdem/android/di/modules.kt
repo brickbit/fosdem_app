@@ -37,5 +37,5 @@ val viewModelModules = module {
     viewModel { PreferencesViewModel(get(), get()) }
     viewModel { MainViewModel(get(), get(), get(), get()) }
     viewModel { SettingsViewModel() }
-    viewModel { TalkViewModel() }
+    viewModel { TalkViewModel(get()) }
 }

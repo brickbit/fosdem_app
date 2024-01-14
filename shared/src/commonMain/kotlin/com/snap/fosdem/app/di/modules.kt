@@ -4,6 +4,7 @@ import com.snap.fosdem.data.local.LocalRepositoryImpl
 import com.snap.fosdem.data.repository.ScheduleRepositoryImpl
 import com.snap.fosdem.domain.repository.LocalRepository
 import com.snap.fosdem.domain.repository.ScheduleRepository
+import com.snap.fosdem.domain.useCase.GetEventByIdUseCase
 import com.snap.fosdem.domain.useCase.GetOnBoardingStatusUseCase
 import com.snap.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByBuildingUseCase
@@ -29,4 +30,5 @@ val useCaseModule = module {
     single { GetScheduleByTrackUseCase(get()) }
     single { GetScheduleByHourUseCase(get()) }
     single { GetScheduleByBuildingUseCase(get()) }
+    single { GetEventByIdUseCase(get()) }
 }
