@@ -13,17 +13,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.snap.fosdem.android.R
+import com.snap.fosdem.app.navigation.Routes
 import com.snap.fosdem.app.viewModel.SettingsViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SettingsRoute(
-    viewModel: SettingsViewModel = koinViewModel()
+    viewModel: SettingsViewModel = koinViewModel(),
+    navigateToLanguage: () -> Unit,
+    navigateToPreferences: () -> Unit,
+
 ) {
     Column {
         SettingItem(
            name = "Idioma",
-            onNavigate = { }
+            onNavigate = { navigateToLanguage() }
         )
         SettingItemWithSwitch(
             name = "Notificaciones",
@@ -32,7 +36,7 @@ fun SettingsRoute(
         )
         SettingItem(
             name = "Tracks preferidos",
-            onNavigate = { }
+            onNavigate = { navigateToPreferences() }
         )
         SettingItem(
             name = "Licencias",

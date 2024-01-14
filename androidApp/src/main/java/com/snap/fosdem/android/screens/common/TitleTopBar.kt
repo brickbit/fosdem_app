@@ -8,10 +8,12 @@ import androidx.compose.runtime.Composable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TitleTopBar() {
+fun TitleTopBar(
+    title: String
+) {
     TopAppBar(title = {
         Text(
-            text = "Ajustes",
+            text = title,
             style = MaterialTheme.typography.titleMedium
         )
     })

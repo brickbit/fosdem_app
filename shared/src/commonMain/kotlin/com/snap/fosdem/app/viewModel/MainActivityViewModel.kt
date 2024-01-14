@@ -31,6 +31,8 @@ class MainActivityViewModel: BaseViewModel() {
             Routes.Settings.name -> Routes.Settings
             Routes.Splash.name -> Routes.Splash
             Routes.Talk.name -> Routes.Talk
+            Routes.Schedule.name -> Routes.Schedule
+            Routes.Language.name -> Routes.Language
             else -> null
         }
     }
@@ -43,6 +45,8 @@ class MainActivityViewModel: BaseViewModel() {
             Routes.Settings -> true
             Routes.Splash -> false
             Routes.Talk -> true
+            Routes.Schedule -> true
+            Routes.Language -> true
             else -> false
         }
     }

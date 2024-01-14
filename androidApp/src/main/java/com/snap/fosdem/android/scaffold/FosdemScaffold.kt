@@ -27,8 +27,10 @@ fun FosdemScaffold(
                         navigateToSettings = { navController.navigate(Routes.Settings.name) }
                     )
                     Routes.Preferences ->  TextTopBar()
-                    Routes.Settings ->  TitleTopBar()
+                    Routes.Settings ->  TitleTopBar("Ajustes")
                     Routes.Talk ->  Box(modifier = Modifier)
+                    Routes.Schedule ->  TitleTopBar("Agenda")
+                    Routes.Language ->  TitleTopBar("Idioma")
                     else -> {}
                 }
             }

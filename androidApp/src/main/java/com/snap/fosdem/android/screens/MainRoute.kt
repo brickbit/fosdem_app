@@ -59,7 +59,7 @@ import org.koin.androidx.compose.koinViewModel
 fun MainRoute(
     viewModel: MainViewModel = koinViewModel(),
     onNavigate: (String) -> Unit,
-    navigateToAgenda: () -> Unit,
+    navigateToSchedule: () -> Unit,
 ) {
     val preferredTracksState = viewModel.statePreferredTracks.collectAsState().value
     val tracksNowState = viewModel.stateCurrentTracks.collectAsState().value
@@ -75,7 +75,7 @@ fun MainRoute(
         tracksNow = tracksNowState,
         tracksBuilding = tracksBuildingState,
         onNavigate = onNavigate,
-        navigateToAgenda = navigateToAgenda
+        navigateToSchedule = navigateToSchedule
     )
 }
 
@@ -85,7 +85,7 @@ fun MainScreen(
     tracksNow: MainTracksNowState,
     tracksBuilding: MainTracksBuildingState,
     onNavigate: (String) -> Unit,
-    navigateToAgenda: () -> Unit
+    navigateToSchedule: () -> Unit
 ) {
     LazyColumn {
         item {
@@ -101,7 +101,7 @@ fun MainScreen(
             onNavigate = onNavigate
         )
         item {
-            AgendaCard (navigateToAgenda = navigateToAgenda)
+            ScheduleCard (navigateToSchedule = navigateToSchedule)
         }
         preferredTracks(
             preferredTracks = preferredTracks,
@@ -272,8 +272,8 @@ fun MainHeader() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AgendaCard(
-    navigateToAgenda: () -> Unit
+fun ScheduleCard(
+    navigateToSchedule: () -> Unit
 ) {
     val context = LocalContext.current
     Card(
@@ -283,7 +283,7 @@ fun AgendaCard(
         ),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
-        onClick = { navigateToAgenda()}
+        onClick = { navigateToSchedule()}
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
