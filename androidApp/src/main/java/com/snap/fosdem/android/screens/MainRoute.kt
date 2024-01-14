@@ -38,12 +38,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
+import com.snap.fosdem.android.MyApplicationTheme
 import com.snap.fosdem.android.R
 import com.snap.fosdem.android.extension.splitImage
 import com.snap.fosdem.android.extension.toColor
+import com.snap.fosdem.android.screens.common.shimmerEffect
 import com.snap.fosdem.app.state.MainPreferredTracksState
 import com.snap.fosdem.app.state.MainTracksBuildingState
 import com.snap.fosdem.app.state.MainTracksNowState
@@ -345,7 +348,9 @@ fun LazyListScope.rightNowItems(
                 }
             }
         }
-        MainTracksNowState.Loading -> item {}
+        MainTracksNowState.Loading -> item {
+            LoadingItem()
+        }
     }
 }
 
@@ -378,7 +383,9 @@ fun LazyListScope.tracksByBuilding(
                 }
             }
         }
-        MainTracksBuildingState.Loading -> item{}
+        MainTracksBuildingState.Loading -> item{
+            LoadingItem()
+        }
     }
 }
 
@@ -402,7 +409,36 @@ fun LazyListScope.preferredTracks(
                 )
             }
         }
-        MainPreferredTracksState.Loading -> item {}
+        MainPreferredTracksState.Loading -> item {
+            LoadingItem()
+        }
     }
 }
 
+@Composable
+fun LoadingItem() {
+    LazyRow(
+        modifier = Modifier.padding(start = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(8.dp)
+    ) {
+        items(4) {
+            Box(
+                modifier = Modifier
+                    .fillParentMaxWidth(0.6f)
+                    .padding(top = 16.dp)
+                    .height(100.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .shimmerEffect(),
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun LoadingItemPreview() {
+    MyApplicationTheme {
+        LoadingItem()
+    }
+}
