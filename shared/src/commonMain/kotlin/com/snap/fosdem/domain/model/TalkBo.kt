@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TalkBo(
+        val id: String,
         val title: String,
         val description: String,
         val track: String,

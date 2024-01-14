@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RoomDto(
+        @SerialName("id")
+        val id: String,
         @SerialName("name")
         val name: String,
         @SerialName("capacity")
@@ -21,6 +23,7 @@ data class RoomDto(
 )
 
 fun RoomDto.toBo() = RoomBo(
+        id = id,
         name = name,
         capacity = capacity,
         building = building.toBo(),

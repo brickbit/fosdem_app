@@ -10,11 +10,10 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun TalkRoute(
     viewModel: TalkViewModel = koinViewModel(),
-    onNavigate: () -> Unit
 ) {
     Column {
         Text(text = "Talk")
-        Button(onClick = { onNavigate() }) {
+        Button(onClick = {  }) {
             Text(text = "Next")
         }
     }

@@ -14,10 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.snap.fosdem.android.navigation.Navigator
 import com.snap.fosdem.android.scaffold.FosdemScaffold
-import com.snap.fosdem.android.screens.common.TextTopBar
-import com.snap.fosdem.app.navigation.Routes
 import com.snap.fosdem.app.state.ScaffoldState
 import com.snap.fosdem.app.viewModel.MainActivityViewModel
 import org.koin.android.ext.android.inject

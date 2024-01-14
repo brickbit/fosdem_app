@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TalkDto(
+        @SerialName("id")
+        val id: String,
         @SerialName("title")
         val title: String,
         @SerialName("description")
@@ -23,6 +25,7 @@ data class TalkDto(
 )
 
 fun TalkDto.toBo() = TalkBo(
+        id = id,
         title = title,
         description = description,
         track = track,

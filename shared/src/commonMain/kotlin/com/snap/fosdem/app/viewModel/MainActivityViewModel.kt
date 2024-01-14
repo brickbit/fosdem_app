@@ -28,7 +28,7 @@ class MainActivityViewModel: BaseViewModel() {
             Routes.Main.name -> Routes.Main
             Routes.OnBoarding.name -> Routes.OnBoarding
             Routes.Preferences.name -> Routes.Preferences
-            Routes.Speaker.name -> Routes.Speaker
+            Routes.Settings.name -> Routes.Settings
             Routes.Splash.name -> Routes.Splash
             Routes.Talk.name -> Routes.Talk
             else -> null
@@ -40,7 +40,7 @@ class MainActivityViewModel: BaseViewModel() {
             Routes.Main -> true
             Routes.OnBoarding -> false
             Routes.Preferences -> true
-            Routes.Speaker -> true
+            Routes.Settings -> true
             Routes.Splash -> false
             Routes.Talk -> true
             else -> false

@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BuildingDto(
+        @SerialName("id")
+        val id: String,
         @SerialName("name")
         val name: String,
         @SerialName("online")
@@ -15,6 +17,7 @@ data class BuildingDto(
 )
 
 fun BuildingDto.toBo() = BuildingBo(
+        id = id,
         name = name,
         online = online,
         map = map

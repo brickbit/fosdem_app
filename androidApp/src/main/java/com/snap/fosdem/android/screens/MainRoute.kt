@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -54,7 +55,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun MainRoute(
     viewModel: MainViewModel = koinViewModel(),
-    onNavigate: () -> Unit
+    onNavigate: (String) -> Unit,
+    navigateToAgenda: () -> Unit,
 ) {
     val preferredTracksState = viewModel.statePreferredTracks.collectAsState().value
     val tracksNowState = viewModel.stateCurrentTracks.collectAsState().value
@@ -69,179 +71,46 @@ fun MainRoute(
         preferredTracks = preferredTracksState,
         tracksNow = tracksNowState,
         tracksBuilding = tracksBuildingState,
-        onNavigate = onNavigate
+        onNavigate = onNavigate,
+        navigateToAgenda = navigateToAgenda
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     preferredTracks: MainPreferredTracksState,
     tracksNow: MainTracksNowState,
     tracksBuilding: MainTracksBuildingState,
-    onNavigate: () -> Unit
+    onNavigate: (String) -> Unit,
+    navigateToAgenda: () -> Unit
 ) {
-    val context = LocalContext.current
     LazyColumn {
         item {
-            Box(
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .padding(top = 24.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
-                        .clip(RoundedCornerShape(20.dp)),
-                    contentScale = ContentScale.Crop,
-                    painter = painterResource(id = R.drawable.fosdem_background),
-                    contentDescription = null
-                )
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        colorFilter = ColorFilter.tint(color = Color.White),
-                        painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                        contentDescription = null
-                    )
-                    Row {
-                        Text(
-                            modifier = Modifier.background(Color.Black).padding(8.dp),
-                            text = "Bruselas | 3 & 4 Febrero 2024",
-                            style = MaterialTheme.typography.titleSmall.copy(color = Color.White)
-                        )
-                    }
-                }
-            }
+            MainHeader()
         }
-        item {
-            Text(
-                modifier = Modifier.padding(start = 16.dp),
-                text = "Ahora mismo",
-                style = MaterialTheme.typography.titleMedium
-            )
-        }
-        when(tracksNow) {
-            is MainTracksNowState.Loaded -> {
-                item {
-                    LazyRow(
-                        modifier = Modifier.padding(start = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        contentPadding = PaddingValues(8.dp)
-                    ) {
-                        items(tracksNow.events) { event ->
-                            EventItem(
-                                event = event,
-                                onNavigate = onNavigate
-                            )
-                        }
-                    }
-                }
-            }
-            MainTracksNowState.Loading -> item {}
-        }
+        rightNowItems(
+            tracksNow = tracksNow,
+            onNavigate = onNavigate
+        )
         item { Spacer(modifier = Modifier.height(24.dp)) }
+        tracksByBuilding(
+            tracksBuilding = tracksBuilding,
+            onNavigate = onNavigate
+        )
         item {
-            Text(
-                modifier = Modifier.padding(start = 16.dp),
-                text = "Más cercanos",
-                style = MaterialTheme.typography.titleMedium
-            )
+            AgendaCard (navigateToAgenda = navigateToAgenda)
         }
-
-        when(tracksBuilding) {
-            is MainTracksBuildingState.Loaded -> {
-                item {
-                    LazyRow(
-                        modifier = Modifier.padding(start = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        contentPadding = PaddingValues(8.dp)
-                    ) {
-                        items(tracksBuilding.events) { event ->
-                            EventItem(
-                                event = event,
-                                onNavigate = onNavigate
-                            )
-                        }
-                    }
-                }
-            }
-            MainTracksBuildingState.Loading -> item{}
-        }
-
-        item {
-            Card(
-                modifier = Modifier.padding(
-                    horizontal = 16.dp,
-                    vertical = 24.dp
-                ),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
-                onClick = { onNavigate()}
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    ContextCompat.getDrawable(context,R.drawable.ic_launcher_foreground).splitImage()?.
-                    second?.asImageBitmap()?.let {
-                        Image(
-                            modifier = Modifier.height(120.dp),
-                            contentScale = ContentScale.FillHeight,
-                            bitmap = it,
-                            contentDescription = null
-                        )
-                    }
-                    Text(
-                        modifier = Modifier
-                            .width(150.dp)
-                            .padding(vertical = 24.dp),
-                        text = "Consulta ahora la agenda completa",
-                        style = MaterialTheme.typography.titleSmall,
-                        textAlign = TextAlign.Center
-                    )
-                    ContextCompat.getDrawable(context,R.drawable.ic_launcher_foreground).splitImage()?.
-                    first?.asImageBitmap()?.let {
-                        Image(
-                            modifier = Modifier.height(120.dp),
-                            contentScale = ContentScale.FillHeight,
-                            bitmap = it,
-                            contentDescription = null
-                        )
-                    }
-                }
-
-            }
-        }
-
-        item {
-            Text(
-                modifier = Modifier.padding(start = 16.dp),
-                text = "Tus tracks preferidos",
-                style = MaterialTheme.typography.titleMedium
-            )
-        }
-        when(preferredTracks) {
-            is MainPreferredTracksState.Loaded -> {
-                items(preferredTracks.tracks) { track ->
-                    TrackRow(
-                        track = track,
-                        onNavigate = onNavigate
-                    )
-                }
-            }
-            MainPreferredTracksState.Loading -> item {}
-        }
+        preferredTracks(
+            preferredTracks = preferredTracks,
+            onNavigate = onNavigate
+        )
     }
 }
 
 @Composable
 fun TrackRow(
     track: TrackBo,
-    onNavigate: () -> Unit
+    onNavigate: (String) -> Unit
 ) {
     Column {
         Text(
@@ -271,12 +140,12 @@ fun TrackRow(
 @Composable
 fun EventItem(
     event: EventBo,
-    onNavigate: () -> Unit
+    onNavigate: (String) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = event.color.toColor()),
-        onClick = { onNavigate()}
+        onClick = { onNavigate(event.id) }
     ) {
         Column(
             modifier = Modifier
@@ -360,3 +229,180 @@ fun CardImageEvent(
         )
     }
 }
+
+@Composable
+fun MainHeader() {
+    Box(
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .padding(top = 24.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
+                .clip(RoundedCornerShape(20.dp)),
+            contentScale = ContentScale.Crop,
+            painter = painterResource(id = R.drawable.fosdem_background),
+            contentDescription = null
+        )
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                colorFilter = ColorFilter.tint(color = Color.White),
+                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                contentDescription = null
+            )
+            Row {
+                Text(
+                    modifier = Modifier
+                        .background(Color.Black)
+                        .padding(8.dp),
+                    text = "Bruselas | 3 & 4 Febrero 2024",
+                    style = MaterialTheme.typography.titleSmall.copy(color = Color.White)
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AgendaCard(
+    navigateToAgenda: () -> Unit
+) {
+    val context = LocalContext.current
+    Card(
+        modifier = Modifier.padding(
+            horizontal = 16.dp,
+            vertical = 24.dp
+        ),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
+        onClick = { navigateToAgenda()}
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            ContextCompat.getDrawable(context,R.drawable.ic_launcher_foreground).splitImage()?.
+            second?.asImageBitmap()?.let {
+                Image(
+                    modifier = Modifier.height(120.dp),
+                    contentScale = ContentScale.FillHeight,
+                    bitmap = it,
+                    contentDescription = null
+                )
+            }
+            Text(
+                modifier = Modifier
+                    .width(150.dp)
+                    .padding(vertical = 24.dp),
+                text = "Consulta ahora la agenda completa",
+                style = MaterialTheme.typography.titleSmall,
+                textAlign = TextAlign.Center
+            )
+            ContextCompat.getDrawable(context,R.drawable.ic_launcher_foreground).splitImage()?.
+            first?.asImageBitmap()?.let {
+                Image(
+                    modifier = Modifier.height(120.dp),
+                    contentScale = ContentScale.FillHeight,
+                    bitmap = it,
+                    contentDescription = null
+                )
+            }
+        }
+    }
+}
+
+fun LazyListScope.rightNowItems(
+    tracksNow: MainTracksNowState,
+    onNavigate: (String) -> Unit
+) {
+    item {
+        Text(
+            modifier = Modifier.padding(start = 16.dp),
+            text = "Ahora mismo",
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
+    when(tracksNow) {
+        is MainTracksNowState.Loaded -> {
+            item {
+                LazyRow(
+                    modifier = Modifier.padding(start = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(8.dp)
+                ) {
+                    items(tracksNow.events) { event ->
+                        EventItem(
+                            event = event,
+                            onNavigate = onNavigate
+                        )
+                    }
+                }
+            }
+        }
+        MainTracksNowState.Loading -> item {}
+    }
+}
+
+fun LazyListScope.tracksByBuilding(
+    tracksBuilding: MainTracksBuildingState,
+    onNavigate: (String) -> Unit
+) {
+    item {
+        Text(
+            modifier = Modifier.padding(start = 16.dp),
+            text = "Más cercanos",
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
+
+    when(tracksBuilding) {
+        is MainTracksBuildingState.Loaded -> {
+            item {
+                LazyRow(
+                    modifier = Modifier.padding(start = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(8.dp)
+                ) {
+                    items(tracksBuilding.events) { event ->
+                        EventItem(
+                            event = event,
+                            onNavigate = onNavigate
+                        )
+                    }
+                }
+            }
+        }
+        MainTracksBuildingState.Loading -> item{}
+    }
+}
+
+fun LazyListScope.preferredTracks(
+    preferredTracks: MainPreferredTracksState,
+    onNavigate: (String) -> Unit
+) {
+    item {
+        Text(
+            modifier = Modifier.padding(start = 16.dp),
+            text = "Tus tracks preferidos",
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
+    when(preferredTracks) {
+        is MainPreferredTracksState.Loaded -> {
+            items(preferredTracks.tracks) { track ->
+                TrackRow(
+                    track = track,
+                    onNavigate = onNavigate
+                )
+            }
+        }
+        MainPreferredTracksState.Loading -> item {}
+    }
+}
+

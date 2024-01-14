@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class EventDto(
+        @SerialName("id")
+        val id: String,
         @SerialName("day")
         val day: String,
         @SerialName("talk")
@@ -25,6 +27,7 @@ data class EventDto(
 )
 
 fun EventDto.toBo(): EventBo = EventBo(
+        id = id,
         day = day,
         talk = talk?.toBo(),
         speaker = speaker?.toBo(),

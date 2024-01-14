@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SpeakerDto(
+        @SerialName("id")
+        val id: String,
         @SerialName("name")
         val name: String,
         @SerialName("image")
@@ -15,6 +17,7 @@ data class SpeakerDto(
 )
 
 fun SpeakerDto.toBo() = SpeakerBo(
+        id = id,
         name = name,
         image = image,
         description = description

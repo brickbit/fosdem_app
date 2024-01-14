@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class EventBo(
+        val id: String,
         val day: String,
         val talk: TalkBo?,
         val speaker: SpeakerBo?,

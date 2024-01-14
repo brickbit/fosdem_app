@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import com.snap.fosdem.android.screens.MainRoute
 import com.snap.fosdem.android.screens.OnBoardingRoute
 import com.snap.fosdem.android.screens.PreferencesRoute
-import com.snap.fosdem.android.screens.SpeakerRoute
+import com.snap.fosdem.android.screens.SettingsRoute
 import com.snap.fosdem.android.screens.SplashRoute
 import com.snap.fosdem.android.screens.TalkRoute
 import com.snap.fosdem.app.navigation.Routes
@@ -43,20 +43,20 @@ fun Navigator(
         }
         composable(Routes.Main.name) {
             MainRoute(
-                onNavigate = {
-                    navController.navigate(Routes.Talk.name)
+                onNavigate = { id ->
+                    navController.navigate(Routes.Talk.goToDetail(id))
+                },
+                navigateToAgenda = {
+                    navController.navigate(Routes.Splash.name)
                 }
             )
         }
         composable(Routes.Talk.name) {
             TalkRoute(
-                onNavigate = {
-                    navController.navigate(Routes.Speaker.name)
-                }
             )
         }
-        composable(Routes.Speaker.name) {
-            SpeakerRoute()
+        composable(Routes.Settings.name) {
+            SettingsRoute()
         }
     }
 }

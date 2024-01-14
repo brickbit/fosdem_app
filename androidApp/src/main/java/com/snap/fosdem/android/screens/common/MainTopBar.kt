@@ -1,10 +1,8 @@
 package com.snap.fosdem.android.screens.common
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,7 +21,9 @@ import com.snap.fosdem.android.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainTopBar() {
+fun MainTopBar(
+    navigateToSettings: () -> Unit
+) {
     TopAppBar(
         title = {
             Row(
@@ -44,7 +44,8 @@ fun MainTopBar() {
             Image(
                 modifier = Modifier
                     .padding(end = 16.dp)
-                    .size(40.dp),
+                    .size(40.dp)
+                    .clickable { navigateToSettings() },
                 painter = painterResource(id = R.drawable.ic_settings),
                 contentDescription = null
             )
@@ -56,6 +57,8 @@ fun MainTopBar() {
 @Composable
 fun MainTopBarPreview() {
     MyApplicationTheme {
-        MainTopBar()
+        MainTopBar {
+
+        }
     }
 }
