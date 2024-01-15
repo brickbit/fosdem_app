@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fosdem">Fosdem</string>
+    <string name="fosdem_logo_description">Logo Fosdem</string>
+    <string name="on_boarding_title_1">Vos tracks préférés toujours à portée de main</string>
+    <string name="on_boarding_title_2">Ne manquez aucune de vos conférences préférées</string>
+    <string name="on_boarding_title_3">Trouvez vos conférences les plus proches</string>
+    <string name="on_boarding_description_1">Sélectionnez vos morceaux préférés pour les avoir sur la page principale. Vous pouvez modifier vos traces préférées à partir des paramètres</string>
+    <string name="on_boarding_description_2">Marquez votre conférence comme favorite et vous recevrez une notification avant qu\'elle ne commence</string>
+    <string name="on_boarding_description_3">Vous ne savez pas dans quel bâtiment se trouve la conférence, localisez chacun d\'eux à partir des détails de la conférence.</string>
+    <string name="next_button">Continuer</string>
+    <string name="track">Tracks</string>
+    <string name="track_subtitle">Sélectionnez les tracks qui vous intéressent le plus</string>
+    <string name="no_languages">Aucune langue trouvée</string>
+    <string name="settings">Paramètres</string>
+    <string name="schedule">L \'agenda</string>
+    <string name="language">Langage</string>
+    <string name="notifications">Notifications</string>
+    <string name="preferred_tracks">Tracks préférées</string>
+    <string name="licenses">Licences</string>
+    <string name="main_date">Bruxelles | 3 &amp; 4 février 2024</string>
+    <string name="check_schedule">Consultez dès maintenant l\'agenda complet</string>
+    <string name="right_now">Maintenant même</string>
+    <string name="main_closest">Le plus proche</string>
+    <string name="your_preferred_tracks">Vos tracks préférés</string>
+</resources>

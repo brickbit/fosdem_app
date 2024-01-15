@@ -73,7 +73,9 @@ fun Navigator(
             ScheduleRoute()
         }
         composable(Routes.Language.name) {
-            LanguageRoute()
+            LanguageRoute(
+                navigateBack = { navController.popBackStack() }
+            )
         }
     }
 }

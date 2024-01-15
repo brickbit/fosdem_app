@@ -25,8 +25,12 @@ android {
         }
     }
     buildTypes {
+        getByName("debug") {
+            buildConfigField("String[]", "languages", "{\"English\",\"Français\",\"Español\"}")
+        }
         getByName("release") {
             isMinifyEnabled = false
+            buildConfigField("String[]", "languages", "{\"English\",\"Français\",\"Español\"}")
         }
     }
     compileOptions {
@@ -35,6 +39,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 

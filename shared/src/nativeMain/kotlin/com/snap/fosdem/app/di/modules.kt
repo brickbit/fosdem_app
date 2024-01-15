@@ -5,7 +5,6 @@ import androidx.datastore.preferences.core.Preferences
 import com.snap.fosdem.app.viewModel.MainViewModel
 import com.snap.fosdem.app.viewModel.OnBoardingViewModel
 import com.snap.fosdem.app.viewModel.PreferencesViewModel
-import com.snap.fosdem.app.viewModel.SettingsViewModel
 import com.snap.fosdem.app.viewModel.SplashViewModel
 import com.snap.fosdem.app.viewModel.TalkViewModel
 import com.snap.fosdem.data.local.dataStorePreferences

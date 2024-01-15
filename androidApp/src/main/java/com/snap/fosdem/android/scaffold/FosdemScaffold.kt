@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import com.snap.fosdem.android.R
 import com.snap.fosdem.android.navigation.Navigator
 import com.snap.fosdem.android.screens.common.MainTopBar
 import com.snap.fosdem.android.screens.common.TitleTopBar
@@ -25,10 +27,10 @@ fun FosdemScaffold(
                     Routes.Main ->  MainTopBar(
                         navigateToSettings = { navController.navigate(Routes.Settings.name) }
                     )
-                    Routes.Settings ->  TitleTopBar("Ajustes")
+                    Routes.Settings ->  TitleTopBar(stringResource(R.string.settings))
                     Routes.Talk ->  Box(modifier = Modifier)
-                    Routes.Schedule ->  TitleTopBar("Agenda")
-                    Routes.Language ->  TitleTopBar("Idioma")
+                    Routes.Schedule ->  TitleTopBar(stringResource(R.string.schedule))
+                    Routes.Language ->  TitleTopBar(stringResource(R.string.language))
                     else -> {}
                 }
             }

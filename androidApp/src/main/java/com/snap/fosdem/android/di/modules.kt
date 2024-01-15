@@ -3,15 +3,17 @@ package com.snap.fosdem.android.di
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.snap.fosdem.android.provider.LanguageProviderImpl
+import com.snap.fosdem.app.viewModel.LanguageViewModel
 import com.snap.fosdem.app.viewModel.MainActivityViewModel
 import com.snap.fosdem.app.viewModel.MainViewModel
 import com.snap.fosdem.app.viewModel.OnBoardingViewModel
 import com.snap.fosdem.app.viewModel.PreferencesViewModel
-import com.snap.fosdem.app.viewModel.SettingsViewModel
 import com.snap.fosdem.app.viewModel.SplashViewModel
 import com.snap.fosdem.app.viewModel.TalkViewModel
 import com.snap.fosdem.data.local.SETTINGS_PREFERENCES
 import com.snap.fosdem.data.local.dataStorePreferences
+import com.snap.fosdem.domain.repository.LanguageProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -28,6 +30,7 @@ fun providerModule(context: Context) = module {
             calculatedPath = File(context.filesDir, "datastore/$SETTINGS_PREFERENCES").path
         )
     }
+    factory<LanguageProvider> { LanguageProviderImpl(context) }
 }
 
 val viewModelModules = module {
@@ -36,6 +39,7 @@ val viewModelModules = module {
     viewModel { OnBoardingViewModel(get()) }
     viewModel { PreferencesViewModel(get(), get()) }
     viewModel { MainViewModel(get(), get(), get(), get()) }
-    viewModel { SettingsViewModel() }
     viewModel { TalkViewModel(get()) }
+    viewModel { LanguageViewModel(get(), get()) }
+
 }

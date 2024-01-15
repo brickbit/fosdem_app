@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -340,7 +341,7 @@ fun MainHeader() {
                     modifier = Modifier
                         .background(Color.Black)
                         .padding(8.dp),
-                    text = "Bruselas | 3 & 4 Febrero 2024",
+                    text = stringResource(R.string.main_date),
                     style = MaterialTheme.typography.titleSmall.copy(color = Color.White)
                 )
             }
@@ -385,7 +386,7 @@ fun ScheduleCard(
                 modifier = Modifier
                     .width(150.dp)
                     .padding(vertical = 24.dp),
-                text = "Consulta ahora la agenda completa",
+                text = stringResource(R.string.check_schedule),
                 style = MaterialTheme.typography.titleSmall.copy(Color.White),
                 textAlign = TextAlign.Center
             )
@@ -410,7 +411,7 @@ fun LazyListScope.rightNowItems(
     item {
         Text(
             modifier = Modifier.padding(start = 8.dp),
-            text = "Ahora mismo",
+            text = stringResource(R.string.right_now),
             style = MaterialTheme.typography.titleMedium
         )
     }
@@ -446,7 +447,7 @@ fun LazyListScope.tracksByBuilding(
     item {
         Text(
             modifier = Modifier.padding(start = 16.dp),
-            text = "Más cercanos",
+            text = stringResource(R.string.main_closest),
             style = MaterialTheme.typography.titleMedium
         )
     }
@@ -483,7 +484,7 @@ fun LazyListScope.preferredTracks(
     item {
         Text(
             modifier = Modifier.padding(start = 16.dp),
-            text = "Tus tracks preferidos",
+            text = stringResource(R.string.your_preferred_tracks),
             style = MaterialTheme.typography.titleMedium
         )
     }

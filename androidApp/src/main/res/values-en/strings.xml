@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fosdem">Fosdem</string>
+    <string name="fosdem_logo_description">Fosdem logo</string>
+    <string name="on_boarding_title_1">Your favorite tracks always at hand</string>
+    <string name="on_boarding_title_2">Don\'t miss any of your favorite talks</string>
+    <string name="on_boarding_title_3">Find your nearest talks</string>
+    <string name="on_boarding_description_1">Select your favorite tracks to have them on the main page. You can change your preferred tracs from settings</string>
+    <string name="on_boarding_description_2">Mark your talk as a favorite and you will receive a notification before it starts</string>
+    <string name="on_boarding_description_3">You don\'t know which building the talk is in, locate each one from the details of the talk</string>
+    <string name="next_button">Next</string>
+    <string name="track">Tracks</string>
+    <string name="track_subtitle">Select the tracks you are most interested in</string>
+    <string name="no_languages">No languages found</string>
+    <string name="settings">Settings</string>
+    <string name="schedule">Schedule</string>
+    <string name="language">Language</string>
+    <string name="notifications">Notifications</string>
+    <string name="preferred_tracks">Favourite tracks</string>
+    <string name="licenses">Licenses</string>
+    <string name="main_date">Brussels | 3 &amp; 4 February 2024</string>
+    <string name="check_schedule">Check the complete agenda now</string>
+    <string name="right_now">Right now</string>
+    <string name="main_closest">The closest tracks</string>
+    <string name="your_preferred_tracks">Your favorite tracks</string>
+</resources>
