@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.snap.fosdem.android.navigation.Navigator
 import com.snap.fosdem.android.screens.common.MainTopBar
-import com.snap.fosdem.android.screens.common.TextTopBar
 import com.snap.fosdem.android.screens.common.TitleTopBar
 import com.snap.fosdem.app.navigation.Routes
 
@@ -26,7 +25,6 @@ fun FosdemScaffold(
                     Routes.Main ->  MainTopBar(
                         navigateToSettings = { navController.navigate(Routes.Settings.name) }
                     )
-                    Routes.Preferences ->  TextTopBar()
                     Routes.Settings ->  TitleTopBar("Ajustes")
                     Routes.Talk ->  Box(modifier = Modifier)
                     Routes.Schedule ->  TitleTopBar("Agenda")

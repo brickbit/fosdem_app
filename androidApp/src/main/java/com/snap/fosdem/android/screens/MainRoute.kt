@@ -2,12 +2,14 @@ package com.snap.fosdem.android.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,9 +21,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,12 +29,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,7 +46,8 @@ import coil.compose.AsyncImage
 import com.snap.fosdem.android.MyApplicationTheme
 import com.snap.fosdem.android.R
 import com.snap.fosdem.android.extension.splitImage
-import com.snap.fosdem.android.extension.toColor
+import com.snap.fosdem.android.extension.toBrushColor
+import com.snap.fosdem.android.mainBrushColor
 import com.snap.fosdem.android.screens.common.shimmerEffect
 import com.snap.fosdem.app.state.MainPreferredTracksState
 import com.snap.fosdem.app.state.MainTracksBuildingState
@@ -125,12 +127,14 @@ fun TrackRow(
             overflow = TextOverflow.Ellipsis
         )
         LazyRow(
-            modifier = Modifier.padding(start = 16.dp),
+            modifier = Modifier.padding(start = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(8.dp)
         ) {
             items(track.events) { event ->
                 EventItem(
+                    modifier = Modifier
+                        .fillParentMaxWidth(0.7f),
                     event = event,
                     onNavigate = onNavigate
                 )
@@ -139,68 +143,141 @@ fun TrackRow(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventItem(
+    modifier: Modifier,
     event: EventBo,
     onNavigate: (String) -> Unit
 ) {
-    Card(
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = event.color.toColor()),
-        onClick = { onNavigate(event.id) }
+    Box(
+        modifier = modifier
+            .padding(8.dp)
+            .clickable { onNavigate(event.id) }
+            .background(
+                brush = event.color.toBrushColor(),
+                shape = RoundedCornerShape(20.dp)
+            ),
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth(0.6f)
-                .padding(16.dp)
-                .height(100.dp),
-            verticalArrangement = Arrangement.SpaceBetween
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
+            HeaderEventItem(
                 modifier = Modifier.width(260.dp),
-                text = event.talk?.title ?: "",
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
+                event = event
             )
-                Row(
-                    modifier = Modifier.width(260.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    CardImageEvent(image = event.speaker?.image)
-                    Text(
-                        modifier = Modifier.width(150.dp),
-                        text = event.speaker?.name ?: "",
-                        style = MaterialTheme.typography.bodyMedium,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-                Row(
-                    modifier = Modifier.padding(end = 8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        modifier = Modifier
-                            .size(20.dp),
-                        painter = painterResource(id = R.drawable.ic_clock),
-                        contentDescription = null
-                    )
-                    Text(
-                        text = "${event.talk?.start}\n${event.talk?.end}",
-                        style = MaterialTheme.typography.bodySmall,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
+            CardImageEvent(image = event.speaker?.image)
+            Text(
+                modifier = Modifier.width(150.dp),
+                text = event.speaker?.name ?: "",
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center
+            )
+            EventDescriptionContent(event)
+
         }
+    }
+}
+
+@Composable
+fun HeaderEventItem(
+    modifier: Modifier,
+    event: EventBo
+) {
+    Row(
+        modifier = modifier.defaultMinSize(120.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(
+            modifier = Modifier
+                .background(
+                    color = Color.White,
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .padding(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                modifier = Modifier
+                    .size(20.dp),
+                painter = painterResource(id = R.drawable.ic_clock),
+                contentDescription = null,
+            )
+            Text(
+                text = "${event.talk?.start}/${event.talk?.end}",
+                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
+            )
+        }
+        Image(
+            modifier = Modifier
+                .background(color = Color.White, shape = CircleShape)
+                .size(28.dp),
+            painter = painterResource(id = R.drawable.ic_notification),
+            contentDescription = null,
+        )
+    }
+}
+
+@Composable
+fun FooterEventItem(
+    event: EventBo
+) {
+    Row(
+        modifier = Modifier
+            .padding(top = 8.dp)
+            .fillMaxWidth()
+            .background(
+                color = Color.White,
+                shape = RoundedCornerShape(16.dp)
+            )
+            .padding(4.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Image(
+            modifier = Modifier
+                .size(20.dp),
+            painter = painterResource(id = R.drawable.ic_location),
+            contentDescription = null,
+        )
+        Text(
+            text = event.talk?.room?.name ?: "",
+            style = MaterialTheme.typography.bodyMedium,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@Composable
+fun EventDescriptionContent(
+    event: EventBo
+) {
+    Column(
+        modifier = Modifier.height(150.dp),
+        verticalArrangement = Arrangement.Bottom
+    ) {
+        Text(
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .width(260.dp),
+            text = event.talk?.title ?: "",
+            style = MaterialTheme.typography.bodyLarge,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
+        )
+        Text(
+            modifier = Modifier.width(260.dp),
+            text = event.talk?.track ?: "",
+            style = MaterialTheme.typography.bodyMedium,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
+        )
+        FooterEventItem(event)
     }
 }
 
@@ -208,28 +285,29 @@ fun EventItem(
 fun CardImageEvent(
     image: String?,
 ) {
-    if (image != null) {
-        Box(
-            modifier = Modifier
-                .background(Color.White, shape = CircleShape)
-                .size(30.dp),
-        ) {
+    Box(
+        modifier = Modifier
+            .padding(top = 16.dp)
+            .background(Color.White, shape = CircleShape)
+            .size(50.dp),
+    ) {
+        if (image != null) {
             AsyncImage(
                 modifier = Modifier
-                    .size(30.dp)
+                    .size(50.dp)
                     .clip(CircleShape),
                 model = image,
+                contentScale = ContentScale.Crop,
                 contentDescription = null,
             )
+        } else {
+            Image(
+                modifier = Modifier
+                    .size(50.dp),
+                painter = painterResource(id = R.drawable.ic_account),
+                contentDescription = null
+            )
         }
-
-    } else {
-        Image(
-            modifier = Modifier
-                .size(30.dp),
-            painter = painterResource(id = R.drawable.ic_account),
-            contentDescription = null
-        )
     }
 }
 
@@ -270,20 +348,23 @@ fun MainHeader() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleCard(
     navigateToSchedule: () -> Unit
 ) {
     val context = LocalContext.current
-    Card(
-        modifier = Modifier.padding(
-            horizontal = 16.dp,
-            vertical = 24.dp
-        ),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
-        onClick = { navigateToSchedule()}
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = 16.dp,
+                vertical = 24.dp
+            )
+            .background(
+                brush = Brush.linearGradient(colorStops = mainBrushColor),
+                shape = RoundedCornerShape(20.dp)
+            )
+            .clickable { navigateToSchedule() }
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -296,7 +377,8 @@ fun ScheduleCard(
                     modifier = Modifier.height(120.dp),
                     contentScale = ContentScale.FillHeight,
                     bitmap = it,
-                    contentDescription = null
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(Color.White)
                 )
             }
             Text(
@@ -304,7 +386,7 @@ fun ScheduleCard(
                     .width(150.dp)
                     .padding(vertical = 24.dp),
                 text = "Consulta ahora la agenda completa",
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.titleSmall.copy(Color.White),
                 textAlign = TextAlign.Center
             )
             ContextCompat.getDrawable(context,R.drawable.ic_launcher_foreground).splitImage()?.
@@ -313,7 +395,8 @@ fun ScheduleCard(
                     modifier = Modifier.height(120.dp),
                     contentScale = ContentScale.FillHeight,
                     bitmap = it,
-                    contentDescription = null
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(Color.White)
                 )
             }
         }
@@ -326,7 +409,7 @@ fun LazyListScope.rightNowItems(
 ) {
     item {
         Text(
-            modifier = Modifier.padding(start = 16.dp),
+            modifier = Modifier.padding(start = 8.dp),
             text = "Ahora mismo",
             style = MaterialTheme.typography.titleMedium
         )
@@ -335,12 +418,14 @@ fun LazyListScope.rightNowItems(
         is MainTracksNowState.Loaded -> {
             item {
                 LazyRow(
-                    modifier = Modifier.padding(start = 16.dp),
+                    modifier = Modifier.padding(start = 8.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     contentPadding = PaddingValues(8.dp)
                 ) {
                     items(tracksNow.events) { event ->
                         EventItem(
+                            modifier = Modifier
+                                .fillParentMaxWidth(0.7f),
                             event = event,
                             onNavigate = onNavigate
                         )
@@ -370,12 +455,14 @@ fun LazyListScope.tracksByBuilding(
         is MainTracksBuildingState.Loaded -> {
             item {
                 LazyRow(
-                    modifier = Modifier.padding(start = 16.dp),
+                    modifier = Modifier.padding(start = 8.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     contentPadding = PaddingValues(8.dp)
                 ) {
                     items(tracksBuilding.events) { event ->
                         EventItem(
+                            modifier = Modifier
+                                .fillParentMaxWidth(0.7f),
                             event = event,
                             onNavigate = onNavigate
                         )
@@ -418,16 +505,16 @@ fun LazyListScope.preferredTracks(
 @Composable
 fun LoadingItem() {
     LazyRow(
-        modifier = Modifier.padding(start = 16.dp),
+        modifier = Modifier.padding(start = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(8.dp)
     ) {
         items(4) {
             Box(
                 modifier = Modifier
-                    .fillParentMaxWidth(0.6f)
-                    .padding(top = 16.dp)
-                    .height(100.dp)
+                    .fillParentMaxWidth(0.7f)
+                    .padding(8.dp)
+                    .height(300.dp)
                     .clip(RoundedCornerShape(20.dp))
                     .shimmerEffect(),
             )

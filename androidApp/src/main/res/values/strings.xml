@@ -2,4 +2,13 @@
 <resources>
     <string name="fosdem">Fosdem</string>
     <string name="fosdem_logo_description">logo de Fosdem</string>
+    <string name="on_boarding_title_1">Tus tracks favoritos siempre a mano</string>
+    <string name="on_boarding_title_2">No te pierdas ninguna de tus charlas favoritas</string>
+    <string name="on_boarding_title_3">Localiza tu charlas más cercanas</string>
+    <string name="on_boarding_description_1">Selecciona tus tracks preferidos para tenerlos en la página principal. Puedes cambiar tus tracs preferidos desde ajustes</string>
+    <string name="on_boarding_description_2">Marca tu charla como favorita y recibiras una notificación antes de que empice</string>
+    <string name="on_boarding_description_3">No sabes en que edificio está la charla localiza cada una desde el detalle de la charla</string>
+    <string name="next_button">Continuar</string>
+    <string name="track">Tracks</string>
+    <string name="track_subtitle">Selecciona los tracks en los que estés más interesado</string>
 </resources>

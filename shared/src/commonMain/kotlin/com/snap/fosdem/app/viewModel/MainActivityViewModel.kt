@@ -41,7 +41,7 @@ class MainActivityViewModel: BaseViewModel() {
         return when(route) {
             Routes.Main -> true
             Routes.OnBoarding -> false
-            Routes.Preferences -> true
+            Routes.Preferences -> false
             Routes.Settings -> true
             Routes.Splash -> false
             Routes.Talk -> true

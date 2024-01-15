@@ -42,12 +42,17 @@ fun MyApplicationTheme(
         )
     } else {
         lightColorScheme(
-            primary = Color(0xFF6200EE),
+            primary = Color(0xFFAB1B93),
             secondary = Color(0xFF03DAC5),
             tertiary = Color(0xFF3700B3)
         )
     }
     val typography = Typography(
+        bodyLarge = TextStyle(
+            fontFamily = signikaFamily,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 20.sp
+        ),
         bodyMedium = TextStyle(
             fontFamily = signikaFamily,
             fontWeight = FontWeight.Normal,
