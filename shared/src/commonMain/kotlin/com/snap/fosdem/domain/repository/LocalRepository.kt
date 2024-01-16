@@ -9,4 +9,8 @@ interface LocalRepository {
 
     suspend fun setPreferences(preferences: List<TrackBo>)
     suspend fun getPreferences(): List<TrackBo>
+
+    suspend fun setNotificationsPermission(permission: Boolean): Preferences
+    suspend fun getNotificationsPermission(): Boolean
+
 }

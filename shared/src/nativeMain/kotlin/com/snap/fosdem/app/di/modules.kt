@@ -26,11 +26,10 @@ val providerModule = module {
     }
 }
 val viewModelModules = module {
-    single { SplashViewModel(get(), get(), get()) }
+    single { SplashViewModel(get(), get(), get(), get()) }
     single { OnBoardingViewModel(get()) }
     single { PreferencesViewModel(get(), get()) }
     single { MainViewModel(get(),get(), get(), get()) }
-    single { SettingsViewModel() }
     single { TalkViewModel(get()) }
 }
 
@@ -39,6 +38,5 @@ object GetViewModels: KoinComponent {
     fun getOnBoardingViewModel() = get<OnBoardingViewModel>()
     fun getPreferencesViewModel() = get<PreferencesViewModel>()
     fun getMainViewModel() = get<MainViewModel>()
-    fun getSpeakerViewModel() = get<SettingsViewModel>()
     fun getTalkViewModel() = get<TalkViewModel>()
 }

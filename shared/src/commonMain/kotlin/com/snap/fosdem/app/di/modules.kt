@@ -1,7 +1,9 @@
 package com.snap.fosdem.app.di
 
 import com.snap.fosdem.data.local.LocalRepositoryImpl
+import com.snap.fosdem.data.repository.PermissionRepositoryImpl
 import com.snap.fosdem.data.repository.ScheduleRepositoryImpl
+import com.snap.fosdem.domain.provider.PermissionRepository
 import com.snap.fosdem.domain.repository.LocalRepository
 import com.snap.fosdem.domain.repository.ScheduleRepository
 import com.snap.fosdem.domain.useCase.ChangeLanguageUseCase
@@ -21,6 +23,7 @@ import org.koin.dsl.module
 val repositoryModule = module {
     factory<ScheduleRepository> { ScheduleRepositoryImpl() }
     factory<LocalRepository> { LocalRepositoryImpl(get()) }
+    factory<PermissionRepository> { PermissionRepositoryImpl(get()) }
 }
 val useCaseModule = module {
     single { GetScheduleDataUseCase(get()) }

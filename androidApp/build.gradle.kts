@@ -64,5 +64,7 @@ dependencies {
     implementation(libs.androidx.data.store.core)
     //coil
     implementation(libs.coil.compose)
+    //permissions
+    implementation(libs.accompanist.permissions)
 
 }

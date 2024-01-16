@@ -7,7 +7,7 @@ import android.os.LocaleList
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import com.snap.fosdem.android.BuildConfig
-import com.snap.fosdem.domain.repository.LanguageProvider
+import com.snap.fosdem.domain.provider.LanguageProvider
 
 class LanguageProviderImpl(
     private val context: Context

@@ -1,6 +1,6 @@
 package com.snap.fosdem.domain.useCase
 
-import com.snap.fosdem.domain.repository.LanguageProvider
+import com.snap.fosdem.domain.provider.LanguageProvider
 
 class ChangeLanguageUseCase(
     private val provider: LanguageProvider

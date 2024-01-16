@@ -1,5 +1,7 @@
 package com.snap.fosdem.android.screens
 
+import android.Manifest
+import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,8 +20,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.snap.fosdem.android.R
+import com.snap.fosdem.android.screens.common.GrantPermission
 import com.snap.fosdem.app.navigation.Routes
 import com.snap.fosdem.app.viewModel.SplashViewModel
 import com.snap.fosdem.app.state.SplashState
@@ -30,10 +32,11 @@ fun SplashRoute(
     viewModel: SplashViewModel = koinViewModel(),
     onNavigate: (Routes) -> Unit
 ) {
+    val state = viewModel.state.collectAsState().value
+
     LaunchedEffect(Unit) {
         viewModel.initializeSplash()
     }
-    val state = viewModel.state.collectAsState().value
     when(state) {
         is SplashState.Finished -> {
             LaunchedEffect(Unit) {
@@ -41,32 +44,51 @@ fun SplashRoute(
             }
         }
         SplashState.Init -> {
-            SplashScreen()
+            SplashScreen(
+                onPermissionGranted = { viewModel.savePermissionState(it) }
+            )
         }
         SplashState.Error -> {
-            SplashScreen()
+            SplashScreen(
+                onPermissionGranted = { viewModel.savePermissionState(it) }
+            )
         }
     }
 }
 
 @Composable
-fun SplashScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+fun SplashScreen(
+    onPermissionGranted: (Boolean) -> Unit
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            Image(
-                modifier = Modifier.size(dimensionResource(id = R.dimen.splash_image_size)),
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription = stringResource(R.string.fosdem_logo_description)
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    modifier = Modifier.size(dimensionResource(id = R.dimen.splash_image_size)),
+                    painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                    contentDescription = stringResource(R.string.fosdem_logo_description)
+                )
+                Text(
+                    text = stringResource(R.string.fosdem).uppercase(),
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            GrantPermission(
+                permission = Manifest.permission.POST_NOTIFICATIONS,
+                onPermissionGranted = { onPermissionGranted(it) },
             )
-            Text(
-                text = stringResource(R.string.fosdem).uppercase(),
-                style = MaterialTheme.typography.titleLarge
+        } else {
+            GrantPermission(
+                permission = Manifest.permission.ACCESS_NOTIFICATION_POLICY,
+                onPermissionGranted = { onPermissionGranted(it) },
             )
         }
     }
@@ -75,6 +97,6 @@ fun SplashScreen() {
 @Preview(device = Devices.PIXEL_3A)
 @Composable
 fun SplashScreenPreview() {
-    SplashScreen()
+    SplashScreen{}
 }
 

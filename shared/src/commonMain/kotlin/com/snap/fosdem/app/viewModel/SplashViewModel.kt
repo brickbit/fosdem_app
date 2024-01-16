@@ -3,6 +3,7 @@ package com.snap.fosdem.app.viewModel
 import com.snap.fosdem.app.flow.toCommonStateFlow
 import com.snap.fosdem.app.navigation.Routes
 import com.snap.fosdem.app.state.SplashState
+import com.snap.fosdem.domain.provider.PermissionRepository
 import com.snap.fosdem.domain.useCase.GetOnBoardingStatusUseCase
 import com.snap.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleDataUseCase
@@ -16,7 +17,8 @@ import kotlinx.coroutines.launch
 class SplashViewModel(
     private val getSchedule: GetScheduleDataUseCase,
     private val getOnBoardingStatus: GetOnBoardingStatusUseCase,
-    private val getPreferredTask: GetPreferredTracksUseCase
+    private val getPreferredTask: GetPreferredTracksUseCase,
+    private val permissionRepository: PermissionRepository
 ): BaseViewModel() {
 
     private val _state: MutableStateFlow<SplashState> = MutableStateFlow(SplashState.Init)
@@ -47,6 +49,12 @@ class SplashViewModel(
                 .onFailure {
                     SplashState.Error
                 }
+        }
+    }
+
+    fun savePermissionState(granted: Boolean) {
+        scope.launch {
+            permissionRepository.grantNotificationPermission(granted)
         }
     }
 
