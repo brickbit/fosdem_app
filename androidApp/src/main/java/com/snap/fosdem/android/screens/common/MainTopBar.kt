@@ -45,7 +45,7 @@ fun MainTopBar(
             Image(
                 modifier = Modifier
                     .padding(end = 16.dp)
-                    .size(40.dp)
+                    .size(30.dp)
                     .clickable { navigateToSettings() },
                 painter = painterResource(id = R.drawable.ic_settings),
                 contentDescription = null

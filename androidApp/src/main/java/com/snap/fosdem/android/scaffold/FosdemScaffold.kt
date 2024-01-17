@@ -1,6 +1,5 @@
 package com.snap.fosdem.android.scaffold
 
-import android.icu.text.CaseMap.Title
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -29,7 +28,6 @@ fun FosdemScaffold(
                     )
                     Routes.Settings ->  TitleTopBar(stringResource(R.string.settings))
                     Routes.Talk ->  Box(modifier = Modifier)
-                    Routes.Schedule ->  TitleTopBar(stringResource(R.string.schedule))
                     Routes.Language ->  TitleTopBar(stringResource(R.string.language))
                     else -> {}
                 }

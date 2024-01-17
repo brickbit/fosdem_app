@@ -18,7 +18,7 @@ import com.snap.fosdem.app.navigation.Routes
 
 @Composable
 fun Navigator(
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     NavHost(
         navController = navController,

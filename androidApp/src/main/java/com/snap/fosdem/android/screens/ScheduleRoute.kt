@@ -1,24 +1,32 @@
 package com.snap.fosdem.android.screens
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,14 +36,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.snap.fosdem.android.R
 import com.snap.fosdem.android.mainBrushColor
 import com.snap.fosdem.android.screens.common.FilterDropDownMenu
 import com.snap.fosdem.android.screens.common.LoadingScreen
+import com.snap.fosdem.android.screens.common.SelectableChip
+import com.snap.fosdem.android.transparentBrushColorReversed
 import com.snap.fosdem.app.state.ScheduleState
 import com.snap.fosdem.app.viewModel.ScheduleViewModel
 import kotlinx.coroutines.launch
@@ -67,7 +80,15 @@ fun ScheduleRoute(
                 hours = stateHour,
                 tracks = stateTrack,
                 rooms = stateRooms,
-                scheduledLoaded = state
+                scheduledLoaded = state,
+                onFilter = { filter ->
+                    viewModel.getScheduleBy(
+                        day = filter.day,
+                        hours = filter.hours,
+                        tracks = filter.tracks,
+                        rooms = filter.rooms
+                    )
+                }
             )
         }
         ScheduleState.Loading -> {
@@ -82,20 +103,67 @@ fun ScheduleScreen(
     hours: List<String>,
     tracks: List<String>,
     rooms: List<String>,
-    scheduledLoaded: ScheduleState.Loaded
+    scheduledLoaded: ScheduleState.Loaded,
+    onFilter: (ScheduleState.Loaded) -> Unit
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState()
 
     LazyColumn {
+        item { FilterTopBar(onClickAction = {showBottomSheet = true}) }
+        item { FiltersUsed(scheduledLoaded = scheduledLoaded)}
         items(scheduledLoaded.events) { event ->
-            Text(text = event.talk?.title ?: "Desconocido")
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .height(IntrinsicSize.Min)
+                    .border(
+                        border = BorderStroke(2.dp, Color.Black),
+                        shape = RoundedCornerShape(20.dp)
+                    )
+            ) {
+                Column(
+                    modifier = Modifier
+                        .background(color = Color.Black, shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp))
+                        .padding(4.dp)
+                        .heightIn(120.dp)
+                        .widthIn(45.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = event.talk?.day?.substring(startIndex = 0, endIndex = 3) ?: "",
+                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+                    )
+                    Text(
+                        text = event.talk?.start ?: "-",
+                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+                    )
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(4.dp)
+                        .heightIn(80.dp)
+                ) {
+                    Text(
+                        text = event.talk?.title ?: "Desconocido",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        text = event.speaker?.name ?: "Desconocido",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                    Text(
+                        text = event.talk?.room?.name ?: "Desconocido",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
         }
     }
-    Button(onClick = { showBottomSheet = true }) {
-        Text(text = "open")
-    }
+
     if (showBottomSheet) {
         ScheduleBottomSheet(
             hours = hours,
@@ -104,7 +172,8 @@ fun ScheduleScreen(
             scheduledLoaded = scheduledLoaded,
             sheetState = sheetState,
             onDismiss = { showBottomSheet = false},
-            filterSchedule = {
+            filterSchedule = {filters ->
+                onFilter(filters)
                 scope.launch { sheetState.hide() }.invokeOnCompletion {
                     if (!sheetState.isVisible) {
                         showBottomSheet = false
@@ -117,6 +186,77 @@ fun ScheduleScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun FilterTopBar(
+    onClickAction: () -> Unit
+) {
+    TopAppBar(
+        title = {
+            Text(
+                text = "Schedule",
+                style = MaterialTheme.typography.titleMedium
+            )
+        },
+        actions = {
+            Image(
+                modifier = Modifier
+                    .padding(end = 16.dp)
+                    .size(30.dp)
+                    .clickable { onClickAction() },
+                painter = painterResource(id = R.drawable.ic_filter),
+                contentDescription = null
+            )
+        }
+    )
+}
+@Composable
+fun FiltersUsed(
+    scheduledLoaded: ScheduleState.Loaded
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Brush.verticalGradient(colorStops = transparentBrushColorReversed)),
+    ) {
+        ListItem(
+            headlineContent = { Text(text = "Tracks") },
+            trailingContent = { Text(text = scheduledLoaded.day) },
+            supportingContent = {
+                Text(text = scheduledLoaded.tracks.getOrNull(0) ?: "All")
+            }
+        )
+        if(scheduledLoaded.hours.isNotEmpty()) {
+            ListItem(
+                headlineContent = { Text(text = "Hours") },
+                supportingContent = {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(scheduledLoaded.hours) { hour ->
+                            Chip(title = hour)
+                        }
+                    }
+                }
+            )
+        }
+        if(scheduledLoaded.rooms.isNotEmpty()) {
+            ListItem(
+                headlineContent = { Text(text = "Rooms") },
+                supportingContent = {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(scheduledLoaded.rooms) { room ->
+                            Chip(title = room)
+                        }
+                    }
+                }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun ScheduleBottomSheet(
     hours: List<String>,
     tracks: List<String>,
@@ -124,8 +264,10 @@ fun ScheduleBottomSheet(
     scheduledLoaded: ScheduleState.Loaded,
     sheetState: SheetState,
     onDismiss: () -> Unit,
-    filterSchedule: () -> Unit,
+    filterSchedule: (ScheduleState.Loaded) -> Unit,
 ) {
+    var currentData = scheduledLoaded
+
     ModalBottomSheet(
         onDismissRequest = { onDismiss() },
         sheetState = sheetState
@@ -150,9 +292,9 @@ fun ScheduleBottomSheet(
                     )
                 }, supportingContent = {
                     FilterDropDownMenu(
-                        selectedItem = null,
+                        selectedItem = currentData.day,
                         items = listOf("Saturday", "Sunday"),
-                        onItemSelected = {}
+                        onItemSelected = { currentData = currentData.copy(day = it) }
                     )
                 }
             )
@@ -165,9 +307,9 @@ fun ScheduleBottomSheet(
                 },
                 supportingContent = {
                     FilterDropDownMenu(
-                        selectedItem = null,
+                        selectedItem = currentData.tracks.getOrNull(0),
                         items = tracks,
-                        onItemSelected = {}
+                        onItemSelected = { currentData = currentData.copy(tracks = listOf(it)) }
                     )
                 }
             )
@@ -185,8 +327,18 @@ fun ScheduleBottomSheet(
                         items(hours){
                             SelectableChip(
                                 title = it,
-                                isActive = true,
-                                onClick = {}
+                                isActive = currentData.hours.contains(it),
+                                onClick = { selectedHour ->
+                                    currentData = if(currentData.hours.contains(selectedHour)) {
+                                        val listHours = currentData.hours.toMutableList()
+                                        listHours.remove(selectedHour)
+                                        currentData.copy(hours = listHours)
+                                    } else {
+                                        val listHours = currentData.hours.toMutableList()
+                                        listHours.add(selectedHour)
+                                        currentData.copy(hours = listHours)
+                                    }
+                                }
                             )
                         }
                     }
@@ -207,8 +359,19 @@ fun ScheduleBottomSheet(
                         items(rooms){
                             SelectableChip(
                                 title = it,
-                                isActive = false,
-                                onClick = {}
+                                isActive = scheduledLoaded.rooms.contains(it),
+                                onClick = { selectedRoom ->
+                                    currentData = if(currentData.rooms.contains(selectedRoom)) {
+                                        val listRooms = currentData.rooms.toMutableList()
+                                        listRooms.remove(selectedRoom)
+                                        currentData.copy(rooms = listRooms)
+                                    } else {
+                                        val listRooms = currentData.rooms.toMutableList()
+                                        listRooms.add(selectedRoom)
+                                        currentData.copy(rooms = listRooms)
+                                    }
+
+                                }
                             )
                         }
                     }
@@ -220,7 +383,7 @@ fun ScheduleBottomSheet(
                     Text(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { filterSchedule()  }
+                            .clickable { filterSchedule(currentData) }
                             .background(
                                 brush = Brush.linearGradient(colorStops = mainBrushColor),
                                 shape = RoundedCornerShape(50)
@@ -237,36 +400,21 @@ fun ScheduleBottomSheet(
 }
 
 @Composable
-fun SelectableChip(
-    title: String,
-    isActive: Boolean,
-    onClick: () -> Unit
+fun Chip(
+    title: String
 ) {
-    if(isActive) {
-        Text(
-            modifier = Modifier
-                .clickable { onClick() }
-                .background(
-                    brush = Brush.linearGradient(colorStops = mainBrushColor),
-                    shape = RoundedCornerShape(50)
-                )
-                .padding(vertical = 4.dp, horizontal = 8.dp),
-            text = title,
-            style = MaterialTheme.typography.bodyMedium.copy(Color.White)
-        )
-    } else {
-        Text(
-            modifier = Modifier
-                .clickable { onClick() }
-                .border(
-                    border = BorderStroke(width = 2.dp, color = Color.Gray),
-                    shape = RoundedCornerShape(50)
-                )
-                .padding(vertical = 4.dp, horizontal = 8.dp),
-            text = title,
-            style = MaterialTheme.typography.bodyMedium.copy(Color.Gray)
-        )
-    }
-
+    Text(
+        modifier = Modifier
+            .border(
+                border = BorderStroke(
+                    width = 2.dp,
+                    brush = Brush.linearGradient(colorStops = mainBrushColor)
+                ),
+                shape = RoundedCornerShape(50)
+            )
+            .padding(vertical = 4.dp, horizontal = 8.dp),
+        text = title,
+        style = MaterialTheme.typography.bodySmall.copy(MaterialTheme.colorScheme.primary)
+    )
 }
 

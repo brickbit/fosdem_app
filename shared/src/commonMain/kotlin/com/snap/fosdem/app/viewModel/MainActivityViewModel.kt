@@ -45,7 +45,7 @@ class MainActivityViewModel: BaseViewModel() {
             Routes.Settings -> true
             Routes.Splash -> false
             Routes.Talk -> true
-            Routes.Schedule -> true
+            Routes.Schedule -> false
             Routes.Language -> true
             else -> false
         }

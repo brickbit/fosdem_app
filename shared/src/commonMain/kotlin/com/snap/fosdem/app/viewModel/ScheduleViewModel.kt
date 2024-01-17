@@ -90,6 +90,9 @@ class ScheduleViewModel(
         rooms: List<String>,
     ) {
         scope.launch {
+            _state.update{
+                ScheduleState.Loading
+            }
             getScheduleByParameter.invoke(
                 day = day,
                 hours = hours,
