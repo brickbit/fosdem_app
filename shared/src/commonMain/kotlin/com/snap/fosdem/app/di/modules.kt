@@ -8,11 +8,14 @@ import com.snap.fosdem.domain.repository.LocalRepository
 import com.snap.fosdem.domain.repository.ScheduleRepository
 import com.snap.fosdem.domain.useCase.ChangeLanguageUseCase
 import com.snap.fosdem.domain.useCase.GetEventByIdUseCase
+import com.snap.fosdem.domain.useCase.GetHoursUseCase
 import com.snap.fosdem.domain.useCase.GetLanguageUseCase
 import com.snap.fosdem.domain.useCase.GetOnBoardingStatusUseCase
 import com.snap.fosdem.domain.useCase.GetPreferredTracksUseCase
+import com.snap.fosdem.domain.useCase.GetRoomsUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByBuildingUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByHourUseCase
+import com.snap.fosdem.domain.useCase.GetScheduleByParameterUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByTrackUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleDataUseCase
 import com.snap.fosdem.domain.useCase.GetTracksUseCase
@@ -34,6 +37,9 @@ val useCaseModule = module {
     single { GetPreferredTracksUseCase(get()) }
     single { GetScheduleByTrackUseCase(get()) }
     single { GetScheduleByHourUseCase(get()) }
+    single { GetScheduleByParameterUseCase(get()) }
+    single { GetHoursUseCase(get()) }
+    single { GetRoomsUseCase(get()) }
     single { GetScheduleByBuildingUseCase(get()) }
     single { GetEventByIdUseCase(get()) }
     single { GetLanguageUseCase(get()) }

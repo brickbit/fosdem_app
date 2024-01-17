@@ -52,11 +52,16 @@ class SplashViewModel(
         }
     }
 
-    fun savePermissionState(granted: Boolean) {
+    fun saveNotificationPermissionState(granted: Boolean) {
         scope.launch {
             permissionRepository.grantNotificationPermission(granted)
         }
     }
 
+    fun saveLocationPermissionState(fine: Boolean, coarse: Boolean) {
+        scope.launch {
+            permissionRepository.grantNotificationPermission(fine && coarse)
+        }
+    }
     
 }

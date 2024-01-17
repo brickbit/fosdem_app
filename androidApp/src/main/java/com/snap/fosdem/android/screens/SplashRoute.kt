@@ -13,6 +13,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -45,12 +49,14 @@ fun SplashRoute(
         }
         SplashState.Init -> {
             SplashScreen(
-                onPermissionGranted = { viewModel.savePermissionState(it) }
+                onNotificationPermissionGranted = { viewModel.saveNotificationPermissionState(it) },
+                onLocationPermissionGranted = { fine, coarse -> viewModel.saveLocationPermissionState(fine,coarse)}
             )
         }
         SplashState.Error -> {
             SplashScreen(
-                onPermissionGranted = { viewModel.savePermissionState(it) }
+                onNotificationPermissionGranted = { viewModel.saveNotificationPermissionState(it) },
+                onLocationPermissionGranted = { fine, coarse -> viewModel.saveLocationPermissionState(fine,coarse)}
             )
         }
     }
@@ -58,8 +64,12 @@ fun SplashRoute(
 
 @Composable
 fun SplashScreen(
-    onPermissionGranted: (Boolean) -> Unit
+    onNotificationPermissionGranted: (Boolean) -> Unit,
+    onLocationPermissionGranted: (Boolean, Boolean) -> Unit
 ) {
+    var fineLocationGranted by remember { mutableStateOf(false) }
+    var coarseLocationGranted by remember { mutableStateOf(false) }
+
     Box(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -83,20 +93,37 @@ fun SplashScreen(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             GrantPermission(
                 permission = Manifest.permission.POST_NOTIFICATIONS,
-                onPermissionGranted = { onPermissionGranted(it) },
+                onPermissionGranted = { onNotificationPermissionGranted(it) },
             )
         } else {
             GrantPermission(
                 permission = Manifest.permission.ACCESS_NOTIFICATION_POLICY,
-                onPermissionGranted = { onPermissionGranted(it) },
+                onPermissionGranted = { onNotificationPermissionGranted(it) },
             )
         }
+        GrantPermission(
+            permission = Manifest.permission.ACCESS_FINE_LOCATION,
+            onPermissionGranted = {
+                fineLocationGranted = it
+                onLocationPermissionGranted(fineLocationGranted,coarseLocationGranted)
+            },
+        )
+        GrantPermission(
+            permission = Manifest.permission.ACCESS_COARSE_LOCATION,
+            onPermissionGranted = {
+                coarseLocationGranted = it
+                onLocationPermissionGranted(fineLocationGranted,coarseLocationGranted)
+            },
+        )
     }
 }
 
 @Preview(device = Devices.PIXEL_3A)
 @Composable
 fun SplashScreenPreview() {
-    SplashScreen{}
+    SplashScreen(
+        onNotificationPermissionGranted = {},
+        onLocationPermissionGranted = {_,_ ->}
+    )
 }
 

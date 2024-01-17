@@ -23,12 +23,13 @@ class LocalRepositoryImpl(
         private const val IS_ON_BOARDING_SHOWN = "IS_ON_BOARDING_SHOWN"
         private const val PREFERRED_TRACK_LIST = "PREFERRED_TRACK_LIST"
         private const val NOTIFICATIONS_ENABLED = "NOTIFICATIONS_ENABLED"
-
+        private const val LOCATION_ENABLED = "LOCATION_ENABLED"
     }
 
     private val onboardingShown = booleanPreferencesKey("$PREFS_TAG_KEY$IS_ON_BOARDING_SHOWN")
     private val preferredTracks = stringPreferencesKey("$PREFS_TAG_KEY$PREFERRED_TRACK_LIST")
     private val notificationsPreferences = booleanPreferencesKey("$PREFS_TAG_KEY$NOTIFICATIONS_ENABLED")
+    private val locationPreferences = booleanPreferencesKey("$PREFS_TAG_KEY$LOCATION_ENABLED")
 
     override suspend fun setOnBoardingSeen() = dataStore.edit { preferences ->
         preferences[onboardingShown] = true
@@ -62,5 +63,13 @@ class LocalRepositoryImpl(
 
     override suspend fun getNotificationsPermission(): Boolean = dataStore.data.map { preferences ->
         preferences[notificationsPreferences] ?: false
+    }.first()
+
+    override suspend fun setLocationPermission(permission: Boolean) = dataStore.edit { preferences ->
+        preferences[locationPreferences] = permission
+    }
+
+    override suspend fun getLocationPermission(): Boolean = dataStore.data.map { preferences ->
+        preferences[locationPreferences] ?: false
     }.first()
 }

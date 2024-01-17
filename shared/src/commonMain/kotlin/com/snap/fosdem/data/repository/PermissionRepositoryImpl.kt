@@ -8,6 +8,10 @@ class PermissionRepositoryImpl(
 ): PermissionRepository {
 
     override suspend fun grantNotificationPermission(granted: Boolean) {
-        localRepository.setNotificationsPermission(true)
+        localRepository.setNotificationsPermission(granted)
+    }
+
+    override suspend fun grantLocationPermission(granted: Boolean) {
+        localRepository.setLocationPermission(granted)
     }
 }

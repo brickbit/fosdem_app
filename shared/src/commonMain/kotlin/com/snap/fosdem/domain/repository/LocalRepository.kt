@@ -13,4 +13,7 @@ interface LocalRepository {
     suspend fun setNotificationsPermission(permission: Boolean): Preferences
     suspend fun getNotificationsPermission(): Boolean
 
+    suspend fun setLocationPermission(permission: Boolean): Preferences
+    suspend fun getLocationPermission(): Boolean
+
 }
