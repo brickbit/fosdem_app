@@ -11,6 +11,7 @@ import com.snap.fosdem.app.viewModel.MainViewModel
 import com.snap.fosdem.app.viewModel.OnBoardingViewModel
 import com.snap.fosdem.app.viewModel.PreferencesViewModel
 import com.snap.fosdem.app.viewModel.ScheduleViewModel
+import com.snap.fosdem.app.viewModel.SettingsViewModel
 import com.snap.fosdem.app.viewModel.SplashViewModel
 import com.snap.fosdem.app.viewModel.TalkViewModel
 import com.snap.fosdem.data.local.SETTINGS_PREFERENCES
@@ -40,9 +41,11 @@ val viewModelModules = module {
     viewModel { MainActivityViewModel() }
     viewModel { SplashViewModel(get(), get(), get(), get()) }
     viewModel { OnBoardingViewModel(get()) }
-    viewModel { PreferencesViewModel(get(), get()) }
+    viewModel { PreferencesViewModel(get(), get(), get()) }
     viewModel { MainViewModel(get(), get(), get(), get()) }
     viewModel { TalkViewModel(get(), get(), get()) }
     viewModel { LanguageViewModel(get(), get()) }
     viewModel { ScheduleViewModel(get(), get(), get(), get()) }
+    viewModel { SettingsViewModel(get(), get()) }
+
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -44,7 +44,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun PreferencesRoute(
     viewModel: PreferencesViewModel = koinViewModel(),
-    onNavigate: () -> Unit
+    previousRoute: String,
+    onNavigate: (String) -> Unit
 ) {
     val state = viewModel.state.collectAsState().value
     LaunchedEffect(Unit) {
@@ -68,7 +69,7 @@ fun PreferencesRoute(
         }
         PreferencesState.Saved -> {
             LaunchedEffect(Unit) {
-                onNavigate()
+                onNavigate(previousRoute)
             }
         }
     }
@@ -110,6 +111,7 @@ fun PreferenceScreen(
                     }
                 )
             }
+            item{ Spacer(modifier = Modifier.padding(bottom= 20.dp)) }
         }
         PreferenceButton(
             tracks = tracks,
@@ -154,7 +156,7 @@ fun PreferenceButton(
         if(enableContinueButton(tracks)) {
             Text(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(12.dp)
                     .fillMaxWidth()
                     .background(
                         brush = Brush.linearGradient(colorStops = mainBrushColor),
@@ -169,13 +171,13 @@ fun PreferenceButton(
         } else {
             Text(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(12.dp)
                     .fillMaxWidth()
                     .background(
                         color = Color.LightGray,
                         shape = CircleShape
                     )
-                    .padding(vertical = 16.dp, horizontal = 32.dp),
+                    .padding(12.dp),
                 text = stringResource(R.string.next_button),
                 style = MaterialTheme.typography.titleSmall.copy(Color.DarkGray),
                 textAlign = TextAlign.Center
