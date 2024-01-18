@@ -66,5 +66,8 @@ dependencies {
     implementation(libs.coil.compose)
     //permissions
     implementation(libs.accompanist.permissions)
+    //chrome custom tab
+    implementation(libs.androidx.browser)
+
 
 }

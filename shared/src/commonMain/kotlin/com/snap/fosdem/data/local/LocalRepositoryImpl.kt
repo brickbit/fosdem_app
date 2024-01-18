@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
+import com.snap.fosdem.domain.model.EventBo
 import com.snap.fosdem.domain.model.TrackBo
 import com.snap.fosdem.domain.repository.LocalRepository
 import kotlinx.coroutines.flow.first
@@ -23,13 +24,13 @@ class LocalRepositoryImpl(
         private const val IS_ON_BOARDING_SHOWN = "IS_ON_BOARDING_SHOWN"
         private const val PREFERRED_TRACK_LIST = "PREFERRED_TRACK_LIST"
         private const val NOTIFICATIONS_ENABLED = "NOTIFICATIONS_ENABLED"
-        private const val LOCATION_ENABLED = "LOCATION_ENABLED"
+        private const val EVENT_NOTIFICATIONS = "EVENT_NOTIFICATIONS"
     }
 
     private val onboardingShown = booleanPreferencesKey("$PREFS_TAG_KEY$IS_ON_BOARDING_SHOWN")
     private val preferredTracks = stringPreferencesKey("$PREFS_TAG_KEY$PREFERRED_TRACK_LIST")
     private val notificationsPreferences = booleanPreferencesKey("$PREFS_TAG_KEY$NOTIFICATIONS_ENABLED")
-    private val locationPreferences = booleanPreferencesKey("$PREFS_TAG_KEY$LOCATION_ENABLED")
+    private val eventNotificationPreferences = stringPreferencesKey("$PREFS_TAG_KEY$EVENT_NOTIFICATIONS")
 
     override suspend fun setOnBoardingSeen() = dataStore.edit { preferences ->
         preferences[onboardingShown] = true
@@ -65,11 +66,33 @@ class LocalRepositoryImpl(
         preferences[notificationsPreferences] ?: false
     }.first()
 
-    override suspend fun setLocationPermission(permission: Boolean) = dataStore.edit { preferences ->
-        preferences[locationPreferences] = permission
+    override suspend fun addNotificationForEvent(eventBo: EventBo) {
+        val list = getNotificationEvents().toMutableList()
+        list.add(eventBo)
+        val listString = Json.encodeToString(list)
+        dataStore.edit { store ->
+            store[eventNotificationPreferences] = listString
+        }
     }
 
-    override suspend fun getLocationPermission(): Boolean = dataStore.data.map { preferences ->
-        preferences[locationPreferences] ?: false
-    }.first()
+    override suspend fun removeNotificationForEvent(eventBo: EventBo) {
+        val list = getNotificationEvents().toMutableList()
+        list.remove(eventBo)
+        val listString = Json.encodeToString(list)
+        dataStore.edit { store ->
+            store[eventNotificationPreferences] = listString
+        }
+    }
+
+    override suspend fun getNotificationEvents(): List<EventBo> {
+        val stringListEvents = dataStore.data.map { store ->
+            store[eventNotificationPreferences] ?: ""
+        }.first()
+        return if (stringListEvents.isNotEmpty()) {
+            val arrayTracks = Json.decodeFromString<Array<EventBo>>(stringListEvents)
+            arrayTracks.toList()
+        } else {
+            emptyList()
+        }
+    }
 }

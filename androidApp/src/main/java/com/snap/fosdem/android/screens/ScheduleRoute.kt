@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -45,18 +44,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.snap.fosdem.android.R
 import com.snap.fosdem.android.mainBrushColor
+import com.snap.fosdem.android.screens.common.Chip
 import com.snap.fosdem.android.screens.common.FilterDropDownMenu
 import com.snap.fosdem.android.screens.common.LoadingScreen
 import com.snap.fosdem.android.screens.common.SelectableChip
 import com.snap.fosdem.android.transparentBrushColorReversed
 import com.snap.fosdem.app.state.ScheduleState
 import com.snap.fosdem.app.viewModel.ScheduleViewModel
+import com.snap.fosdem.domain.model.EventBo
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ScheduleRoute(
-    viewModel: ScheduleViewModel = koinViewModel()
+    viewModel: ScheduleViewModel = koinViewModel(),
+    onEventClicked: (String) -> Unit
 ) {
     val stateHour = viewModel.stateHour.collectAsState().value
     val stateTrack = viewModel.stateTracks.collectAsState().value
@@ -88,7 +90,8 @@ fun ScheduleRoute(
                         tracks = filter.tracks,
                         rooms = filter.rooms
                     )
-                }
+                },
+                onEventClicked = onEventClicked
             )
         }
         ScheduleState.Loading -> {
@@ -104,7 +107,8 @@ fun ScheduleScreen(
     tracks: List<String>,
     rooms: List<String>,
     scheduledLoaded: ScheduleState.Loaded,
-    onFilter: (ScheduleState.Loaded) -> Unit
+    onFilter: (ScheduleState.Loaded) -> Unit,
+    onEventClicked: (String) -> Unit
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -114,53 +118,10 @@ fun ScheduleScreen(
         item { FilterTopBar(onClickAction = {showBottomSheet = true}) }
         item { FiltersUsed(scheduledLoaded = scheduledLoaded)}
         items(scheduledLoaded.events) { event ->
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                    .height(IntrinsicSize.Min)
-                    .border(
-                        border = BorderStroke(2.dp, Color.Black),
-                        shape = RoundedCornerShape(20.dp)
-                    )
-            ) {
-                Column(
-                    modifier = Modifier
-                        .background(color = Color.Black, shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp))
-                        .padding(4.dp)
-                        .heightIn(120.dp)
-                        .widthIn(45.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = event.talk?.day?.substring(startIndex = 0, endIndex = 3) ?: "",
-                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
-                    )
-                    Text(
-                        text = event.talk?.start ?: "-",
-                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
-                    )
-                }
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(4.dp)
-                        .heightIn(80.dp)
-                ) {
-                    Text(
-                        text = event.talk?.title ?: "Desconocido",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Text(
-                        text = event.speaker?.name ?: "Desconocido",
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                    Text(
-                        text = event.talk?.room?.name ?: "Desconocido",
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-            }
+            EventSchedule(
+                event = event,
+                onClickAction = onEventClicked
+            )
         }
     }
 
@@ -181,6 +142,61 @@ fun ScheduleScreen(
                 }
             }
         )
+    }
+}
+
+@Composable
+fun EventSchedule(
+    event: EventBo,
+    onClickAction: (String) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .height(IntrinsicSize.Min)
+            .clickable { onClickAction(event.id) }
+            .border(
+                border = BorderStroke(2.dp, Color.Black),
+                shape = RoundedCornerShape(20.dp)
+            )
+    ) {
+        Column(
+            modifier = Modifier
+                .background(color = Color.Black, shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp))
+                .padding(4.dp)
+                .heightIn(120.dp)
+                .widthIn(45.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = event.talk?.day?.substring(startIndex = 0, endIndex = 3) ?: "",
+                style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+            )
+            Text(
+                text = event.talk?.start ?: "-",
+                style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+            )
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp)
+                .heightIn(80.dp)
+        ) {
+            Text(
+                text = event.talk?.title ?: "Desconocido",
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Text(
+                text = event.speaker?.name ?: "Desconocido",
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                text = event.talk?.room?.name ?: "Desconocido",
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
     }
 }
 
@@ -399,22 +415,4 @@ fun ScheduleBottomSheet(
     }
 }
 
-@Composable
-fun Chip(
-    title: String
-) {
-    Text(
-        modifier = Modifier
-            .border(
-                border = BorderStroke(
-                    width = 2.dp,
-                    brush = Brush.linearGradient(colorStops = mainBrushColor)
-                ),
-                shape = RoundedCornerShape(50)
-            )
-            .padding(vertical = 4.dp, horizontal = 8.dp),
-        text = title,
-        style = MaterialTheme.typography.bodySmall.copy(MaterialTheme.colorScheme.primary)
-    )
-}
 

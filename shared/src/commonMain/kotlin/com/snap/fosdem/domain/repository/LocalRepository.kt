@@ -1,6 +1,8 @@
 package com.snap.fosdem.domain.repository
 
 import androidx.datastore.preferences.core.Preferences
+import com.snap.fosdem.app.navigation.Routes
+import com.snap.fosdem.domain.model.EventBo
 import com.snap.fosdem.domain.model.TrackBo
 
 interface LocalRepository {
@@ -13,7 +15,9 @@ interface LocalRepository {
     suspend fun setNotificationsPermission(permission: Boolean): Preferences
     suspend fun getNotificationsPermission(): Boolean
 
-    suspend fun setLocationPermission(permission: Boolean): Preferences
-    suspend fun getLocationPermission(): Boolean
+    suspend fun addNotificationForEvent(eventBo: EventBo)
+    suspend fun removeNotificationForEvent(eventBo: EventBo)
+    suspend fun getNotificationEvents(): List<EventBo>
+
 
 }

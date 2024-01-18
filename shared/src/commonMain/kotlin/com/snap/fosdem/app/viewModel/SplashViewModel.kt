@@ -3,10 +3,10 @@ package com.snap.fosdem.app.viewModel
 import com.snap.fosdem.app.flow.toCommonStateFlow
 import com.snap.fosdem.app.navigation.Routes
 import com.snap.fosdem.app.state.SplashState
-import com.snap.fosdem.domain.provider.PermissionRepository
 import com.snap.fosdem.domain.useCase.GetOnBoardingStatusUseCase
 import com.snap.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleDataUseCase
+import com.snap.fosdem.domain.useCase.ManageNotificationPermissionUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,7 +18,7 @@ class SplashViewModel(
     private val getSchedule: GetScheduleDataUseCase,
     private val getOnBoardingStatus: GetOnBoardingStatusUseCase,
     private val getPreferredTask: GetPreferredTracksUseCase,
-    private val permissionRepository: PermissionRepository
+    private val manageNotificationPermission: ManageNotificationPermissionUseCase
 ): BaseViewModel() {
 
     private val _state: MutableStateFlow<SplashState> = MutableStateFlow(SplashState.Init)
@@ -54,14 +54,10 @@ class SplashViewModel(
 
     fun saveNotificationPermissionState(granted: Boolean) {
         scope.launch {
-            permissionRepository.grantNotificationPermission(granted)
+            manageNotificationPermission.invoke(granted)
         }
     }
 
-    fun saveLocationPermissionState(fine: Boolean, coarse: Boolean) {
-        scope.launch {
-            permissionRepository.grantNotificationPermission(fine && coarse)
-        }
-    }
+
     
 }

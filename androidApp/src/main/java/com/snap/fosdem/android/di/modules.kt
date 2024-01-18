@@ -42,7 +42,7 @@ val viewModelModules = module {
     viewModel { OnBoardingViewModel(get()) }
     viewModel { PreferencesViewModel(get(), get()) }
     viewModel { MainViewModel(get(), get(), get(), get()) }
-    viewModel { TalkViewModel(get()) }
+    viewModel { TalkViewModel(get(), get(), get()) }
     viewModel { LanguageViewModel(get(), get()) }
     viewModel { ScheduleViewModel(get(), get(), get(), get()) }
 }

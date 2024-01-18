@@ -91,21 +91,16 @@ fun MainScreen(
     navigateToSchedule: () -> Unit
 ) {
     LazyColumn {
-        item {
+        /*item {
             MainHeader()
+        }*/
+        item {
+            ScheduleCard (navigateToSchedule = navigateToSchedule)
         }
         rightNowItems(
             tracksNow = tracksNow,
             onNavigate = onNavigate
         )
-        item { Spacer(modifier = Modifier.height(24.dp)) }
-        tracksByBuilding(
-            tracksBuilding = tracksBuilding,
-            onNavigate = onNavigate
-        )
-        item {
-            ScheduleCard (navigateToSchedule = navigateToSchedule)
-        }
         preferredTracks(
             preferredTracks = preferredTracks,
             onNavigate = onNavigate
@@ -121,9 +116,9 @@ fun TrackRow(
     Column {
         Text(
             modifier = Modifier
-                .padding(start = 16.dp, top = 16.dp, bottom = 8.dp),
+                .padding(start = 16.dp, top = 8.dp),
             text = track.name,
-            style = MaterialTheme.typography.titleSmall,
+            style = MaterialTheme.typography.bodyMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -152,34 +147,17 @@ fun EventItem(
 ) {
     Box(
         modifier = modifier
-            .padding(8.dp)
             .clickable { onNavigate(event.id) }
             .background(
                 brush = event.color.toBrushColor(),
-                shape = RoundedCornerShape(20.dp)
-            ),
+                shape = RoundedCornerShape(16.dp)
+            ).padding(8.dp),
     ) {
         Column(
-            modifier = Modifier
-                .padding(16.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            HeaderEventItem(
-                modifier = Modifier.width(260.dp),
-                event = event
-            )
-            CardImageEvent(image = event.speaker?.image)
-            Text(
-                modifier = Modifier.width(150.dp),
-                text = event.speaker?.name ?: "",
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                textAlign = TextAlign.Center
-            )
             EventDescriptionContent(event)
-
         }
     }
 }
@@ -230,25 +208,19 @@ fun FooterEventItem(
 ) {
     Row(
         modifier = Modifier
-            .padding(top = 8.dp)
-            .fillMaxWidth()
-            .background(
-                color = Color.White,
-                shape = RoundedCornerShape(16.dp)
-            )
-            .padding(4.dp),
-        horizontalArrangement = Arrangement.Center
+            .padding(top = 8.dp),
+        horizontalArrangement = Arrangement.Start
     ) {
         Image(
             modifier = Modifier
-                .size(20.dp),
+                .size(16.dp),
             painter = painterResource(id = R.drawable.ic_location),
             contentDescription = null,
         )
         Text(
             text = event.talk?.room?.name ?: "",
-            style = MaterialTheme.typography.bodyMedium,
-            maxLines = 2,
+            style = MaterialTheme.typography.bodySmall,
+            maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
     }
@@ -259,25 +231,24 @@ fun EventDescriptionContent(
     event: EventBo
 ) {
     Column(
-        modifier = Modifier.height(150.dp),
-        verticalArrangement = Arrangement.Bottom
+        modifier = Modifier.height(90.dp),
+        verticalArrangement = Arrangement.Top
     ) {
         Text(
             modifier = Modifier
-                .padding(top = 16.dp)
                 .width(260.dp),
             text = event.talk?.title ?: "",
-            style = MaterialTheme.typography.bodyLarge,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis
-        )
-        Text(
-            modifier = Modifier.width(260.dp),
-            text = event.talk?.track ?: "",
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
+        Text(
+            text = event.speaker?.name ?: "",
+            style = MaterialTheme.typography.bodySmall,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+
         FooterEventItem(event)
     }
 }
@@ -410,9 +381,9 @@ fun LazyListScope.rightNowItems(
 ) {
     item {
         Text(
-            modifier = Modifier.padding(start = 8.dp),
+            modifier = Modifier.padding(start = 16.dp),
             text = stringResource(R.string.right_now),
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.bodyMedium
         )
     }
     when(tracksNow) {
@@ -483,9 +454,9 @@ fun LazyListScope.preferredTracks(
 ) {
     item {
         Text(
-            modifier = Modifier.padding(start = 16.dp),
+            modifier = Modifier.padding(top= 16.dp, start = 16.dp),
             text = stringResource(R.string.your_preferred_tracks),
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleSmall
         )
     }
     when(preferredTracks) {
@@ -507,7 +478,6 @@ fun LazyListScope.preferredTracks(
 fun LoadingItem() {
     LazyRow(
         modifier = Modifier.padding(start = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(8.dp)
     ) {
         items(4) {
@@ -515,7 +485,7 @@ fun LoadingItem() {
                 modifier = Modifier
                     .fillParentMaxWidth(0.7f)
                     .padding(8.dp)
-                    .height(300.dp)
+                    .height(120.dp)
                     .clip(RoundedCornerShape(20.dp))
                     .shimmerEffect(),
             )

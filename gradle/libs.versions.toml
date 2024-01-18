@@ -2,6 +2,7 @@
 accompanistPermissions = "0.33.2-alpha"
 agp = "8.2.0"
 androidx-datastorePreferencesCore = "1.1.0-dev01"
+browser = "1.7.0"
 coilCompose = "2.5.0"
 datastorePreferencesCore = "1.0.0"
 gson = "2.10.1"
@@ -22,6 +23,7 @@ androidx-data-store = "1.1.0-alpha07"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
+androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }
 androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastorePreferencesCore" }
 androidx-datastore-preferences-core-v110dev01 = { module = "androidx.datastore:datastore-preferences-core", version.ref = "androidx-datastorePreferencesCore" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }

@@ -13,10 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -50,13 +46,11 @@ fun SplashRoute(
         SplashState.Init -> {
             SplashScreen(
                 onNotificationPermissionGranted = { viewModel.saveNotificationPermissionState(it) },
-                onLocationPermissionGranted = { fine, coarse -> viewModel.saveLocationPermissionState(fine,coarse)}
             )
         }
         SplashState.Error -> {
             SplashScreen(
                 onNotificationPermissionGranted = { viewModel.saveNotificationPermissionState(it) },
-                onLocationPermissionGranted = { fine, coarse -> viewModel.saveLocationPermissionState(fine,coarse)}
             )
         }
     }
@@ -65,11 +59,7 @@ fun SplashRoute(
 @Composable
 fun SplashScreen(
     onNotificationPermissionGranted: (Boolean) -> Unit,
-    onLocationPermissionGranted: (Boolean, Boolean) -> Unit
 ) {
-    var fineLocationGranted by remember { mutableStateOf(false) }
-    var coarseLocationGranted by remember { mutableStateOf(false) }
-
     Box(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -101,20 +91,6 @@ fun SplashScreen(
                 onPermissionGranted = { onNotificationPermissionGranted(it) },
             )
         }
-        GrantPermission(
-            permission = Manifest.permission.ACCESS_FINE_LOCATION,
-            onPermissionGranted = {
-                fineLocationGranted = it
-                onLocationPermissionGranted(fineLocationGranted,coarseLocationGranted)
-            },
-        )
-        GrantPermission(
-            permission = Manifest.permission.ACCESS_COARSE_LOCATION,
-            onPermissionGranted = {
-                coarseLocationGranted = it
-                onLocationPermissionGranted(fineLocationGranted,coarseLocationGranted)
-            },
-        )
     }
 }
 
@@ -123,7 +99,6 @@ fun SplashScreen(
 fun SplashScreenPreview() {
     SplashScreen(
         onNotificationPermissionGranted = {},
-        onLocationPermissionGranted = {_,_ ->}
     )
 }
 

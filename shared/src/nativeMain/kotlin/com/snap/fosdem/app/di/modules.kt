@@ -30,7 +30,7 @@ val viewModelModules = module {
     single { OnBoardingViewModel(get()) }
     single { PreferencesViewModel(get(), get()) }
     single { MainViewModel(get(),get(), get(), get()) }
-    single { TalkViewModel(get()) }
+    single { TalkViewModel(get(), get()) }
 }
 
 object GetViewModels: KoinComponent {

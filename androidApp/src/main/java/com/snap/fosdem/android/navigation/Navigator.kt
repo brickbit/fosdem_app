@@ -70,7 +70,10 @@ fun Navigator(
             )
         }
         composable(Routes.Schedule.name) {
-            ScheduleRoute()
+            ScheduleRoute(
+                onEventClicked = {id ->
+                    navController.navigate(Routes.Talk.goToDetail(id))}
+            )
         }
         composable(Routes.Language.name) {
             LanguageRoute(
