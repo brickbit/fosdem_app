@@ -17,7 +17,7 @@
     <string name="language">Langage</string>
     <string name="notifications">Notifications</string>
     <string name="preferred_tracks">Tracks préférées</string>
-    <string name="licenses">Licences</string>
+    <string name="settings_licenses">Licences</string>
     <string name="main_date">Bruxelles | 3 &amp; 4 février 2024</string>
     <string name="check_schedule">Consultez dès maintenant l\'agenda complet</string>
     <string name="right_now">Maintenant même</string>

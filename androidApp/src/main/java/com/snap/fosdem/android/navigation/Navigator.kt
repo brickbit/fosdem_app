@@ -14,7 +14,10 @@ import com.snap.fosdem.android.screens.ScheduleRoute
 import com.snap.fosdem.android.screens.SettingsRoute
 import com.snap.fosdem.android.screens.SplashRoute
 import com.snap.fosdem.android.screens.TalkRoute
+import com.snap.fosdem.android.screens.common.CustomWebView
 import com.snap.fosdem.app.navigation.Routes
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun Navigator(
@@ -27,21 +30,34 @@ fun Navigator(
         composable(Routes.Splash.name) {
             SplashRoute(
                 onNavigate = { route ->
-                    navController.navigate(route.name)
+                    when(route) {
+                        Routes.FavouriteTracks -> navController.navigate(Routes.FavouriteTracks.goFromRoute(Routes.Splash.name))
+                        else -> navController.navigate(route.name)
+                    }
+
                 }
             )
         }
         composable(Routes.OnBoarding.name) {
             OnBoardingRoute(
                 onNavigate = {
-                    navController.navigate(Routes.Preferences.name)
+                    navController.navigate(Routes.FavouriteTracks.goFromRoute(Routes.OnBoarding.name))
                 }
             )
         }
-        composable(Routes.Preferences.name) {
+        composable(
+            route = Routes.FavouriteTracks.name,
+            arguments = listOf(navArgument("route") { type = NavType.StringType })
+        ) { backStackEntry ->
             PreferencesRoute(
-                onNavigate = {
-                    navController.navigate(Routes.Main.name)
+                previousRoute = backStackEntry.arguments?.getString("route") ?: "" ,
+                onNavigate = { route ->
+                    when(route) {
+                        Routes.Settings.name -> navController.popBackStack()
+                        else -> navController.navigate(Routes.Main.name)
+
+                    }
+
                 }
             )
         }
@@ -63,21 +79,37 @@ fun Navigator(
                 id = backStackEntry.arguments?.getString("id") ?: ""
             )
         }
+
         composable(Routes.Settings.name) {
             SettingsRoute(
                 navigateToLanguage = { navController.navigate(Routes.Language.name) },
-                navigateToPreferences = { navController.navigate(Routes.Preferences.name) }
+                navigateToPreferences = {
+                    navController.navigate(Routes.FavouriteTracks.goFromRoute(Routes.Settings.name))
+                                        },
+                navigateToAbout = { url ->
+                    val encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
+                    navController.navigate(Routes.WebView.loadWebView(encodedUrl))
+                }
             )
         }
         composable(Routes.Schedule.name) {
             ScheduleRoute(
-                onEventClicked = {id ->
-                    navController.navigate(Routes.Talk.goToDetail(id))}
+                onEventClicked = { id ->
+                    navController.navigate(Routes.Talk.goToDetail(id))
+                }
             )
         }
         composable(Routes.Language.name) {
             LanguageRoute(
                 navigateBack = { navController.popBackStack() }
+            )
+        }
+        composable(
+            route = Routes.WebView.name,
+            arguments = listOf(navArgument("url") { type = NavType.StringType })
+        ) { backStackEntry ->
+            CustomWebView(
+                url = backStackEntry.arguments?.getString("url") ?: ""
             )
         }
     }

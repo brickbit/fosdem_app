@@ -27,12 +27,13 @@ class MainActivityViewModel: BaseViewModel() {
         return when(name) {
             Routes.Main.name -> Routes.Main
             Routes.OnBoarding.name -> Routes.OnBoarding
-            Routes.Preferences.name -> Routes.Preferences
+            Routes.FavouriteTracks.name -> Routes.FavouriteTracks
             Routes.Settings.name -> Routes.Settings
             Routes.Splash.name -> Routes.Splash
             Routes.Talk.name -> Routes.Talk
             Routes.Schedule.name -> Routes.Schedule
             Routes.Language.name -> Routes.Language
+            Routes.WebView.name -> Routes.WebView
             else -> null
         }
     }
@@ -41,12 +42,13 @@ class MainActivityViewModel: BaseViewModel() {
         return when(route) {
             Routes.Main -> true
             Routes.OnBoarding -> false
-            Routes.Preferences -> false
+            Routes.FavouriteTracks -> false
             Routes.Settings -> true
             Routes.Splash -> false
             Routes.Talk -> true
             Routes.Schedule -> false
             Routes.Language -> true
+            Routes.WebView -> true
             else -> false
         }
     }

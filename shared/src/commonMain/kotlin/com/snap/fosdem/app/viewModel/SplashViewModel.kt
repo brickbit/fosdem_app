@@ -37,7 +37,7 @@ class SplashViewModel(
                         val onBoardingShown = getOnBoardingStatus.invoke()
                         val listTracks = getPreferredTask.invoke()
                         val route = if(onBoardingShown && listTracks.isEmpty()) {
-                            Routes.Preferences
+                            Routes.FavouriteTracks
                         } else if(onBoardingShown && listTracks.isNotEmpty()){
                             Routes.Main
                         } else {
