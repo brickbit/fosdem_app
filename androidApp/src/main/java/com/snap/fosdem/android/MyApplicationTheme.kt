@@ -44,7 +44,10 @@ fun MyApplicationTheme(
         lightColorScheme(
             primary = Color(0xFFAB1B93),
             secondary = Color(0xFF03DAC5),
-            tertiary = Color(0xFF3700B3)
+            tertiary = Color(0xFF3700B3),
+            background = Color.White,
+            surfaceTint = Color(0xFFCCCCCC),
+            surface = Color.White
         )
     }
     val typography = Typography(

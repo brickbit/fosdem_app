@@ -39,6 +39,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -156,13 +158,13 @@ fun EventSchedule(
             .height(IntrinsicSize.Min)
             .clickable { onClickAction(event.id) }
             .border(
-                border = BorderStroke(2.dp, Color.Black),
+                border = BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface),
                 shape = RoundedCornerShape(20.dp)
             )
     ) {
         Column(
             modifier = Modifier
-                .background(color = Color.Black, shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp))
+                .background(color = MaterialTheme.colorScheme.onSurface, shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp))
                 .padding(4.dp)
                 .heightIn(120.dp)
                 .widthIn(45.dp),
@@ -171,11 +173,11 @@ fun EventSchedule(
         ) {
             Text(
                 text = event.talk?.day?.substring(startIndex = 0, endIndex = 3) ?: "",
-                style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+                style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.background)
             )
             Text(
                 text = event.talk?.start ?: "-",
-                style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+                style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.background)
             )
         }
         Column(
@@ -219,7 +221,8 @@ fun FilterTopBar(
                     .size(30.dp)
                     .clickable { onClickAction() },
                 painter = painterResource(id = R.drawable.ic_filter),
-                contentDescription = null
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
             )
         }
     )
@@ -228,10 +231,12 @@ fun FilterTopBar(
 fun FiltersUsed(
     scheduledLoaded: ScheduleState.Loaded
 ) {
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Brush.verticalGradient(colorStops = transparentBrushColorReversed)),
+            .background(Brush.verticalGradient(colorStops = transparentBrushColorReversed(context))),
     ) {
         ListItem(
             headlineContent = { Text(text = "Tracks") },

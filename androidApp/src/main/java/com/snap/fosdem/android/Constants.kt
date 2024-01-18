@@ -1,6 +1,10 @@
 package com.snap.fosdem.android
 
+import android.content.Context
+import android.content.res.Configuration
 import androidx.compose.ui.graphics.Color
+import java.security.AccessController.getContext
+
 
 val mainBrushColor = arrayOf(
     0.0f to Color(0xFFAB1B93),
@@ -8,17 +12,35 @@ val mainBrushColor = arrayOf(
     1f to Color(0xFF620072)
 )
 
-val transparentBrushColor = arrayOf(
-    0.0f to Color.White.copy(alpha = 0.1f),
-    0.35f to Color.White.copy(alpha = 0.7f),
-    1f to Color.White.copy(alpha = 1f)
-)
+fun transparentBrushColor(context: Context) = if(context.resources.configuration.uiMode and
+    Configuration.UI_MODE_NIGHT_MASK != Configuration.UI_MODE_NIGHT_YES) {
+    arrayOf(
+        0.0f to Color.White.copy(alpha = 0.1f),
+        0.35f to Color.White.copy(alpha = 0.7f),
+        1f to Color.White.copy(alpha = 1f)
+    )
+} else {
+    arrayOf(
+        0.0f to Color(0xFF1C1B1F).copy(alpha = 0.1f),
+        0.35f to Color(0xFF1C1B1F).copy(alpha = 0.7f),
+        1f to Color(0xFF1C1B1F).copy(alpha = 1f)
+    )
+}
 
-val transparentBrushColorReversed = arrayOf(
-    0.0f to Color.White.copy(alpha = 1f),
-    0.9f to Color.White.copy(alpha = 0.88f),
-    1f to Color.White.copy(alpha = 0.1f)
-)
+fun transparentBrushColorReversed(context: Context) = if(context.resources.configuration.uiMode and
+    Configuration.UI_MODE_NIGHT_MASK != Configuration.UI_MODE_NIGHT_YES) {
+    arrayOf(
+        0.0f to Color.White.copy(alpha = 1f),
+        0.9f to Color.White.copy(alpha = 0.88f),
+        1f to Color.White.copy(alpha = 0.1f)
+    )
+} else {
+    arrayOf(
+        0.0f to Color(0xFF1C1B1F).copy(alpha = 1f),
+        0.9f to Color(0xFF1C1B1F).copy(alpha = 0.88f),
+        1f to Color(0xFF1C1B1F).copy(alpha = 0.1f)
+    )
+}
 
 val c1BrushColor = arrayOf(
     0.0f to Color(0xFF69D2E7).copy(alpha = 1f),

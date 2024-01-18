@@ -23,6 +23,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -200,7 +201,8 @@ fun SettingItem(
         trailingContent = {
             Image(
                 painter = painterResource(id = R.drawable.ic_arrow_right),
-                contentDescription = null
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
             )
         }
     )
@@ -229,7 +231,8 @@ fun SettingItemWithSubtitle(
         trailingContent = {
             Image(
                 painter = painterResource(id = R.drawable.ic_arrow_right),
-                contentDescription = null
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
             )
         }
     )

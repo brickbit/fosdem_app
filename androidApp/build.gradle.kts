@@ -75,6 +75,9 @@ dependencies {
     implementation(libs.accompanist.permissions)
     //chrome custom tab
     implementation(libs.androidx.browser)
+    //splash
+    implementation(libs.androidx.core.splashscreen)
+
 
 
 }

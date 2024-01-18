@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
@@ -122,10 +123,11 @@ fun PreferenceScreen(
 }
 @Composable
 fun PreferenceTitle() {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .height(130.dp)
-            .background(Brush.verticalGradient(colorStops = transparentBrushColorReversed))
+            .background(Brush.verticalGradient(colorStops = transparentBrushColorReversed(context)))
             .padding(16.dp),
         verticalArrangement = Arrangement.Top
     ) {
@@ -146,11 +148,13 @@ fun PreferenceButton(
     enableContinueButton: (List<TrackBo>) -> Boolean,
     onContinueButtonClicked: () -> Unit
 ) {
+    val context = LocalContext.current
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(130.dp)
-            .background(brush = Brush.verticalGradient(colorStops = transparentBrushColor)),
+            .background(brush = Brush.verticalGradient(colorStops = transparentBrushColor(context))),
         contentAlignment = Alignment.BottomCenter
     ) {
         if(enableContinueButton(tracks)) {

@@ -186,6 +186,7 @@ fun HeaderEventItem(
                     .size(20.dp),
                 painter = painterResource(id = R.drawable.ic_clock),
                 contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
             )
             Text(
                 text = "${event.talk?.start}/${event.talk?.end}",
@@ -198,6 +199,7 @@ fun HeaderEventItem(
                 .size(28.dp),
             painter = painterResource(id = R.drawable.ic_notification),
             contentDescription = null,
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
         )
     }
 }
@@ -216,6 +218,7 @@ fun FooterEventItem(
                 .size(16.dp),
             painter = painterResource(id = R.drawable.ic_location),
             contentDescription = null,
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
         )
         Text(
             text = event.talk?.room?.name ?: "",
@@ -277,7 +280,8 @@ fun CardImageEvent(
                 modifier = Modifier
                     .size(50.dp),
                 painter = painterResource(id = R.drawable.ic_account),
-                contentDescription = null
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
             )
         }
     }
@@ -296,7 +300,8 @@ fun MainHeader() {
                 .clip(RoundedCornerShape(20.dp)),
             contentScale = ContentScale.Crop,
             painter = painterResource(id = R.drawable.fosdem_background),
-            contentDescription = null
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
         )
         Column(
             verticalArrangement = Arrangement.Center,
@@ -305,7 +310,7 @@ fun MainHeader() {
             Image(
                 colorFilter = ColorFilter.tint(color = Color.White),
                 painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription = null
+                contentDescription = null,
             )
             Row {
                 Text(

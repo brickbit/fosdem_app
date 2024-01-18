@@ -58,6 +58,6 @@ fun String?.toBrushColor(): Brush {
         "c8" -> Brush.verticalGradient(colorStops = c8BrushColor)
         "c9" -> Brush.verticalGradient(colorStops = c9BrushColor)
         "c10" -> Brush.verticalGradient(colorStops = c10BrushColor)
-        else -> Brush.verticalGradient(colorStops = transparentBrushColor)
+        else -> Brush.verticalGradient(colorStops = c1BrushColor)
     }
 }
