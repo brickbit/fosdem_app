@@ -8,9 +8,11 @@ import com.snap.fosdem.domain.useCase.ChangeLanguageUseCase
 import com.snap.fosdem.domain.useCase.GetEventByIdUseCase
 import com.snap.fosdem.domain.useCase.GetHoursUseCase
 import com.snap.fosdem.domain.useCase.GetLanguageUseCase
+import com.snap.fosdem.domain.useCase.GetNotificationsEnabledUseCase
 import com.snap.fosdem.domain.useCase.GetOnBoardingStatusUseCase
 import com.snap.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.snap.fosdem.domain.useCase.GetRoomsUseCase
+import com.snap.fosdem.domain.useCase.GetSavedTracksUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByBuildingUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByHourUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByParameterUseCase
@@ -40,11 +42,13 @@ val useCaseModule = module {
     single { GetScheduleByParameterUseCase(get()) }
     single { GetHoursUseCase(get()) }
     single { GetRoomsUseCase(get()) }
+    single { GetSavedTracksUseCase(get()) }
     single { GetScheduleByBuildingUseCase(get()) }
     single { GetEventByIdUseCase(get()) }
     single { GetLanguageUseCase(get()) }
     single { ChangeLanguageUseCase(get()) }
     single { ManageNotificationPermissionUseCase(get()) }
+    single { GetNotificationsEnabledUseCase(get()) }
     single { ManageEventNotificationUseCase(get()) }
     single { IsEventNotifiedUseCase(get()) }
 

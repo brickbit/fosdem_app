@@ -3,6 +3,7 @@ package com.snap.fosdem.app.viewModel
 import com.snap.fosdem.app.flow.toCommonStateFlow
 import com.snap.fosdem.app.state.PreferencesState
 import com.snap.fosdem.domain.model.TrackBo
+import com.snap.fosdem.domain.useCase.GetSavedTracksUseCase
 import com.snap.fosdem.domain.useCase.GetTracksUseCase
 import com.snap.fosdem.domain.useCase.SavePreferredTracksUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +15,7 @@ import kotlinx.coroutines.launch
 class PreferencesViewModel(
     private val getTracks: GetTracksUseCase,
     private val saveTracks: SavePreferredTracksUseCase,
+    private val getSavedTracks: GetSavedTracksUseCase
 ): BaseViewModel() {
 
     private val _state: MutableStateFlow<PreferencesState> = MutableStateFlow(PreferencesState.Loading)
@@ -27,8 +29,11 @@ class PreferencesViewModel(
         scope.launch {
             getTracks.invoke()
                 .onSuccess { tracks ->
+                    val savedTracks = getSavedTracks.invoke()
+                    val checkedTracks = tracks.map { track ->
+                        track.copy(checked = savedTracks.count { track.name == it.name } > 0) }
                     _state.update {
-                        PreferencesState.Loaded(tracks)
+                        PreferencesState.Loaded(checkedTracks)
                     }
                 }
                 .onFailure {
@@ -62,7 +67,12 @@ class PreferencesViewModel(
                 PreferencesState.Saved
             }
         }
+    }
 
+    private fun getSavedFavouritesTracks() {
+        scope.launch {
+            getSavedTracks.invoke()
+        }
     }
 
     fun enableContinueButton(tracks: List<TrackBo>): Boolean {
