@@ -95,7 +95,14 @@ fun SettingsRoute(
         time = state.time,
         onSelectNotificationTime = { viewModel.selectNotificationTime(it) },
         requestPermission = {
-            notificationPermissionState.launchPermissionRequest()
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+                val intent = Intent(ACTION_APPLICATION_DETAILS_SETTINGS)
+                intent.data = Uri.parse("package:${context.packageName}")
+                context.startActivity(intent)
+            } else {
+                notificationPermissionState.launchPermissionRequest()
+
+            }
         },
         withdrawPermission = {
             val intent = Intent(ACTION_APPLICATION_DETAILS_SETTINGS)
