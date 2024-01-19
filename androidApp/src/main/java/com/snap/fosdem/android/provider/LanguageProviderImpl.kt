@@ -1,27 +1,28 @@
 package com.snap.fosdem.android.provider
 
 import android.app.LocaleManager
-import android.content.Context
+
 import android.os.Build
 import android.os.LocaleList
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
 import com.snap.fosdem.android.BuildConfig
 import com.snap.fosdem.domain.provider.LanguageProvider
+import java.util.Locale
+
 
 class LanguageProviderImpl(
-    private val context: Context
+    private val activityProvider: ActivityProvider
 ): LanguageProvider {
     override fun changeLanguage(language: String) {
+        val activity = activityProvider.getActivity()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            context.getSystemService(LocaleManager::class.java)
-                .applicationLocales = LocaleList.forLanguageTags(language)
+            activity?.getSystemService(LocaleManager::class.java)
+                ?.applicationLocales = LocaleList.forLanguageTags(language)
         } else {
-            AppCompatDelegate.setApplicationLocales(
-                LocaleListCompat.forLanguageTags(
-                    language
-                )
-            )
+            val newLocale = Locale(language)
+            val configuration = activity?.resources?.configuration
+            configuration?.locale = newLocale
+            activity?.resources?.updateConfiguration(configuration, activity.resources.displayMetrics)
+            activity?.recreate()
         }
     }
 

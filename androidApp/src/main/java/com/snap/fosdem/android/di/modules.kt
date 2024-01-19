@@ -33,7 +33,7 @@ fun providerModule(context: Context) = module {
             calculatedPath = File(context.filesDir, "datastore/$SETTINGS_PREFERENCES").path
         )
     }
-    factory<LanguageProvider> { LanguageProviderImpl(context) }
+    factory<LanguageProvider> { LanguageProviderImpl(get()) }
     single { ActivityProvider() }
 }
 
