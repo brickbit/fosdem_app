@@ -19,5 +19,6 @@ interface LocalRepository {
     suspend fun removeNotificationForEvent(eventBo: EventBo)
     suspend fun getNotificationEvents(): List<EventBo>
 
-
+    suspend fun setNotificationTime(time: Int): Preferences
+    suspend fun getNotificationTime(): Int
 }

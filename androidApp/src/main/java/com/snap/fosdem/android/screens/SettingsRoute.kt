@@ -12,19 +12,31 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -32,13 +44,18 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 import com.snap.fosdem.android.BuildConfig
-import com.snap.fosdem.android.MainActivity
 import com.snap.fosdem.android.R
-import com.snap.fosdem.android.screens.common.GrantPermission
 import com.snap.fosdem.app.viewModel.SettingsViewModel
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun SettingsRoute(
     viewModel: SettingsViewModel = koinViewModel(),
@@ -46,40 +63,66 @@ fun SettingsRoute(
     navigateToPreferences: () -> Unit,
     navigateToAbout: (String) -> Unit,
 ) {
-    val stateNotifications = viewModel.stateNotificationEnabled.collectAsState().value
-
-    LaunchedEffect(Unit) {
-        viewModel.checkNotifications()
+    val state = viewModel.state.collectAsState().value
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
+    val notificationPermissionState = rememberPermissionState(permission =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        Manifest.permission.POST_NOTIFICATIONS
+    } else {
+        Manifest.permission.ACCESS_NOTIFICATION_POLICY
     }
-    if(!stateNotifications) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            GrantPermission(
-                permission = Manifest.permission.POST_NOTIFICATIONS,
-                onPermissionGranted = { viewModel.changeNotificationStatus(it) },
-            )
-        } else {
-            GrantPermission(
-                permission = Manifest.permission.ACCESS_NOTIFICATION_POLICY,
-                onPermissionGranted = { viewModel.changeNotificationStatus(it) },
-            )
+    )
+    DisposableEffect(lifecycleOwner) {
+        val lifecycleEventObserver = LifecycleEventObserver { _, event ->
+            when(event) {
+                Lifecycle.Event.ON_RESUME -> {
+                    viewModel.getNotificationTime()
+                    viewModel.changeNotificationStatus(
+                        NotificationManagerCompat.from(context).areNotificationsEnabled()
+                    )
+                }
+                else -> {}
+            }
         }
+        lifecycleOwner.lifecycle.addObserver(lifecycleEventObserver)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(lifecycleEventObserver) }
     }
+
+
     SettingsScreen(
-        stateNotifications = stateNotifications,
+        enabled = state.enabled,
+        time = state.time,
+        onSelectNotificationTime = { viewModel.selectNotificationTime(it) },
+        requestPermission = {
+            notificationPermissionState.launchPermissionRequest()
+        },
+        withdrawPermission = {
+            val intent = Intent(ACTION_APPLICATION_DETAILS_SETTINGS)
+            intent.data = Uri.parse("package:${context.packageName}")
+            context.startActivity(intent)
+        },
         navigateToLanguage = navigateToLanguage,
         navigateToPreferences = navigateToPreferences,
         navigateToAbout = navigateToAbout,
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    stateNotifications: Boolean,
+    enabled: Boolean,
+    time: Int,
+    onSelectNotificationTime: (Int) -> Unit,
+    requestPermission: () -> Unit,
+    withdrawPermission: () -> Unit,
     navigateToLanguage: () -> Unit,
     navigateToPreferences: () -> Unit,
     navigateToAbout: (String) -> Unit
 ) {
-    val context = LocalContext.current as MainActivity
+    var showBottomSheet by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState()
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -92,25 +135,19 @@ fun SettingsScreen(
             )
             SettingItemWithSwitch(
                 name = stringResource(R.string.notifications),
-                notificationsEnabled = stateNotifications,
+                notificationsEnabled = enabled,
                 onNotificationsChange = { granted ->
-                    if(granted) {
-
+                    if(!granted) {
+                        withdrawPermission()
                     } else {
-                        val intent = Intent(
-                            ACTION_APPLICATION_DETAILS_SETTINGS,
-                            Uri.parse("package:" + context.packageManager)
-                        )
-                        context.startActivity(intent)
-
-
+                        requestPermission()
                     }
                 }
             )
             SettingItemWithSubtitle(
-                name = "Aviso de notificación",
-                subtitle = "10 minutos antes",
-                onNavigate = { navigateToLanguage() }
+                name = stringResource(R.string.settings_notification_time),
+                subtitle = stringResource(R.string.settings_notification_time_selected, time.toString()),
+                onActionClicked = { showBottomSheet = true }
             )
             SettingItem(
                 name = stringResource(R.string.preferred_tracks),
@@ -131,6 +168,20 @@ fun SettingsScreen(
         SettingsFooter()
     }
 
+    if (showBottomSheet) {
+        NotificationBottomSheet(
+            sheetState = sheetState,
+            onDismiss = { showBottomSheet = false },
+            onAcceptDelay = {
+                onSelectNotificationTime(it)
+                scope.launch { sheetState.hide() }.invokeOnCompletion {
+                    if (!sheetState.isVisible) {
+                        showBottomSheet = false
+                    }
+                }
+            }
+        )
+    }
 }
 
 @Composable
@@ -212,10 +263,10 @@ fun SettingItem(
 fun SettingItemWithSubtitle(
     name: String,
     subtitle: String,
-    onNavigate: () -> Unit
+    onActionClicked: () -> Unit
 ) {
     ListItem(
-        modifier = Modifier.clickable { onNavigate() },
+        modifier = Modifier.clickable { onActionClicked() },
         headlineContent = {
             Text(
                 text = name,
@@ -225,7 +276,7 @@ fun SettingItemWithSubtitle(
         supportingContent = {
             Text(
                 text = subtitle,
-                style = MaterialTheme.typography.titleSmall
+                style = MaterialTheme.typography.bodySmall
             )
         },
         trailingContent = {
@@ -260,4 +311,37 @@ fun SettingItemWithSwitch(
         }
     )
     Divider(color = Color(0xFFCCCCCC))
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NotificationBottomSheet(
+    sheetState: SheetState,
+    onDismiss: () -> Unit,
+    onAcceptDelay: (Int) -> Unit
+) {
+    ModalBottomSheet(
+        onDismissRequest = { onDismiss() },
+        sheetState = sheetState
+    ) {
+        Column(
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 64.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            LazyColumn {
+                items(5){
+                    ListItem(
+                        modifier = Modifier.clickable {
+                            onAcceptDelay((it+1)*10)
+                        },
+                        headlineContent = {
+                            Text(text = "${(it+1)*10} minutos antes")
+                        }
+                    )
+                    Divider()
+                }
+            }
+        }
+    }
 }

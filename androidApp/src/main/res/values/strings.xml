@@ -31,5 +31,7 @@
     <string name="settings_developer_tag">linkedIn</string>
     <string name="settings_github_tag">gitHub</string>
     <string name="settings_version">Versión %1$s</string>
+    <string name="settings_notification_time">Aviso de notificación</string>
+    <string name="settings_notification_time_selected">%1$s minutos antes</string>
 
 </resources>

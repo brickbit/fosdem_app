@@ -15,27 +15,44 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.NotificationManagerCompat
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 import com.snap.fosdem.android.R
-import com.snap.fosdem.android.screens.common.GrantPermission
 import com.snap.fosdem.app.navigation.Routes
 import com.snap.fosdem.app.viewModel.SplashViewModel
 import com.snap.fosdem.app.state.SplashState
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun SplashRoute(
     viewModel: SplashViewModel = koinViewModel(),
     onNavigate: (Routes) -> Unit
 ) {
     val state = viewModel.state.collectAsState().value
+    val context = LocalContext.current
+    val notificationPermissionState = rememberPermissionState(permission =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            Manifest.permission.POST_NOTIFICATIONS
+        } else {
+            Manifest.permission.ACCESS_NOTIFICATION_POLICY
+        }
+    )
 
     LaunchedEffect(Unit) {
         viewModel.initializeSplash()
+        notificationPermissionState.launchPermissionRequest()
+        viewModel.saveNotificationPermissionState(
+            NotificationManagerCompat.from(context).areNotificationsEnabled()
+        )
+
     }
     when(state) {
         is SplashState.Finished -> {
@@ -44,22 +61,17 @@ fun SplashRoute(
             }
         }
         SplashState.Init -> {
-            SplashScreen(
-                onNotificationPermissionGranted = { viewModel.saveNotificationPermissionState(it) },
-            )
+            SplashScreen()
         }
         SplashState.Error -> {
-            SplashScreen(
-                onNotificationPermissionGranted = { viewModel.saveNotificationPermissionState(it) },
-            )
+            SplashScreen()
         }
     }
 }
 
 @Composable
-fun SplashScreen(
-    onNotificationPermissionGranted: (Boolean) -> Unit,
-) {
+fun SplashScreen() {
+    val context = LocalContext.current
     Box(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -80,25 +92,12 @@ fun SplashScreen(
                 )
             }
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            GrantPermission(
-                permission = Manifest.permission.POST_NOTIFICATIONS,
-                onPermissionGranted = { onNotificationPermissionGranted(it) },
-            )
-        } else {
-            GrantPermission(
-                permission = Manifest.permission.ACCESS_NOTIFICATION_POLICY,
-                onPermissionGranted = { onNotificationPermissionGranted(it) },
-            )
-        }
     }
 }
 
 @Preview(device = Devices.PIXEL_3A)
 @Composable
 fun SplashScreenPreview() {
-    SplashScreen(
-        onNotificationPermissionGranted = {},
-    )
+    SplashScreen()
 }
 

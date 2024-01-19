@@ -46,6 +46,6 @@ val viewModelModules = module {
     viewModel { TalkViewModel(get(), get(), get()) }
     viewModel { LanguageViewModel(get(), get()) }
     viewModel { ScheduleViewModel(get(), get(), get(), get()) }
-    viewModel { SettingsViewModel(get(), get()) }
+    viewModel { SettingsViewModel(get(), get(), get(), get()) }
 
 }

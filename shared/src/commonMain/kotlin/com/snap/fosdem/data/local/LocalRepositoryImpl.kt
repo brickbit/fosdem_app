@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import com.snap.fosdem.domain.model.EventBo
@@ -25,12 +26,14 @@ class LocalRepositoryImpl(
         private const val PREFERRED_TRACK_LIST = "PREFERRED_TRACK_LIST"
         private const val NOTIFICATIONS_ENABLED = "NOTIFICATIONS_ENABLED"
         private const val EVENT_NOTIFICATIONS = "EVENT_NOTIFICATIONS"
+        private const val NOTIFICATION_TIME = "NOTIFICATION_TIME"
     }
 
     private val onboardingShown = booleanPreferencesKey("$PREFS_TAG_KEY$IS_ON_BOARDING_SHOWN")
     private val preferredTracks = stringPreferencesKey("$PREFS_TAG_KEY$PREFERRED_TRACK_LIST")
     private val notificationsPreferences = booleanPreferencesKey("$PREFS_TAG_KEY$NOTIFICATIONS_ENABLED")
     private val eventNotificationPreferences = stringPreferencesKey("$PREFS_TAG_KEY$EVENT_NOTIFICATIONS")
+    private val notificationTime = intPreferencesKey("$PREFS_TAG_KEY$NOTIFICATION_TIME")
 
     override suspend fun setOnBoardingSeen() = dataStore.edit { preferences ->
         preferences[onboardingShown] = true
@@ -95,4 +98,12 @@ class LocalRepositoryImpl(
             emptyList()
         }
     }
+
+    override suspend fun setNotificationTime(time: Int) = dataStore.edit { preferences ->
+        preferences[notificationTime] = time
+    }
+
+    override suspend fun getNotificationTime() = dataStore.data.map { preferences ->
+        preferences[notificationTime] ?: 10
+    }.first()
 }
