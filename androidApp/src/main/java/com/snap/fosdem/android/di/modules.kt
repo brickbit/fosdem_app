@@ -38,7 +38,7 @@ fun providerModule(context: Context) = module {
 }
 
 val viewModelModules = module {
-    viewModel { MainActivityViewModel() }
+    viewModel { MainActivityViewModel(get()) }
     viewModel { SplashViewModel(get(), get(), get(), get()) }
     viewModel { OnBoardingViewModel(get()) }
     viewModel { PreferencesViewModel(get(), get(), get()) }

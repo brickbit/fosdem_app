@@ -2,15 +2,21 @@ package com.snap.fosdem.app.viewModel
 
 import com.snap.fosdem.app.navigation.Routes
 import com.snap.fosdem.app.state.ScaffoldState
+import com.snap.fosdem.app.state.SendNotificationState
+import com.snap.fosdem.domain.useCase.GetEventsForNotificationUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class MainActivityViewModel: BaseViewModel() {
+class MainActivityViewModel(
+    private val getEventsForNotification: GetEventsForNotificationUseCase
+): BaseViewModel() {
 
     private val _state: MutableStateFlow<ScaffoldState> = MutableStateFlow(ScaffoldState.Initialized(visible = false, route = Routes.Splash))
     val state = _state.asStateFlow()
-
+    private val _sendNotificationState: MutableStateFlow<SendNotificationState> = MutableStateFlow(SendNotificationState.Initialized)
+    val sendNotificationState = _sendNotificationState.asStateFlow()
     fun getRouteInformation(name: String?) {
         val route = getRouteByName(name)
         val visibility = shouldShowTopBar(route)
@@ -50,6 +56,17 @@ class MainActivityViewModel: BaseViewModel() {
             Routes.Language -> true
             Routes.WebView -> true
             else -> false
+        }
+    }
+
+    fun getEventsForNotification() {
+        scope.launch {
+            getEventsForNotification.invoke()
+                .onSuccess { notification ->
+                    _sendNotificationState.update {
+                        SendNotificationState.Ready(notification)
+                    }
+                }
         }
     }
 }

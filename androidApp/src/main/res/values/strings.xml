@@ -33,5 +33,6 @@
     <string name="settings_version">Versión %1$s</string>
     <string name="settings_notification_time">Aviso de notificación</string>
     <string name="settings_notification_time_selected">%1$s minutos antes</string>
+    <string name="notification_description">La charla empieza en %1$s minutos en la sala %2$s</string>
 
 </resources>

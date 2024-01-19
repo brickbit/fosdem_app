@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    kotlin("plugin.serialization") version "1.9.0"
 }
 apply(plugin= "com.mikepenz.aboutlibraries.plugin")
 
@@ -80,5 +81,7 @@ dependencies {
     //splash
     implementation(libs.androidx.core.splashscreen)
     //licenses
-    implementation("com.mikepenz:aboutlibraries-compose:10.10.0")
+    implementation(libs.aboutlibraries.compose)
+    //serialization
+    implementation(libs.kotlinx.serialization.json)
 }

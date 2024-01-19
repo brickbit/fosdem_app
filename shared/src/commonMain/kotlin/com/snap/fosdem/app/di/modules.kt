@@ -6,6 +6,7 @@ import com.snap.fosdem.domain.repository.LocalRepository
 import com.snap.fosdem.domain.repository.ScheduleRepository
 import com.snap.fosdem.domain.useCase.ChangeLanguageUseCase
 import com.snap.fosdem.domain.useCase.GetEventByIdUseCase
+import com.snap.fosdem.domain.useCase.GetEventsForNotificationUseCase
 import com.snap.fosdem.domain.useCase.GetHoursUseCase
 import com.snap.fosdem.domain.useCase.GetLanguageUseCase
 import com.snap.fosdem.domain.useCase.GetNotificationTimeUseCase
@@ -53,6 +54,7 @@ val useCaseModule = module {
     single { GetNotificationsEnabledUseCase(get()) }
     single { ManageEventNotificationUseCase(get()) }
     single { IsEventNotifiedUseCase(get()) }
+    single { GetEventsForNotificationUseCase(get()) }
     single { GetNotificationTimeUseCase(get()) }
     single { ManageNotificationTimeUseCase(get()) }
 }
