@@ -14,6 +14,7 @@ import com.snap.fosdem.android.screens.ScheduleRoute
 import com.snap.fosdem.android.screens.SettingsRoute
 import com.snap.fosdem.android.screens.SplashRoute
 import com.snap.fosdem.android.screens.TalkRoute
+import com.snap.fosdem.android.screens.ThirdPartyLibrariesRoute
 import com.snap.fosdem.android.screens.common.CustomWebView
 import com.snap.fosdem.app.navigation.Routes
 import java.net.URLEncoder
@@ -89,6 +90,9 @@ fun Navigator(
                 navigateToAbout = { url ->
                     val encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
                     navController.navigate(Routes.WebView.loadWebView(encodedUrl))
+                },
+                navigateToThirdPartyLibraries = {
+                    navController.navigate(Routes.ThirdPartyLibraries.name)
                 }
             )
         }
@@ -111,6 +115,11 @@ fun Navigator(
             CustomWebView(
                 url = backStackEntry.arguments?.getString("url") ?: ""
             )
+        }
+        composable(
+            route = Routes.ThirdPartyLibraries.name
+        ) {
+            ThirdPartyLibrariesRoute()
         }
     }
 }

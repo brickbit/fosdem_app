@@ -62,6 +62,7 @@ fun SettingsRoute(
     navigateToLanguage: () -> Unit,
     navigateToPreferences: () -> Unit,
     navigateToAbout: (String) -> Unit,
+    navigateToThirdPartyLibraries: () -> Unit
 ) {
     val state = viewModel.state.collectAsState().value
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -88,8 +89,6 @@ fun SettingsRoute(
         lifecycleOwner.lifecycle.addObserver(lifecycleEventObserver)
         onDispose { lifecycleOwner.lifecycle.removeObserver(lifecycleEventObserver) }
     }
-
-
     SettingsScreen(
         enabled = state.enabled,
         time = state.time,
@@ -112,6 +111,7 @@ fun SettingsRoute(
         navigateToLanguage = navigateToLanguage,
         navigateToPreferences = navigateToPreferences,
         navigateToAbout = navigateToAbout,
+        navigateToThirdPartyLibraries = navigateToThirdPartyLibraries
     )
 }
 
@@ -125,7 +125,8 @@ fun SettingsScreen(
     withdrawPermission: () -> Unit,
     navigateToLanguage: () -> Unit,
     navigateToPreferences: () -> Unit,
-    navigateToAbout: (String) -> Unit
+    navigateToAbout: (String) -> Unit,
+    navigateToThirdPartyLibraries: () -> Unit
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -163,6 +164,7 @@ fun SettingsScreen(
             SettingItem(
                 name = stringResource(R.string.settings_licenses),
                 onNavigate = {
+                    navigateToThirdPartyLibraries()
                 }
             )
             SettingItem(

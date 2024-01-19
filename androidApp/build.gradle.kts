@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
 }
+apply(plugin= "com.mikepenz.aboutlibraries.plugin")
+
 
 android {
     namespace = "com.snap.fosdem.android"
@@ -77,7 +79,6 @@ dependencies {
     implementation(libs.androidx.browser)
     //splash
     implementation(libs.androidx.core.splashscreen)
-
-
-
+    //licenses
+    implementation("com.mikepenz:aboutlibraries-compose:10.10.0")
 }

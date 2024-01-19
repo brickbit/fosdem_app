@@ -17,5 +17,5 @@ sealed class Routes(val name: String) {
     data object WebView: Routes("WebView/{url}") {
         fun loadWebView(url: String): String = "WebView/$url"
     }
-
+    data object ThirdPartyLibraries: Routes("ThirdLibraries")
 }
