@@ -39,7 +39,7 @@ extension TalkView {
         private var handle: DisposableHandle?
 
         init() {
-            self.viewModel = TalkViewModel()
+            self.viewModel =  GetViewModels().getTalkViewModel()
             //self.viewModel.initializeSplash()
         }
         

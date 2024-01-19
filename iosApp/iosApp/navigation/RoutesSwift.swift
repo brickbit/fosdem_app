@@ -44,12 +44,10 @@ extension RouteSwift {
             self = .splash
         case let onBoarding as Routes.OnBoarding:
             self = .onBoarding
-        case let preferences as Routes.Preferences:
+        case let preferences as Routes.FavouriteTracks:
             self = .preferences
         case let mainRoute as Routes.Main:
             self = .main
-        case let speaker as Routes.Speaker:
-            self = .speaker
         case let talk as Routes.Talk:
             self = .talk
         default:
