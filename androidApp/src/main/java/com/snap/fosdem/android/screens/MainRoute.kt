@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -47,8 +46,8 @@ import coil.compose.AsyncImage
 import com.snap.fosdem.android.MyApplicationTheme
 import com.snap.fosdem.android.R
 import com.snap.fosdem.android.extension.splitImage
-import com.snap.fosdem.android.extension.toBrushColor
 import com.snap.fosdem.android.mainBrushColor
+import com.snap.fosdem.android.screens.common.EventItem
 import com.snap.fosdem.android.screens.common.shimmerEffect
 import com.snap.fosdem.app.state.MainPreferredTracksState
 import com.snap.fosdem.app.state.MainTracksBuildingState
@@ -123,84 +122,19 @@ fun TrackRow(
             overflow = TextOverflow.Ellipsis
         )
         LazyRow(
-            modifier = Modifier.padding(start = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(8.dp)
+            modifier = Modifier
+                .padding(horizontal = 8.dp, vertical = 8.dp),
         ) {
             items(track.events) { event ->
                 EventItem(
                     modifier = Modifier
-                        .fillParentMaxWidth(0.7f),
+                        .fillParentMaxWidth(0.8f)
+                        .padding(horizontal = 8.dp, vertical = 8.dp),
                     event = event,
-                    onNavigate = onNavigate
+                    onClickAction = onNavigate
                 )
             }
         }
-    }
-}
-
-@Composable
-fun EventItem(
-    modifier: Modifier,
-    event: EventBo,
-    onNavigate: (String) -> Unit
-) {
-    Box(
-        modifier = modifier
-            .clickable { onNavigate(event.id) }
-            .background(
-                brush = event.color.toBrushColor(),
-                shape = RoundedCornerShape(16.dp)
-            ).padding(8.dp),
-    ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            EventDescriptionContent(event)
-        }
-    }
-}
-
-@Composable
-fun HeaderEventItem(
-    modifier: Modifier,
-    event: EventBo
-) {
-    Row(
-        modifier = modifier.defaultMinSize(120.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row(
-            modifier = Modifier
-                .background(
-                    color = Color.White,
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .padding(4.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                modifier = Modifier
-                    .size(20.dp),
-                painter = painterResource(id = R.drawable.ic_clock),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
-            )
-            Text(
-                text = "${event.talk?.start}/${event.talk?.end}",
-                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
-            )
-        }
-        Image(
-            modifier = Modifier
-                .background(color = Color.White, shape = CircleShape)
-                .size(28.dp),
-            painter = painterResource(id = R.drawable.ic_notification),
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
-        )
     }
 }
 
@@ -226,33 +160,6 @@ fun FooterEventItem(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
-    }
-}
-
-@Composable
-fun EventDescriptionContent(
-    event: EventBo
-) {
-    Column(
-        modifier = Modifier.height(90.dp),
-        verticalArrangement = Arrangement.Top
-    ) {
-        Text(
-            modifier = Modifier
-                .width(260.dp),
-            text = event.talk?.title ?: "",
-            style = MaterialTheme.typography.bodyMedium,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis
-        )
-        Text(
-            text = event.speaker?.name ?: "",
-            style = MaterialTheme.typography.bodySmall,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-
-        FooterEventItem(event)
     }
 }
 
@@ -395,16 +302,15 @@ fun LazyListScope.rightNowItems(
         is MainTracksNowState.Loaded -> {
             item {
                 LazyRow(
-                    modifier = Modifier.padding(start = 8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(8.dp)
+                    modifier = Modifier.padding(vertical = 8.dp),
                 ) {
                     items(tracksNow.events) { event ->
                         EventItem(
                             modifier = Modifier
-                                .fillParentMaxWidth(0.7f),
+                                .fillParentMaxWidth(0.8f)
+                                .padding(horizontal = 8.dp, vertical = 8.dp),
                             event = event,
-                            onNavigate = onNavigate
+                            onClickAction = onNavigate
                         )
                     }
                 }
@@ -432,16 +338,15 @@ fun LazyListScope.tracksByBuilding(
         is MainTracksBuildingState.Loaded -> {
             item {
                 LazyRow(
-                    modifier = Modifier.padding(start = 8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(8.dp)
+                    modifier = Modifier.padding(vertical = 8.dp),
                 ) {
                     items(tracksBuilding.events) { event ->
                         EventItem(
                             modifier = Modifier
-                                .fillParentMaxWidth(0.7f),
+                                .fillParentMaxWidth(0.8f)
+                                .padding(horizontal = 8.dp, vertical = 8.dp),
                             event = event,
-                            onNavigate = onNavigate
+                            onClickAction = onNavigate
                         )
                     }
                 }
@@ -488,7 +393,7 @@ fun LoadingItem() {
         items(4) {
             Box(
                 modifier = Modifier
-                    .fillParentMaxWidth(0.7f)
+                    .fillParentMaxWidth(0.8f)
                     .padding(8.dp)
                     .height(120.dp)
                     .clip(RoundedCornerShape(20.dp))

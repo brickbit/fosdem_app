@@ -51,7 +51,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController: NavHostController = rememberNavController()
             createChannel()
-            searchNotification()
             MyApplicationTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -72,6 +71,11 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        searchNotification()
     }
 
     override fun onStart() {
