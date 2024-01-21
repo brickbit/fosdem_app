@@ -100,7 +100,7 @@ fun ContentForPage(
         Image(
             modifier = Modifier.size(dimensionResource(id = R.dimen.splash_image_size)),
             painter = painterResource(id = R.drawable.ic_launcher_foreground),
-            contentDescription = stringResource(R.string.fosdem_logo_description)
+            contentDescription = stringResource(R.string.splash_fosdem_logo_description)
         )
         Text(
             text = title,
@@ -123,7 +123,7 @@ fun ContentForPage(
                     )
                     .padding(vertical = 16.dp, horizontal = 32.dp)
                     .clickable { onContinueClicked() },
-                text = stringResource(R.string.next_button),
+                text = stringResource(R.string.on_boarding_next_button),
                 style = MaterialTheme.typography.titleSmall.copy(Color.White)
             )
         }

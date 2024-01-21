@@ -11,7 +11,7 @@
         android:allowBackup="false"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:label="@string/fosdem"
+        android:label="@string/splash_fosdem"
         android:icon="@mipmap/ic_launcher">
         <receiver
             android:name=".service.NotificationService"

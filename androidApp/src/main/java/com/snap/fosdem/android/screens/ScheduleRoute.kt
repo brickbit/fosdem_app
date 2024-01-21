@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.snap.fosdem.android.R
@@ -150,7 +151,7 @@ fun FilterTopBar(
     TopAppBar(
         title = {
             Text(
-                text = "Schedule",
+                text = stringResource(id = R.string.schedule),
                 style = MaterialTheme.typography.titleMedium
             )
         },
@@ -179,15 +180,15 @@ fun FiltersUsed(
             .background(Brush.verticalGradient(colorStops = transparentBrushColorReversed(context))),
     ) {
         ListItem(
-            headlineContent = { Text(text = "Tracks") },
+            headlineContent = { Text(text = stringResource(R.string.schedule_tracks)) },
             trailingContent = { Text(text = scheduledLoaded.day) },
             supportingContent = {
-                Text(text = scheduledLoaded.tracks.getOrNull(0) ?: "All")
+                Text(text = scheduledLoaded.tracks.getOrNull(0) ?: stringResource(R.string.schedule_all))
             }
         )
         if(scheduledLoaded.hours.isNotEmpty()) {
             ListItem(
-                headlineContent = { Text(text = "Hours") },
+                headlineContent = { Text(text = stringResource(R.string.schedule_hour)) },
                 supportingContent = {
                     LazyRow(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -240,7 +241,7 @@ fun ScheduleBottomSheet(
                 headlineContent = {
                     Text(
                         modifier = Modifier.padding(bottom = 16.dp),
-                        text = "Filtrar por",
+                        text = stringResource(R.string.schedule_filter_by),
                         style = MaterialTheme.typography.titleMedium
                     )
                 }
@@ -248,7 +249,7 @@ fun ScheduleBottomSheet(
             ListItem(
                 headlineContent = {
                     Text(
-                        text = "Día",
+                        text = stringResource(R.string.schedule_day),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }, supportingContent = {
@@ -262,7 +263,7 @@ fun ScheduleBottomSheet(
             ListItem(
                 headlineContent = {
                     Text(
-                        text = "Tracks",
+                        text = stringResource(id = R.string.schedule_tracks),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 },
@@ -277,7 +278,7 @@ fun ScheduleBottomSheet(
             ListItem(
                 headlineContent = {
                     Text(
-                        text = "Hora",
+                        text = stringResource(id = R.string.schedule_hour),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 },
@@ -309,7 +310,7 @@ fun ScheduleBottomSheet(
             ListItem(
                 headlineContent = {
                     Text(
-                        text = "Room",
+                        text = stringResource(R.string.schedule_room),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 },
@@ -350,7 +351,7 @@ fun ScheduleBottomSheet(
                                 shape = RoundedCornerShape(50)
                             )
                             .padding(vertical = 12.dp),
-                        text = "Filter",
+                        text = stringResource(R.string.schedule_filter),
                         style = MaterialTheme.typography.bodyMedium.copy(Color.White),
                         textAlign = TextAlign.Center
                     )

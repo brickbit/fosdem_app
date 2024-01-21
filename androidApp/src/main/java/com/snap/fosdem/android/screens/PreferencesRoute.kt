@@ -54,7 +54,7 @@ fun PreferencesRoute(
     }
 
     when(state) {
-        PreferencesState.Error -> Text("Error")
+        PreferencesState.Error -> Text(stringResource(R.string.favourite_error))
         is PreferencesState.Loaded -> {
             PreferenceScreen(
                 tracks = state.tracks,
@@ -132,11 +132,11 @@ fun PreferenceTitle() {
         verticalArrangement = Arrangement.Top
     ) {
         Text(
-            text = stringResource(R.string.track),
+            text = stringResource(R.string.favourite_tracks_track),
             style = MaterialTheme.typography.titleMedium
         )
         Text(
-            text = stringResource(R.string.track_subtitle),
+            text = stringResource(R.string.favourite_tracks_track_subtitle),
             style = MaterialTheme.typography.bodyMedium
         )
     }
@@ -168,7 +168,7 @@ fun PreferenceButton(
                     )
                     .clickable { onContinueButtonClicked() }
                     .padding(vertical = 16.dp, horizontal = 32.dp),
-                text = stringResource(R.string.next_button),
+                text = stringResource(R.string.favourite_tracks_next_button),
                 style = MaterialTheme.typography.titleSmall.copy(Color.White),
                 textAlign = TextAlign.Center
             )
@@ -182,7 +182,7 @@ fun PreferenceButton(
                         shape = CircleShape
                     )
                     .padding(12.dp),
-                text = stringResource(R.string.next_button),
+                text = stringResource(R.string.on_boarding_next_button),
                 style = MaterialTheme.typography.titleSmall.copy(Color.DarkGray),
                 textAlign = TextAlign.Center
             )

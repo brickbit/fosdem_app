@@ -138,11 +138,11 @@ fun SettingsScreen(
     ) {
         Column {
             SettingItem(
-                name = stringResource(id = R.string.language),
+                name = stringResource(id = R.string.settings_language),
                 onNavigate = { navigateToLanguage() }
             )
             SettingItemWithSwitch(
-                name = stringResource(R.string.notifications),
+                name = stringResource(R.string.settings_notifications),
                 notificationsEnabled = enabled,
                 onNotificationsChange = { granted ->
                     if(!granted) {
@@ -158,7 +158,7 @@ fun SettingsScreen(
                 onActionClicked = { showBottomSheet = true }
             )
             SettingItem(
-                name = stringResource(R.string.preferred_tracks),
+                name = stringResource(R.string.settings_favourite_tracks),
                 onNavigate = { navigateToPreferences() }
             )
             SettingItem(
@@ -345,7 +345,10 @@ fun NotificationBottomSheet(
                             onAcceptDelay((it+1)*10)
                         },
                         headlineContent = {
-                            Text(text = "${(it+1)*10} minutos antes")
+                            Text(text = stringResource(
+                                R.string.settings_minutes_before,
+                                (it + 1) * 10
+                            ))
                         }
                     )
                     Divider()

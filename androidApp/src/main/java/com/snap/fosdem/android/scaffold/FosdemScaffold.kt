@@ -28,7 +28,7 @@ fun FosdemScaffold(
                     )
                     Routes.Settings ->  TitleTopBar(stringResource(R.string.settings))
                     Routes.Talk ->  Box(modifier = Modifier)
-                    Routes.Language ->  TitleTopBar(stringResource(R.string.language))
+                    Routes.Language ->  TitleTopBar(stringResource(R.string.settings_language))
                     Routes.WebView -> TitleTopBar(stringResource(R.string.settings_app_license))
                     Routes.ThirdPartyLibraries -> TitleTopBar(stringResource(R.string.settings_licenses))
                     else -> {}

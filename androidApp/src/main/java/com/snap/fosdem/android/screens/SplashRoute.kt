@@ -84,10 +84,10 @@ fun SplashScreen() {
                 Image(
                     modifier = Modifier.size(dimensionResource(id = R.dimen.splash_image_size)),
                     painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                    contentDescription = stringResource(R.string.fosdem_logo_description)
+                    contentDescription = stringResource(R.string.splash_fosdem_logo_description)
                 )
                 Text(
-                    text = stringResource(R.string.fosdem).uppercase(),
+                    text = stringResource(R.string.splash_fosdem).uppercase(),
                     style = MaterialTheme.typography.titleLarge
                 )
             }

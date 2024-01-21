@@ -11,8 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,6 +38,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -218,7 +218,12 @@ fun TalkHeader(
                         style = MaterialTheme.typography.bodyLarge
                     )
                     Text(
-                        text = "${event.talk.day}  ${event.startHour}/${event.endHour}",
+                        text = stringResource(
+                            R.string.talk_speaker_header,
+                            event.talk.day,
+                            event.startHour,
+                            event.endHour
+                        ),
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -277,7 +282,7 @@ fun TalkDescription(
                     shape = RoundedCornerShape(50)
                 )
                 .padding(vertical = 12.dp),
-            text = if(notify) "Quitar alarma" else "Poner alarma",
+            text = if(notify) stringResource(R.string.talk_remove_alarm) else stringResource(R.string.talk_set_alarm),
             style = MaterialTheme.typography.bodyMedium.copy(Color.White),
             textAlign = TextAlign.Center
         )

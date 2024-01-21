@@ -54,7 +54,7 @@ fun LanguageRoute(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = stringResource(R.string.no_languages))
+                Text(text = stringResource(R.string.languages_no_languages))
             }
         }
     }

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -36,7 +35,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -155,7 +153,7 @@ fun FooterEventItem(
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
         )
         Text(
-            text = event.talk?.room?.name ?: "",
+            text = event.talk.room.name,
             style = MaterialTheme.typography.bodySmall,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -269,7 +267,7 @@ fun ScheduleCard(
                 modifier = Modifier
                     .width(150.dp)
                     .padding(vertical = 24.dp),
-                text = stringResource(R.string.check_schedule),
+                text = stringResource(R.string.main_check_schedule),
                 style = MaterialTheme.typography.titleSmall.copy(Color.White),
                 textAlign = TextAlign.Center
             )
@@ -294,7 +292,7 @@ fun LazyListScope.rightNowItems(
     item {
         Text(
             modifier = Modifier.padding(start = 16.dp),
-            text = stringResource(R.string.right_now),
+            text = stringResource(R.string.main_right_now),
             style = MaterialTheme.typography.bodyMedium
         )
     }
@@ -365,7 +363,7 @@ fun LazyListScope.preferredTracks(
     item {
         Text(
             modifier = Modifier.padding(top= 16.dp, start = 16.dp),
-            text = stringResource(R.string.your_preferred_tracks),
+            text = stringResource(R.string.main_your_favourite_tracks),
             style = MaterialTheme.typography.titleSmall
         )
     }

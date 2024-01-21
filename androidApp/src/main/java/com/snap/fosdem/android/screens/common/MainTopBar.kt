@@ -37,7 +37,7 @@ fun MainTopBar(
                     contentDescription = null
                 )
                 Text(
-                    text = stringResource(id = R.string.fosdem),
+                    text = stringResource(id = R.string.top_bar_fosdem),
                     style = MaterialTheme.typography.titleMedium
                 )
             }
