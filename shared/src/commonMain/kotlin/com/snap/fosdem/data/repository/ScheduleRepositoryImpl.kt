@@ -3,8 +3,8 @@ package com.snap.fosdem.data.repository
 import com.snap.fosdem.data.Constant
 import com.snap.fosdem.data.dataSource.makeRequest
 import com.snap.fosdem.data.dataSource.transform
-import com.snap.fosdem.data.model.TrackDto
-import com.snap.fosdem.data.model.toBo
+import com.snap.fosdem.data.model.dto.TrackDto
+import com.snap.fosdem.data.model.dto.toBo
 import com.snap.fosdem.domain.model.TrackBo
 import com.snap.fosdem.domain.repository.ScheduleRepository
 import io.ktor.client.HttpClient

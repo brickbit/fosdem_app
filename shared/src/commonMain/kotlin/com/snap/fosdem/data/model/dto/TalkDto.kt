@@ -1,4 +1,4 @@
-package com.snap.fosdem.data.model
+package com.snap.fosdem.data.model.dto
 
 import com.snap.fosdem.domain.model.TalkBo
 import kotlinx.serialization.SerialName
@@ -6,21 +6,21 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TalkDto(
-        @SerialName("id")
+    @SerialName("id")
         val id: String,
-        @SerialName("title")
+    @SerialName("title")
         val title: String,
-        @SerialName("description")
+    @SerialName("description")
         val description: String,
-        @SerialName("track")
+    @SerialName("track")
         val track: String,
-        @SerialName("room")
+    @SerialName("room")
         val room: RoomDto,
-        @SerialName("day")
+    @SerialName("day")
         val day: String,
-        @SerialName("start")
+    @SerialName("start")
         val start: String,
-        @SerialName("end")
+    @SerialName("end")
         val end: String
 )
 

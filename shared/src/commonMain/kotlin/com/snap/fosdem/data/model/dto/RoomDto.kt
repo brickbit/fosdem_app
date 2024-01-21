@@ -1,4 +1,4 @@
-package com.snap.fosdem.data.model
+package com.snap.fosdem.data.model.dto
 
 import com.snap.fosdem.domain.model.RoomBo
 import kotlinx.serialization.SerialName
@@ -6,19 +6,19 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RoomDto(
-        @SerialName("id")
+    @SerialName("id")
         val id: String,
-        @SerialName("name")
+    @SerialName("name")
         val name: String,
-        @SerialName("capacity")
+    @SerialName("capacity")
         val capacity: String,
-        @SerialName("building")
+    @SerialName("building")
         val building: BuildingDto,
-        @SerialName("location")
+    @SerialName("location")
         val location: String,
-        @SerialName("video")
+    @SerialName("video")
         val video: String,
-        @SerialName("chat")
+    @SerialName("chat")
         val chat: String,
 )
 

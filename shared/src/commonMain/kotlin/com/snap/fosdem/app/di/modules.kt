@@ -1,8 +1,10 @@
 package com.snap.fosdem.app.di
 
 import com.snap.fosdem.data.local.LocalRepositoryImpl
+import com.snap.fosdem.data.repository.RealmRepositoryImpl
 import com.snap.fosdem.data.repository.ScheduleRepositoryImpl
 import com.snap.fosdem.domain.repository.LocalRepository
+import com.snap.fosdem.domain.repository.RealmRepository
 import com.snap.fosdem.domain.repository.ScheduleRepository
 import com.snap.fosdem.domain.useCase.ChangeLanguageUseCase
 import com.snap.fosdem.domain.useCase.GetEventByIdUseCase
@@ -32,22 +34,23 @@ import org.koin.dsl.module
 val repositoryModule = module {
     factory<ScheduleRepository> { ScheduleRepositoryImpl() }
     factory<LocalRepository> { LocalRepositoryImpl(get()) }
+    factory<RealmRepository> { RealmRepositoryImpl() }
 }
 val useCaseModule = module {
-    single { GetScheduleDataUseCase(get()) }
-    single { GetTracksUseCase(get()) }
+    single { GetScheduleDataUseCase(get(),get()) }
+    single { GetTracksUseCase(get(), get()) }
     single { SaveOnBoardingUseCase(get()) }
     single { GetOnBoardingStatusUseCase(get()) }
     single { SavePreferredTracksUseCase(get()) }
     single { GetPreferredTracksUseCase(get()) }
-    single { GetScheduleByTrackUseCase(get()) }
-    single { GetScheduleByHourUseCase(get()) }
-    single { GetScheduleByParameterUseCase(get()) }
-    single { GetHoursUseCase(get()) }
-    single { GetRoomsUseCase(get()) }
+    single { GetScheduleByTrackUseCase(get(), get()) }
+    single { GetScheduleByHourUseCase(get(), get()) }
+    single { GetScheduleByParameterUseCase(get(), get()) }
+    single { GetHoursUseCase(get(), get()) }
+    single { GetRoomsUseCase(get(), get()) }
     single { GetSavedTracksUseCase(get()) }
-    single { GetScheduleByBuildingUseCase(get()) }
-    single { GetEventByIdUseCase(get()) }
+    single { GetScheduleByBuildingUseCase(get(), get()) }
+    single { GetEventByIdUseCase(get(), get()) }
     single { GetLanguageUseCase(get()) }
     single { ChangeLanguageUseCase(get()) }
     single { ManageNotificationPermissionUseCase(get()) }

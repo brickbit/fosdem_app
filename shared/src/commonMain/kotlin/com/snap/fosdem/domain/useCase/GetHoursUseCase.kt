@@ -1,12 +1,18 @@
 package com.snap.fosdem.domain.useCase
 
+import com.snap.fosdem.domain.repository.RealmRepository
 import com.snap.fosdem.domain.repository.ScheduleRepository
 
 class GetHoursUseCase(
-    private val repository: ScheduleRepository
+    private val repository: ScheduleRepository,
+    private var realmRepository: RealmRepository
 ) {
     suspend operator fun invoke(): Result<List<String>> {
-        val filteredHours = repository.getSchedule().getOrNull()?.let { schedules ->
+        val realmResult = realmRepository.getSchedule()
+        val schedulesData = realmResult.ifEmpty {
+            repository.getSchedule().getOrNull()
+        }
+        val filteredHours = schedulesData?.let { schedules ->
             val events = schedules.map { it.events }.flatten()
             val hours = events.map { it.startHour }.filter { it[0].isDigit() }.distinct()
             hours.sorted()

@@ -16,6 +16,7 @@ compose-material3 = "1.1.2"
 androidx-activityCompose = "1.8.0"
 kotlinxCoroutinesCore = "1.8.0-RC2"
 kotlinxDatetime = "0.5.0"
+libraryBase = "1.13.0"
 lifecycleViewmodelCompose = "2.6.2"
 koinAndroidxCompose = "3.4.1"
 koinCore = "3.5.0"
@@ -56,6 +57,7 @@ ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorCli
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktorClientCore" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClientCore" }
 androidx-data-store-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "androidx-data-store" }
+library-base = { module = "io.realm.kotlin:library-base", version.ref = "libraryBase" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

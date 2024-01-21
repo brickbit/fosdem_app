@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     kotlin("plugin.serialization") version "1.9.0"
+    id("io.realm.kotlin") version "1.11.0"
 }
 
 kotlin {
@@ -41,6 +42,9 @@ kotlin {
             implementation(libs.koin.core.v320)
             //datetime
             implementation(libs.kotlinx.datetime)
+            //realm
+            implementation(libs.library.base)
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

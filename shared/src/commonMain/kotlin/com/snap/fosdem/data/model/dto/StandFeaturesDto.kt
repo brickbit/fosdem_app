@@ -1,4 +1,4 @@
-package com.snap.fosdem.data.model
+package com.snap.fosdem.data.model.dto
 
 import com.snap.fosdem.domain.model.StandFeaturesBo
 import kotlinx.serialization.SerialName
