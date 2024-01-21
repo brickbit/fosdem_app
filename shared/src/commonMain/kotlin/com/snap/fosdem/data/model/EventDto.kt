@@ -11,17 +11,13 @@ data class EventDto(
         @SerialName("day")
         val day: String,
         @SerialName("talk")
-        val talk: TalkDto?,
+        val talk: TalkDto,
         @SerialName("speaker")
-        val speaker: SpeakerDto?,
+        val speaker: List<SpeakerDto>,
         @SerialName("startHour")
         val startHour: String,
-        @SerialName("startHourLink")
-        val startHourLink: String,
         @SerialName("endHour")
         val endHour: String,
-        @SerialName("endHourLink")
-        val endHourLink: String,
         @SerialName("color")
         val color: String?,
 )
@@ -29,11 +25,9 @@ data class EventDto(
 fun EventDto.toBo(): EventBo = EventBo(
         id = id,
         day = day,
-        talk = talk?.toBo(),
-        speaker = speaker?.toBo(),
+        talk = talk.toBo(),
+        speaker = speaker.map{ it.toBo() },
         startHour = startHour,
-        startHourLink = startHourLink,
         endHour = endHour,
-        endHourLink = endHourLink,
         color = color
 )

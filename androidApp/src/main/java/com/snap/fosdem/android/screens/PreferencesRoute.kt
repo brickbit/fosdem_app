@@ -198,10 +198,10 @@ fun PreferenceScreenPreview() {
     MyApplicationTheme {
         PreferenceScreen(
             tracks = listOf(
-                TrackBo(id = "1", name = "Android, iOS, Flutter", events = emptyList()),
-                TrackBo(id = "2", name = "Vue, Angular", events = emptyList()),
-                TrackBo(id = "3", name = "Spring Boot", events = emptyList()),
-                TrackBo(id = "4", name = "AI", events = emptyList()),
+                TrackBo(id = "1", name = "Android, iOS, Flutter", events = emptyList(), stands = emptyList()),
+                TrackBo(id = "2", name = "Vue, Angular", events = emptyList(), stands = emptyList()),
+                TrackBo(id = "3", name = "Spring Boot", events = emptyList(), stands = emptyList()),
+                TrackBo(id = "4", name = "AI", events = emptyList(), stands = emptyList()),
             ),
             onTackChecked = {_,_ ->},
             enableContinueButton = { true },

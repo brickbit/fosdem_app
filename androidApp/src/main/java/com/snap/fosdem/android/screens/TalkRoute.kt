@@ -1,7 +1,6 @@
 package com.snap.fosdem.android.screens
 
 import android.net.Uri
-import android.webkit.WebView
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,6 +11,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,7 +46,6 @@ import coil.compose.AsyncImage
 import com.snap.fosdem.android.MyApplicationTheme
 import com.snap.fosdem.android.R
 import com.snap.fosdem.android.mainBrushColor
-import com.snap.fosdem.android.screens.common.CustomWebView
 import com.snap.fosdem.android.screens.common.LoadingScreen
 import com.snap.fosdem.app.state.TalkState
 import com.snap.fosdem.app.viewModel.TalkViewModel
@@ -105,7 +105,7 @@ fun TalkContent(
     notifyEvent: (EventBo) -> Unit,
     removeNotifyEvent: (EventBo) -> Unit
 ) {
-    var showSpeakerBottomSheet by remember { mutableStateOf(false) }
+    var showSpeakerBottomSheet by remember { mutableStateOf( Pair(0,false)) }
     val speakerSheetState = rememberModalBottomSheetState()
     var showRoomBottomSheet by remember { mutableStateOf(false) }
 
@@ -116,7 +116,7 @@ fun TalkContent(
     ) {
         TalkHeader(
             event = event,
-            onSpeakerClicked = { showSpeakerBottomSheet = true }
+            onSpeakerClicked = { showSpeakerBottomSheet = Pair(it,true) }
         )
         TalkDescription(
             event = event,
@@ -126,15 +126,16 @@ fun TalkContent(
             removeNotifyEvent = removeNotifyEvent
         )
     }
-    if(showSpeakerBottomSheet) {
+    if(showSpeakerBottomSheet.second) {
         SpeakerBottomSheet(
+            position = showSpeakerBottomSheet.first,
             event = event,
             sheetState = speakerSheetState,
-            onDismiss = { showSpeakerBottomSheet = false},
+            onDismiss = { showSpeakerBottomSheet = Pair(showSpeakerBottomSheet.first,false)},
         )
     }
     if(showRoomBottomSheet) {
-        event.talk?.room?.location?.let {
+        event.talk.room.location.let {
             val context = LocalContext.current
             val intent = CustomTabsIntent.Builder().build()
             intent.launchUrl(context, Uri.parse(it))
@@ -147,6 +148,7 @@ fun TalkContent(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SpeakerBottomSheet(
+    position: Int,
     event: EventBo,
     sheetState: SheetState,
     onDismiss: () -> Unit
@@ -164,17 +166,17 @@ fun SpeakerBottomSheet(
                 modifier = Modifier
                     .size(70.dp)
                     .clip(CircleShape),
-                model = event.speaker?.image ?: "",
+                model = event.speaker[position].image ?: "",
                 contentDescription = null,
                 contentScale = ContentScale.Crop
             )
             Text(
-                text = event.speaker?.name ?: "",
+                text = event.speaker[position].name,
                 style = MaterialTheme.typography.titleSmall,
                 textAlign = TextAlign.Center
             )
             Text(
-                text = event.speaker?.description ?: "",
+                text = event.speaker[position].description ?: "",
                 style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center
             )
@@ -185,43 +187,43 @@ fun SpeakerBottomSheet(
 @Composable
 fun TalkHeader(
     event: EventBo,
-    onSpeakerClicked: () -> Unit
+    onSpeakerClicked: (Int) -> Unit
 ) {
-    Column {
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            text = (event.talk?.title ?: "").uppercase(),
-            style = MaterialTheme.typography.titleMedium
-        )
-        Row(
-            modifier = Modifier
-                .padding(top = 8.dp)
-                .clickable { onSpeakerClicked() },
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            AsyncImage(
+    event.speaker.forEach {speaker ->
+            Text(
                 modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape),
-                model = event.speaker?.image ?: "",
-                contentDescription = null,
-                contentScale = ContentScale.Crop
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
+                text = (event.talk.title).uppercase(),
+                style = MaterialTheme.typography.titleMedium
             )
-            Column {
-                Text(
-                    text = event.speaker?.name ?: "",
-                    style = MaterialTheme.typography.bodyLarge
+            Row(
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .clickable { onSpeakerClicked(event.speaker.indexOf(speaker)) },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                AsyncImage(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape),
+                    model = speaker.image ?: "",
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
                 )
-                Text(
-                    text = "${event.talk?.day ?: ""}  ${event.startHour}/${event.endHour}",
-                    style = MaterialTheme.typography.bodySmall
-                )
+                Column {
+                    Text(
+                        text = speaker.name,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    Text(
+                        text = "${event.talk.day}  ${event.startHour}/${event.endHour}",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
             }
         }
-    }
 }
 
 @Composable
@@ -237,7 +239,7 @@ fun TalkDescription(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
-            text = (event.talk?.track ?: "").uppercase(),
+            text = (event.talk.track).uppercase(),
             style = MaterialTheme.typography.bodySmall
         )
         Row(
@@ -255,14 +257,14 @@ fun TalkDescription(
             Text(
                 modifier = Modifier
                     .padding(top = 4.dp),
-                text = (event.talk?.room?.name ?: "").uppercase(),
+                text = (event.talk.room.name).uppercase(),
                 style = MaterialTheme.typography.bodySmall
             )
         }
 
         Text(
             modifier = Modifier.padding(top = 24.dp),
-            text = event.talk?.description ?: "",
+            text = event.talk.description,
             style = MaterialTheme.typography.bodyMedium
         )
         Text(

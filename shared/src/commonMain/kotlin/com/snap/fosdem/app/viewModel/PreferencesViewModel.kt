@@ -47,7 +47,7 @@ class PreferencesViewModel(
     fun onTrackChecked(track: TrackBo, checked: Boolean) {
         val newTrackList = (state.value as PreferencesState.Loaded).tracks.map {
             if(it == track) {
-                TrackBo(id = track.id, name = track.name, events = track.events, checked = checked)
+                TrackBo(id = track.id, name = track.name, events = track.events, checked = checked, stands = track.stands)
             } else {
                 it
             }

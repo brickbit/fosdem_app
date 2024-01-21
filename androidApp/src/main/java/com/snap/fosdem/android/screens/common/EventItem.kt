@@ -12,7 +12,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -40,7 +44,10 @@ fun EventItem(
     ) {
         Column(
             modifier = Modifier
-                .background(color = MaterialTheme.colorScheme.onSurface, shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp))
+                .background(
+                    color = MaterialTheme.colorScheme.onSurface,
+                    shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp)
+                )
                 .padding(4.dp)
                 .heightIn(120.dp)
                 .widthIn(45.dp),
@@ -48,11 +55,11 @@ fun EventItem(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = event.talk?.day?.substring(startIndex = 0, endIndex = 3) ?: "",
+                text = event.talk.day.substring(startIndex = 0, endIndex = 3),
                 style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.background)
             )
             Text(
-                text = event.talk?.start ?: "-",
+                text = event.talk.start,
                 style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.background)
             )
         }
@@ -63,17 +70,20 @@ fun EventItem(
                 .heightIn(80.dp)
         ) {
             Text(
-                text = event.talk?.title ?: "Desconocido",
+                text = event.talk.title,
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis
             )
+            event.speaker.forEach {
+                Text(
+                    text = it.name,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+
             Text(
-                text = event.speaker?.name ?: "Desconocido",
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = event.talk?.room?.name ?: "Desconocido",
+                text = event.talk.room.name,
                 style = MaterialTheme.typography.bodySmall
             )
         }

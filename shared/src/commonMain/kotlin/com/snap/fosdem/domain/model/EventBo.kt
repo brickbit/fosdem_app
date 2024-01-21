@@ -11,12 +11,10 @@ import kotlinx.serialization.Serializable
 data class EventBo(
         val id: String,
         val day: String,
-        val talk: TalkBo?,
-        val speaker: SpeakerBo?,
+        val talk: TalkBo,
+        val speaker: List<SpeakerBo>,
         val startHour: String,
-        val startHourLink: String,
         val endHour: String,
-        val endHourLink: String,
         val color: String?,
 )
 

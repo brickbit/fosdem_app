@@ -8,4 +8,5 @@ data class TrackBo(
         val name: String,
         val events: List<EventBo>,
         val checked: Boolean = false,
+        val stands: List<StandBo>
 )

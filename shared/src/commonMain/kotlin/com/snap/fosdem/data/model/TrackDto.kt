@@ -11,11 +11,14 @@ data class TrackDto(
         @SerialName("name")
         val name: String,
         @SerialName("events")
-        val events: List<EventDto>
+        val events: List<EventDto>,
+        @SerialName("stands")
+        val stands: List<StandDto>,
 )
 
 fun TrackDto.toBo() = TrackBo(
         id = id,
         name = name,
-        events = events.map { it.toBo() }
+        events = events.map { it.toBo() },
+        stands = stands.map { it.toBo() }
 )
