@@ -6,3 +6,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform).apply(false)
     id("com.mikepenz.aboutlibraries.plugin") version "10.10.0"
 }
+buildscript {
+    dependencies {
+        classpath(libs.firebase.crashlytics.gradle)
+    }
+}

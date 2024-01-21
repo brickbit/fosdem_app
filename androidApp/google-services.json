@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "892847897919",
+    "project_id": "fosdem-e70fe",
+    "storage_bucket": "fosdem-e70fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892847897919:android:647cd4c3e8cf86290a678a",
+        "android_client_info": {
+          "package_name": "com.snap.fosdem.android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOB0zytfE9MCxpUFrCRR7nQiHLgpgJN5M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

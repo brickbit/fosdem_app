@@ -7,6 +7,7 @@ browser = "1.7.0"
 coilCompose = "2.5.0"
 coreSplashscreen = "1.0.1"
 datastorePreferencesCore = "1.0.0"
+firebaseCrashlyticsGradle = "2.9.9"
 gson = "2.10.1"
 insert-koin-koinCore = "3.2.0"
 kotlin = "1.9.20"
@@ -35,6 +36,7 @@ androidx-datastore-preferences-core-v110dev01 = { module = "androidx.datastore:d
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "compose" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+firebase-crashlytics-gradle = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 koin-core-v320 = { module = "io.insert-koin:koin-core", version.ref = "insert-koin-koinCore" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }

@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     kotlin("plugin.serialization") version "1.9.0"
+    id("com.google.firebase.crashlytics")
+
 }
 apply(plugin= "com.mikepenz.aboutlibraries.plugin")
 
@@ -84,4 +86,8 @@ dependencies {
     implementation(libs.aboutlibraries.compose)
     //serialization
     implementation(libs.kotlinx.serialization.json)
+    //firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.1.0"))
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
 }
