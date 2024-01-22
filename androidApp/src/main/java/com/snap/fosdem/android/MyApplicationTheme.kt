@@ -47,7 +47,8 @@ fun MyApplicationTheme(
             tertiary = Color(0xFF3700B3),
             background = Color.White,
             surfaceTint = Color(0xFFCCCCCC),
-            surface = Color.White
+            surface = Color.White,
+            surfaceVariant = Color(0xFFCCCCCC),
         )
     }
     val typography = Typography(

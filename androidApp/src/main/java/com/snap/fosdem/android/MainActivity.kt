@@ -103,7 +103,7 @@ class MainActivity : ComponentActivity() {
 
     private fun scheduleNotification(event: EventBo, timeBefore: Int) {
         lifecycleScope.launch(Dispatchers.IO) {
-            val image = URL(event.talk?.room?.building?.map).readBytes()
+            val image = URL(event.talk.room.building.map).readBytes()
             val intent = Intent(applicationContext, NotificationService::class.java)
             intent.putExtra("NOTIFICATION_EVENT_ID", Json.encodeToString(event))
             intent.putExtra("NOTIFICATION_TIME_ID", timeBefore)
