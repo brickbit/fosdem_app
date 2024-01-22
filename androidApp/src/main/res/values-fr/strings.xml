@@ -2,48 +2,48 @@
 <resources>
     <!--SPLASH-->
     <string name="splash_fosdem">Fosdem</string>
-    <string name="splash_fosdem_logo_description">logo de Fosdem</string>
+    <string name="splash_fosdem_logo_description">Logo Fosdem</string>
     <!--ON_BOARDING-->
-    <string name="on_boarding_title_1">Tus tracks favoritos siempre a mano</string>
-    <string name="on_boarding_title_2">No te pierdas ninguna de tus charlas favoritas</string>
-    <string name="on_boarding_title_3">Localiza tu charlas más cercanas</string>
-    <string name="on_boarding_description_1">Selecciona tus tracks preferidos para tenerlos en la página principal. Puedes cambiar tus tracs preferidos desde ajustes</string>
-    <string name="on_boarding_description_2">Marca tu charla como favorita y recibiras una notificación antes de que empice</string>
-    <string name="on_boarding_description_3">No sabes en que edificio está la charla localiza cada una desde el detalle de la charla</string>
-    <string name="on_boarding_next_button">Continuar</string>
+    <string name="on_boarding_title_1">Vos tracks préférés toujours à portée de main</string>
+    <string name="on_boarding_title_2">Ne manquez aucune de vos conférences préférées</string>
+    <string name="on_boarding_title_3">Trouvez facilement toutes les conférences avec des filtres</string>
+    <string name="on_boarding_description_1">Sélectionnez vos tracks préférés pour les avoir sur la page principale. Vous pouvez modifier vos tracks préférées à partir des paramètres</string>
+    <string name="on_boarding_description_2">Marquez votre conférence comme favorite et vous recevrez une notification avant qu\'elle  commence</string>
+    <string name="on_boarding_description_3">Filtrer les conférences par heure, par salle, par piste ou par jour</string>
+    <string name="on_boarding_next_button">Continuer</string>
     <!--FAVOURITE_TRACKS-->
     <string name="favourite_tracks_track">Tracks</string>
-    <string name="favourite_tracks_track_subtitle">Selecciona los tracks en los que estés más interesado</string>
-    <string name="favourite_tracks_next_button">Continuar</string>
-    <string name="favourite_error">Error</string>
+    <string name="favourite_tracks_track_subtitle">Sélectionnez les tracks qui vous intéressent le plus</string>
+    <string name="favourite_tracks_next_button">Continuer</string>
+    <string name="favourite_error">Erreur</string>
     <!--MAIN_TRACKS-->
-    <string name="main_date">Bruselas | 3 &amp; 4 Febrero 2024</string>
-    <string name="main_check_schedule">Consulta ahora la agenda completa</string>
-    <string name="main_right_now">Ahora mismo</string>
-    <string name="main_closest">Más cercanos</string>
-    <string name="main_your_favourite_tracks">Tus tracks favoritos</string>
+    <string name="main_date">Bruxelles | 3 &amp; 4 février 2024</string>
+    <string name="main_check_schedule">Consultez dès maintenant l\'agenda complet</string>
+    <string name="main_right_now">Maintenant</string>
+    <string name="main_closest">Le plus proche</string>
+    <string name="main_your_favourite_tracks">Vos tracks préférés</string>
     <!--SETTINGS-->
-    <string name="settings">Ajustes</string>
-    <string name="settings_licenses">Licencias de terceros</string>
-    <string name="settings_app_license">Licencia de la app</string>
-    <string name="settings_developed_by">"Desarrollado por "</string>
+    <string name="settings">Paramètres</string>
+    <string name="settings_licenses">Licences tierces</string>
+    <string name="settings_app_license">Licence d\'application</string>
+    <string name="settings_developed_by">"Développé par "</string>
     <string name="settings_developer">Roberto García</string>
-    <string name="settings_source_code">" código disponible en "</string>
+    <string name="settings_source_code">"code disponible dans"</string>
     <string name="settings_github">GitHub</string>
     <string name="settings_developer_tag">linkedIn</string>
     <string name="settings_github_tag">gitHub</string>
-    <string name="settings_version">Versión %1$s</string>
-    <string name="settings_notification_time">Aviso de notificación</string>
-    <string name="settings_notification_time_selected">%1$s minutos antes</string>
-    <string name="settings_favourite_tracks">Tracks favoritos</string>
-    <string name="settings_minutes_before">%1$s minutos antes</string>
-    <string name="settings_language">Idioma</string>
-    <string name="settings_notifications">Notificaciones</string>
+    <string name="settings_version">Version %1$s</string>
+    <string name="settings_notification_time">Avis de notification</string>
+    <string name="settings_notification_time_selected">%1$s minutes avant</string>
+    <string name="settings_favourite_tracks">Tracks préférées</string>
+    <string name="settings_minutes_before">%1$s minutes avant</string>
+    <string name="settings_language">langage</string>
+    <string name="settings_notifications">Notifications</string>
     <!--LANGUAGE-->
-    <string name="languages_no_languages">No se han encontrado idiomas</string>
+    <string name="languages_no_languages">Aucune langue trouvée</string>
     <!--TALK-->
     <string name="talk_speaker_header">%1$s  %2$s/%3$s</string>
-    <string name="talk_remove_alarm">Quitar alarma</string>
+    <string name="talk_remove_alarm">Supprimer le favori</string>
     <string name="talk_set_alarm">Poner alarma</string>
     <!--SCHEDULE-->
     <string name="schedule">Agenda</string>
@@ -54,6 +54,8 @@
     <string name="schedule_day">Día</string>
     <string name="schedule_room">Room</string>
     <string name="schedule_filter">Filter</string>
+    <string name="schedule_rooms">Salas</string>
+    <string name="schedule_no_items_found">No se ha encontrado ningún elemento con los parámetros seleccionados</string>
     <!--NOTIFICATION-->
     <string name="notification_description">La charla empieza en %1$s minutos en la sala %2$s</string>
     <!--SPLASH-->
