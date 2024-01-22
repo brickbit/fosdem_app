@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     kotlin("plugin.serialization") version "1.9.0"
     id("com.google.firebase.crashlytics")
+    id("com.google.gms.google-services")
 
 }
 apply(plugin= "com.mikepenz.aboutlibraries.plugin")
@@ -90,4 +91,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.1.0"))
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
+    //lottie
+    implementation(libs.lottie.compose)
+
 }

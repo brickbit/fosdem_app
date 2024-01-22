@@ -44,20 +44,20 @@
     <!--TALK-->
     <string name="talk_speaker_header">%1$s  %2$s/%3$s</string>
     <string name="talk_remove_alarm">Supprimer le favori</string>
-    <string name="talk_set_alarm">Poner alarma</string>
+    <string name="talk_set_alarm">Enregistrer comme favori</string>
     <!--SCHEDULE-->
-    <string name="schedule">Agenda</string>
+    <string name="schedule">L \'agenda</string>
     <string name="schedule_tracks">Tracks</string>
-    <string name="schedule_all">All</string>
-    <string name="schedule_hour">Hours</string>
-    <string name="schedule_filter_by">Filtrar por</string>
-    <string name="schedule_day">Día</string>
-    <string name="schedule_room">Room</string>
-    <string name="schedule_filter">Filter</string>
-    <string name="schedule_rooms">Salas</string>
-    <string name="schedule_no_items_found">No se ha encontrado ningún elemento con los parámetros seleccionados</string>
+    <string name="schedule_all">Tous</string>
+    <string name="schedule_hour">Heures</string>
+    <string name="schedule_filter_by">Filtrer par</string>
+    <string name="schedule_day">Jour</string>
+    <string name="schedule_room">Salle</string>
+    <string name="schedule_filter">Filtre</string>
+    <string name="schedule_rooms">Salle</string>
+    <string name="schedule_no_items_found">Aucun élément trouvé avec les paramètres sélectionnés</string>
     <!--NOTIFICATION-->
-    <string name="notification_description">La charla empieza en %1$s minutos en la sala %2$s</string>
+    <string name="notification_description">La conférence commence dans %1$s minutes dans la salle %2$s</string>
     <!--SPLASH-->
     <string name="top_bar_fosdem">Fosdem</string>
 </resources>
