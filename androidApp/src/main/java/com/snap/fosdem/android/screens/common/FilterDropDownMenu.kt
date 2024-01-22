@@ -2,6 +2,7 @@ package com.snap.fosdem.android.screens.common
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -57,6 +58,7 @@ fun FilterDropDownMenu(
                             onItemSelected(selectedText)
                         }
                     )
+                    Divider()
                 }
             }
         }
