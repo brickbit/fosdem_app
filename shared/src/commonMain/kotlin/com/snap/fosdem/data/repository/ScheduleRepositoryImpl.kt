@@ -4,8 +4,10 @@ import com.snap.fosdem.data.Constant
 import com.snap.fosdem.data.dataSource.makeRequest
 import com.snap.fosdem.data.dataSource.transform
 import com.snap.fosdem.data.model.dto.TrackDto
+import com.snap.fosdem.data.model.dto.VersionDto
 import com.snap.fosdem.data.model.dto.toBo
 import com.snap.fosdem.domain.model.TrackBo
+import com.snap.fosdem.domain.model.VersionBo
 import com.snap.fosdem.domain.repository.ScheduleRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -33,6 +35,16 @@ class ScheduleRepositoryImpl: ScheduleRepository {
         }
         return transform(apiResponse.getOrNull()?.body<List<TrackDto>>()) { response ->
             response?.map { it.toBo() }
+        }
+    }
+
+    override suspend fun getVersion(): Result<VersionBo> {
+        val apiResponse = makeRequest { client.get(Constant.BASE_URL+Constant.GET_VERSION) }
+        apiResponse.onFailure {
+            return Result.failure(it)
+        }
+        return transform(apiResponse.getOrNull()?.body<VersionDto>()) { response ->
+            response?.toBo()
         }
     }
 }

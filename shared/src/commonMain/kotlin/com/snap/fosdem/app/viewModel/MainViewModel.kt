@@ -10,8 +10,10 @@ import com.snap.fosdem.domain.useCase.GetFavouritesEventsUseCase
 import com.snap.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByHourUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByTrackUseCase
+import com.snap.fosdem.domain.useCase.GetScheduleDataUseCase
 import com.snap.fosdem.domain.useCase.GetSpeakersUseCase
 import com.snap.fosdem.domain.useCase.GetStandsUseCase
+import com.snap.fosdem.domain.useCase.IsUpdateNeeded
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -19,12 +21,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MainViewModel(
+    private val getSchedule: GetScheduleDataUseCase,
     private val getPreferredTracks: GetPreferredTracksUseCase,
     private val getScheduleByTrack: GetScheduleByTrackUseCase,
     private val getScheduleByHour: GetScheduleByHourUseCase,
     private val getFavouritesEvents: GetFavouritesEventsUseCase,
     private val getSpeakers: GetSpeakersUseCase,
-    private val getStands: GetStandsUseCase
+    private val getStands: GetStandsUseCase,
+    private val needUpdate: IsUpdateNeeded,
 ): BaseViewModel() {
 
     private val _statePreferredTracks: MutableStateFlow<MainPreferredTracksState> = MutableStateFlow(MainPreferredTracksState.Loading)
@@ -59,6 +63,13 @@ class MainViewModel(
         scope = scope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = StandsState.Loading
+    ).toCommonStateFlow()
+
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing = _isRefreshing.stateIn(
+        scope = scope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = false
     ).toCommonStateFlow()
 
     fun getPreferredTracks() {
@@ -120,6 +131,28 @@ class MainViewModel(
                     }
                 }
                 .onFailure {  }
+        }
+    }
+
+    fun onRefresh() {
+        scope.launch {
+            needUpdate.invoke()
+                .onSuccess { shouldUpdate ->
+                    if (shouldUpdate) {
+                        getSchedule.invoke(shouldUpdate)
+                            .onSuccess{
+                                _isRefreshing.update { false }
+                            }
+                        getSpeakerList()
+                        getStandList()
+                    } else {
+                        _isRefreshing.update { false }
+                    }
+                }
+                .onFailure {
+                    _isRefreshing.update { false }
+                }
+
         }
     }
 }

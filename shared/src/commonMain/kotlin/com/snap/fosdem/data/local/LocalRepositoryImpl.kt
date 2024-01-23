@@ -26,6 +26,7 @@ class LocalRepositoryImpl(
         private const val NOTIFICATIONS_ENABLED = "NOTIFICATIONS_ENABLED"
         private const val EVENT_NOTIFICATIONS = "EVENT_NOTIFICATIONS"
         private const val NOTIFICATION_TIME = "NOTIFICATION_TIME"
+        private const val VERSION = "VERSION"
     }
 
     private val onboardingShown = booleanPreferencesKey("$PREFS_TAG_KEY$IS_ON_BOARDING_SHOWN")
@@ -33,6 +34,7 @@ class LocalRepositoryImpl(
     private val notificationsPreferences = booleanPreferencesKey("$PREFS_TAG_KEY$NOTIFICATIONS_ENABLED")
     private val eventNotificationPreferences = stringPreferencesKey("$PREFS_TAG_KEY$EVENT_NOTIFICATIONS")
     private val notificationTime = intPreferencesKey("$PREFS_TAG_KEY$NOTIFICATION_TIME")
+    private val versionStored = stringPreferencesKey("$PREFS_TAG_KEY$VERSION")
 
     override suspend fun setOnBoardingSeen() = dataStore.edit { preferences ->
         preferences[onboardingShown] = true
@@ -105,4 +107,12 @@ class LocalRepositoryImpl(
     override suspend fun getNotificationTime() = dataStore.data.map { preferences ->
         preferences[notificationTime] ?: 10
     }.first()
+
+    override suspend fun getVersion(): String = dataStore.data.map { preferences ->
+        preferences[versionStored] ?: ""
+    }.first()
+
+    override suspend fun saveVersion(version: String)= dataStore.edit { preferences ->
+        preferences[versionStored] = version
+    }
 }

@@ -11,15 +11,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -40,14 +42,13 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.core.content.ContextCompat
-import coil.compose.AsyncImage
 import com.snap.fosdem.android.MyApplicationTheme
 import com.snap.fosdem.android.R
 import com.snap.fosdem.android.extension.splitImage
@@ -66,6 +67,7 @@ import com.snap.fosdem.app.viewModel.MainViewModel
 import com.snap.fosdem.domain.model.TrackBo
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MainRoute(
     viewModel: MainViewModel = koinViewModel(),
@@ -77,6 +79,8 @@ fun MainRoute(
     val favouriteEventsState = viewModel.stateFavouriteEvents.collectAsState().value
     val speakerState = viewModel.stateSpeaker.collectAsState().value
     val standState = viewModel.stateStand.collectAsState().value
+    val refreshing = viewModel.isRefreshing.collectAsState().value
+    val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.onRefresh() })
 
     LaunchedEffect(Unit) {
         viewModel.getScheduleByMoment()
@@ -85,20 +89,30 @@ fun MainRoute(
         viewModel.getSpeakerList()
         viewModel.getStandList()
     }
-    MainScreen(
-        preferredTracks = preferredTracksState,
-        tracksNow = tracksNowState,
-        favourites = favouriteEventsState,
-        speakers = speakerState,
-        stands = standState,
-        onNavigate = onNavigate,
-        navigateToSchedule = navigateToSchedule
-    )
+    Box {
+        PullRefreshIndicator(
+            refreshing = refreshing,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter).zIndex(1f)
+        )
+        MainScreen(
+            modifier = Modifier
+                .pullRefresh(pullRefreshState),
+            preferredTracks = preferredTracksState,
+            tracksNow = tracksNowState,
+            favourites = favouriteEventsState,
+            speakers = speakerState,
+            stands = standState,
+            onNavigate = onNavigate,
+            navigateToSchedule = navigateToSchedule
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
+    modifier: Modifier = Modifier,
     preferredTracks: MainPreferredTracksState,
     tracksNow: MainTracksNowState,
     favourites: FavouriteEventsState,
@@ -120,9 +134,9 @@ fun MainScreen(
             onDismiss = { showSpeakerBottomSheet = Pair(showSpeakerBottomSheet.first,false)},
         )
     }
-    LazyColumn {
+    LazyColumn(modifier = modifier) {
         item {
-            ScheduleCard (navigateToSchedule = navigateToSchedule)
+            ScheduleCard(navigateToSchedule = navigateToSchedule)
         }
         rightNowItems(
             tracksNow = tracksNow,
@@ -135,7 +149,7 @@ fun MainScreen(
         )
         speakerItems(
             speakers = speakers,
-            onNavigate = { showSpeakerBottomSheet = Pair(it,true)  }
+            onNavigate = { showSpeakerBottomSheet = Pair(it, true) }
         )
         preferredTracks(
             preferredTracks = preferredTracks,

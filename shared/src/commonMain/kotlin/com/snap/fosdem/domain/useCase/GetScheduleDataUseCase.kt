@@ -9,7 +9,7 @@ class GetScheduleDataUseCase(
     private var realmRepository: RealmRepository
 ) {
 
-    suspend operator fun invoke(): Result<List<TrackBo>>  {
+    suspend operator fun invoke(needUpdate: Boolean): Result<List<TrackBo>>  {
         val realmResult = realmRepository.getSchedule()
         return if(realmResult.isNotEmpty()) {
             Result.success(realmResult)

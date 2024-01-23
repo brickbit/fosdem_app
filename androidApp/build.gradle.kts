@@ -93,5 +93,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx")
     //lottie
     implementation(libs.lottie.compose)
+    //material
+    implementation(libs.androidx.material)
+
 
 }

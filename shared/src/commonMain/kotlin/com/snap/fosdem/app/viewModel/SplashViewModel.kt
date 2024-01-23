@@ -6,6 +6,7 @@ import com.snap.fosdem.app.state.SplashState
 import com.snap.fosdem.domain.useCase.GetOnBoardingStatusUseCase
 import com.snap.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleDataUseCase
+import com.snap.fosdem.domain.useCase.IsUpdateNeeded
 import com.snap.fosdem.domain.useCase.ManageNotificationPermissionUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
+    private val needUpdate: IsUpdateNeeded,
     private val getSchedule: GetScheduleDataUseCase,
     private val getOnBoardingStatus: GetOnBoardingStatusUseCase,
     private val getPreferredTask: GetPreferredTracksUseCase,
@@ -31,24 +33,29 @@ class SplashViewModel(
     fun initializeSplash() {
         scope.launch {
             delay(2000)
-            getSchedule.invoke()
-                .onSuccess {
-                    _state.update {
-                        val onBoardingShown = getOnBoardingStatus.invoke()
-                        val listTracks = getPreferredTask.invoke()
-                        val route = if(onBoardingShown && listTracks.isEmpty()) {
-                            Routes.FavouriteTracks
-                        } else if(onBoardingShown && listTracks.isNotEmpty()){
-                            Routes.Main
-                        } else {
-                            Routes.OnBoarding
+            needUpdate.invoke()
+                .onSuccess { shouldUpdate ->
+                    getSchedule.invoke(shouldUpdate)
+                        .onSuccess {
+                            _state.update {
+                                val onBoardingShown = getOnBoardingStatus.invoke()
+                                val listTracks = getPreferredTask.invoke()
+                                val route = if(onBoardingShown && listTracks.isEmpty()) {
+                                    Routes.FavouriteTracks
+                                } else if(onBoardingShown && listTracks.isNotEmpty()){
+                                    Routes.Main
+                                } else {
+                                    Routes.OnBoarding
+                                }
+                                SplashState.Finished(route)
+                            }
                         }
-                        SplashState.Finished(route)
-                    }
+                        .onFailure {
+                            SplashState.Error
+                        }
                 }
-                .onFailure {
-                    SplashState.Error
-                }
+                .onFailure {  }
+
         }
     }
 

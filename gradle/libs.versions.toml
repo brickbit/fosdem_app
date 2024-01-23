@@ -22,6 +22,7 @@ lifecycleViewmodelCompose = "2.6.2"
 koinAndroidxCompose = "3.4.1"
 koinCore = "3.5.0"
 lottieCompose = "4.0.0"
+material = "1.5.4"
 navigationCompose = "2.7.6"
 kotlinxSerializationJson = "1.6.2"
 ktorClientCore = "2.3.7"
@@ -34,6 +35,7 @@ androidx-browser = { module = "androidx.browser:browser", version.ref = "browser
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastorePreferencesCore" }
 androidx-datastore-preferences-core-v110dev01 = { module = "androidx.datastore:datastore-preferences-core", version.ref = "androidx-datastorePreferencesCore" }
+androidx-material = { module = "androidx.compose.material:material", version.ref = "material" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "compose" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }

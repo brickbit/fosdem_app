@@ -21,4 +21,7 @@ interface LocalRepository {
 
     suspend fun setNotificationTime(time: Int): Preferences
     suspend fun getNotificationTime(): Int
+
+    suspend fun saveVersion(version: String): Preferences
+    suspend fun getVersion(): String
 }

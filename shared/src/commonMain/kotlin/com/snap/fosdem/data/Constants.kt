@@ -6,6 +6,8 @@ class Constant {
         const val BASE_URL = "https://fosdem-back-production.up.railway.app/api/v1/"
 
         const val GET_TRACKS = "tracks/"
+        const val GET_VERSION = "version/"
+
     }
 
 }
