@@ -6,7 +6,7 @@
     <!--ON_BOARDING-->
     <string name="on_boarding_title_1">Always have your favorite tracks on hand</string>
     <string name="on_boarding_title_2">Don\'t miss any of your favorite talks</string>
-    <string name="on_boarding_title_3">Easily find all chats with filters</string>
+    <string name="on_boarding_title_3">Easily find all talks with filters</string>
     <string name="on_boarding_description_1">Select your favorite tracks to see them on the main page. You can change your favorite tracks from the settings</string>
     <string name="on_boarding_description_2">Mark your talk as a favorite and you will receive a notification before it starts</string>
     <string name="on_boarding_description_3">Filter talks by time, by room, by track or by day</string>
