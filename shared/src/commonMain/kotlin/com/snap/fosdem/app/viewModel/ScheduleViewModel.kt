@@ -14,6 +14,9 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 class ScheduleViewModel(
     private val getHoursUseCase: GetHoursUseCase,
@@ -58,9 +61,9 @@ class ScheduleViewModel(
         initialValue = FavouriteEventsState.Loading
     ).toCommonStateFlow()
 
-    fun getHours() {
+    fun getHours(day: String) {
         scope.launch {
-            getHoursUseCase.invoke()
+            getHoursUseCase.invoke(day)
                 .onSuccess { hours ->
                     _stateHour.update {
                         hours

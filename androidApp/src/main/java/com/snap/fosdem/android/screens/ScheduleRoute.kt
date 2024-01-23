@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
@@ -69,7 +70,7 @@ fun ScheduleRoute(
     val state = viewModel.state.collectAsState().value
 
     LaunchedEffect(Unit) {
-        viewModel.getHours()
+        viewModel.getHours(day = "Saturday")
         viewModel.getTracks()
         viewModel.getRooms()
         viewModel.getFavouritesEvents()
@@ -96,7 +97,16 @@ fun ScheduleRoute(
                         room = filter.room
                     )
                 },
-                onEventClicked = onEventClicked
+                onEventClicked = onEventClicked,
+                updateHour = { filter ->
+                    viewModel.getHours(filter.day)
+                    viewModel.getScheduleBy(
+                        day = filter.day,
+                        hours = filter.hours,
+                        track = filter.track,
+                        room = filter.room
+                    )
+                }
             )
         }
         is ScheduleState.Empty -> {
@@ -115,7 +125,16 @@ fun ScheduleRoute(
                         room = filter.room
                     )
                 },
-                onEventClicked = onEventClicked
+                onEventClicked = onEventClicked,
+                updateHour = { filter ->
+                    viewModel.getHours(filter.day)
+                    viewModel.getScheduleBy(
+                        day = filter.day,
+                        hours = filter.hours,
+                        track = filter.track,
+                        room = filter.room
+                    )
+                }
             )
         }
         ScheduleState.Loading -> {
@@ -150,7 +169,8 @@ fun ScheduleScreen(
     scheduledLoaded: ScheduleFilter,
     favourites: FavouriteEventsState,
     onFilter: (ScheduleFilter) -> Unit,
-    onEventClicked: (String) -> Unit
+    onEventClicked: (String) -> Unit,
+    updateHour: (ScheduleFilter) -> Unit
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -197,7 +217,8 @@ fun ScheduleScreen(
                         showBottomSheet = false
                     }
                 }
-            }
+            },
+            updateHour = updateHour
         )
     }
 }
@@ -282,10 +303,12 @@ fun FiltersUsed(
             },
         )
         if(scheduledLoaded.hours.isNotEmpty()) {
+            val listState = rememberLazyListState()
             ListItem(
                 headlineContent = { Text(text = stringResource(R.string.schedule_hour)) },
                 supportingContent = {
                     LazyRow(
+                        state = listState,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         items(scheduledLoaded.hours) { hour ->
@@ -311,6 +334,7 @@ fun ScheduleBottomSheet(
     sheetState: SheetState,
     onDismiss: () -> Unit,
     filterSchedule: (ScheduleFilter) -> Unit,
+    updateHour: (ScheduleFilter) -> Unit
 ) {
     var currentData = scheduledLoaded
 
@@ -341,7 +365,10 @@ fun ScheduleBottomSheet(
                     FilterDropDownMenu(
                         selectedItem = currentData.day.dayToTranslatable(context),
                         items = listOf("Saturday".dayToTranslatable(context), "Sunday".dayToTranslatable(context)),
-                        onItemSelected = { currentData = currentData.copy(day = it.dayFromTranslatable(context)) }
+                        onItemSelected = {
+                            currentData = currentData.copy(day = it.dayFromTranslatable(context))
+                            updateHour(currentData)
+                        }
                     )
                 }
             )
