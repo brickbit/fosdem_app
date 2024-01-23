@@ -1,6 +1,7 @@
 package com.snap.fosdem.app.viewModel
 
 import com.snap.fosdem.app.flow.toCommonStateFlow
+import com.snap.fosdem.app.state.ScheduleFilter
 import com.snap.fosdem.app.state.ScheduleState
 import com.snap.fosdem.domain.useCase.GetHoursUseCase
 import com.snap.fosdem.domain.useCase.GetRoomsUseCase
@@ -26,18 +27,18 @@ class ScheduleViewModel(
         initialValue = emptyList()
     ).toCommonStateFlow()
 
-    private val _stateTracks: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
+    private val _stateTracks: MutableStateFlow<List<String>> = MutableStateFlow(listOf(""))
     val stateTracks = _stateTracks.stateIn(
         scope = scope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = emptyList()
+        initialValue = listOf("")
     ).toCommonStateFlow()
 
-    private val _stateRooms: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
+    private val _stateRooms: MutableStateFlow<List<String>> = MutableStateFlow(listOf(""))
     val stateRooms = _stateRooms.stateIn(
         scope = scope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = emptyList()
+        initialValue = listOf("")
     ).toCommonStateFlow()
 
     private val _state: MutableStateFlow<ScheduleState> = MutableStateFlow(ScheduleState.Loading)
@@ -65,7 +66,9 @@ class ScheduleViewModel(
         scope.launch {
             getTracksUseCase.invoke()
                 .onSuccess { tracks ->
-                    _stateTracks.update { tracks.map { it.name } }
+                    val list = tracks.map { it.name }.toMutableList()
+                    list.add(0, "All")
+                    _stateTracks.update { list.toList() }
                 }
                 .onFailure {
                 }
@@ -76,7 +79,9 @@ class ScheduleViewModel(
         scope.launch {
             getRoomsUseCase.invoke()
                 .onSuccess { rooms ->
-                    _stateRooms.update { rooms }
+                    val list = rooms.map { it }.toMutableList()
+                    list.add(0, "All")
+                    _stateRooms.update { list.toList() }
                 }
                 .onFailure {
                 }
@@ -86,8 +91,8 @@ class ScheduleViewModel(
     fun getScheduleBy(
         day: String,
         hours: List<String>,
-        tracks: List<String>,
-        rooms: List<String>,
+        track: String,
+        room: String,
     ) {
         scope.launch {
             _state.update{
@@ -96,18 +101,32 @@ class ScheduleViewModel(
             getScheduleByParameter.invoke(
                 day = day,
                 hours = hours,
-                tracks = tracks,
-                rooms = rooms
+                track = track,
+                room = room
             )
                 .onSuccess { events ->
                     _state.update {
-                        ScheduleState.Loaded(
-                            day = day,
-                            hours = hours,
-                            tracks = tracks,
-                            rooms = rooms,
-                            events  = events,
-                        )
+                        if(events.isNotEmpty()) {
+                            ScheduleState.Loaded(
+                                filter = ScheduleFilter(
+                                    day = day,
+                                    hours = hours,
+                                    track = track,
+                                    room = room,
+                                    events = events
+                                )
+                            )
+                        } else {
+                            ScheduleState.Empty(
+                                filter = ScheduleFilter(
+                                    day = day,
+                                    hours = hours,
+                                    track = track,
+                                    room = room,
+                                    events = events
+                                )
+                            )
+                        }
                     }
                 }
                 .onFailure {

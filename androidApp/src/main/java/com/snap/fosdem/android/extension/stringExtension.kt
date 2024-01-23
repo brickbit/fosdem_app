@@ -1,7 +1,9 @@
 package com.snap.fosdem.android.extension
 
+import android.content.Context
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import com.snap.fosdem.android.R
 import com.snap.fosdem.android.c10BrushColor
 import com.snap.fosdem.android.c1BrushColor
 import com.snap.fosdem.android.c2BrushColor
@@ -60,4 +62,28 @@ fun String?.toBrushColor(): Brush {
         "c10" -> Brush.verticalGradient(colorStops = c10BrushColor)
         else -> Brush.verticalGradient(colorStops = c1BrushColor)
     }
+}
+
+fun String.dayToTranslatable(context: Context): String {
+    return if(this == "Saturday") {
+        context.getString(R.string.schedule_saturday)
+    } else {
+        context.getString(R.string.schedule_sunday)
+    }
+}
+
+fun String.dayFromTranslatable(context: Context): String {
+    return if(this == context.getString(R.string.schedule_saturday)) {
+        "Saturday"
+    } else {
+        "Sunday"
+    }
+}
+
+fun String.allToTranslatable(context: Context): String {
+    return context.getString(R.string.schedule_all)
+}
+
+fun String.allFromTranslatable(context: Context): String {
+    return "All"
 }

@@ -14,10 +14,11 @@ import com.snap.fosdem.android.mainBrushColor
 
 @Composable
 fun Chip(
+    modifier: Modifier = Modifier,
     title: String
 ) {
     Text(
-        modifier = Modifier
+        modifier = modifier
             .border(
                 border = BorderStroke(
                     width = 2.dp,

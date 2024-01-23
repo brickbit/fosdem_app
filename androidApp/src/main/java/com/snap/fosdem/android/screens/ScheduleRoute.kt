@@ -28,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -36,15 +37,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.snap.fosdem.android.R
+import com.snap.fosdem.android.extension.dayFromTranslatable
+import com.snap.fosdem.android.extension.dayToTranslatable
 import com.snap.fosdem.android.mainBrushColor
+import com.snap.fosdem.android.screens.common.AnimatedPreloader
 import com.snap.fosdem.android.screens.common.Chip
 import com.snap.fosdem.android.screens.common.EventItem
 import com.snap.fosdem.android.screens.common.FilterDropDownMenu
 import com.snap.fosdem.android.screens.common.LoadingScreen
 import com.snap.fosdem.android.screens.common.SelectableChip
 import com.snap.fosdem.android.transparentBrushColorReversed
+import com.snap.fosdem.app.state.ScheduleFilter
 import com.snap.fosdem.app.state.ScheduleState
 import com.snap.fosdem.app.viewModel.ScheduleViewModel
 import kotlinx.coroutines.launch
@@ -67,8 +73,8 @@ fun ScheduleRoute(
         viewModel.getScheduleBy(
             day = "Saturday",
             hours = emptyList(),
-            tracks = emptyList(),
-            rooms = emptyList()
+            track = "",
+            room = ""
         )
     }
     when(state) {
@@ -77,13 +83,31 @@ fun ScheduleRoute(
                 hours = stateHour,
                 tracks = stateTrack,
                 rooms = stateRooms,
-                scheduledLoaded = state,
+                scheduledLoaded = state.filter,
                 onFilter = { filter ->
                     viewModel.getScheduleBy(
                         day = filter.day,
                         hours = filter.hours,
-                        tracks = filter.tracks,
-                        rooms = filter.rooms
+                        track = filter.track,
+                        room = filter.room
+                    )
+                },
+                onEventClicked = onEventClicked
+            )
+        }
+        is ScheduleState.Empty -> {
+            ScheduleScreen(
+                empty = true,
+                hours = stateHour,
+                tracks = stateTrack,
+                rooms = stateRooms,
+                scheduledLoaded = state.filter,
+                onFilter = { filter ->
+                    viewModel.getScheduleBy(
+                        day = filter.day,
+                        hours = filter.hours,
+                        track = filter.track,
+                        room = filter.room
                     )
                 },
                 onEventClicked = onEventClicked
@@ -95,29 +119,59 @@ fun ScheduleRoute(
     }
 }
 
+@Composable
+fun NoItemFound() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        AnimatedPreloader(modifier = Modifier.size(200.dp))
+        Text(
+            modifier = Modifier.padding(horizontal = 24.dp),
+            text = stringResource(R.string.schedule_no_items_found),
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleScreen(
+    empty: Boolean = false,
     hours: List<String>,
     tracks: List<String>,
     rooms: List<String>,
-    scheduledLoaded: ScheduleState.Loaded,
-    onFilter: (ScheduleState.Loaded) -> Unit,
+    scheduledLoaded: ScheduleFilter,
+    onFilter: (ScheduleFilter) -> Unit,
     onEventClicked: (String) -> Unit
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
 
     LazyColumn {
-        item { FilterTopBar(onClickAction = {showBottomSheet = true}) }
-        item { FiltersUsed(scheduledLoaded = scheduledLoaded)}
-        items(scheduledLoaded.events) { event ->
-            EventItem(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                event = event,
-                onClickAction = onEventClicked
+        item { FilterTopBar(onClickAction = { showBottomSheet = true }) }
+        item {
+            FiltersUsed(
+                scheduledLoaded = scheduledLoaded,
+                onFilterResultClicked = { showBottomSheet = true }
             )
+        }
+        if(!empty) {
+            items(scheduledLoaded.events) { event ->
+                EventItem(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                    event = event,
+                    onClickAction = onEventClicked
+                )
+            }
+        } else {
+            item {
+                NoItemFound()
+            }
         }
     }
 
@@ -170,7 +224,8 @@ fun FilterTopBar(
 }
 @Composable
 fun FiltersUsed(
-    scheduledLoaded: ScheduleState.Loaded
+    scheduledLoaded: ScheduleFilter,
+    onFilterResultClicked: () -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -180,11 +235,44 @@ fun FiltersUsed(
             .background(Brush.verticalGradient(colorStops = transparentBrushColorReversed(context))),
     ) {
         ListItem(
-            headlineContent = { Text(text = stringResource(R.string.schedule_tracks)) },
-            trailingContent = { Text(text = scheduledLoaded.day) },
-            supportingContent = {
-                Text(text = scheduledLoaded.tracks.getOrNull(0) ?: stringResource(R.string.schedule_all))
+            headlineContent = { Text(text = stringResource(R.string.schedule_day)) },
+            trailingContent = {
+                Text(
+                    modifier = Modifier.clickable { onFilterResultClicked() },
+                    text = scheduledLoaded.day.dayToTranslatable(context),
+                    style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary)
+                )
             }
+        )
+        ListItem(
+            headlineContent = { Text(text = stringResource(R.string.schedule_tracks)) },
+            trailingContent = {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(0.6f)
+                        .clickable { onFilterResultClicked() },
+                    text = if(scheduledLoaded.track == "" || scheduledLoaded.track == "All") { stringResource(R.string.schedule_all) } else { scheduledLoaded.track },
+                    style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.End
+                )
+            }
+        )
+        ListItem(
+            headlineContent = { Text(text = stringResource(R.string.schedule_rooms)) },
+            trailingContent = {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(0.6f)
+                        .clickable { onFilterResultClicked() },
+                    text = if (scheduledLoaded.room == "" || scheduledLoaded.room == "All") { stringResource(R.string.schedule_all) } else { scheduledLoaded.room },
+                    style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.End
+                )
+            },
         )
         if(scheduledLoaded.hours.isNotEmpty()) {
             ListItem(
@@ -194,21 +282,10 @@ fun FiltersUsed(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         items(scheduledLoaded.hours) { hour ->
-                            Chip(title = hour)
-                        }
-                    }
-                }
-            )
-        }
-        if(scheduledLoaded.rooms.isNotEmpty()) {
-            ListItem(
-                headlineContent = { Text(text = "Rooms") },
-                supportingContent = {
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(scheduledLoaded.rooms) { room ->
-                            Chip(title = room)
+                            Chip(
+                                modifier = Modifier.clickable { onFilterResultClicked() },
+                                title = hour
+                            )
                         }
                     }
                 }
@@ -223,10 +300,10 @@ fun ScheduleBottomSheet(
     hours: List<String>,
     tracks: List<String>,
     rooms: List<String>,
-    scheduledLoaded: ScheduleState.Loaded,
+    scheduledLoaded: ScheduleFilter,
     sheetState: SheetState,
     onDismiss: () -> Unit,
-    filterSchedule: (ScheduleState.Loaded) -> Unit,
+    filterSchedule: (ScheduleFilter) -> Unit,
 ) {
     var currentData = scheduledLoaded
 
@@ -253,10 +330,11 @@ fun ScheduleBottomSheet(
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }, supportingContent = {
+                    val context = LocalContext.current
                     FilterDropDownMenu(
-                        selectedItem = currentData.day,
-                        items = listOf("Saturday", "Sunday"),
-                        onItemSelected = { currentData = currentData.copy(day = it) }
+                        selectedItem = currentData.day.dayToTranslatable(context),
+                        items = listOf("Saturday".dayToTranslatable(context), "Sunday".dayToTranslatable(context)),
+                        onItemSelected = { currentData = currentData.copy(day = it.dayFromTranslatable(context)) }
                     )
                 }
             )
@@ -269,9 +347,24 @@ fun ScheduleBottomSheet(
                 },
                 supportingContent = {
                     FilterDropDownMenu(
-                        selectedItem = currentData.tracks.getOrNull(0),
+                        selectedItem = if(currentData.track == "" || currentData.track == "All") { stringResource(R.string.schedule_all) } else { currentData.track },
                         items = tracks,
-                        onItemSelected = { currentData = currentData.copy(tracks = listOf(it)) }
+                        onItemSelected = { currentData = currentData.copy(track = it) }
+                    )
+                }
+            )
+            ListItem(
+                headlineContent = {
+                    Text(
+                        text = stringResource(R.string.schedule_room),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                },
+                supportingContent = {
+                    FilterDropDownMenu(
+                        selectedItem = if (currentData.room == "" || currentData.room == "All") { stringResource(R.string.schedule_all) } else { currentData.room },
+                        items = rooms,
+                        onItemSelected = { currentData = currentData.copy(room = it) }
                     )
                 }
             )
@@ -287,52 +380,24 @@ fun ScheduleBottomSheet(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         items(hours){
+                            var composableHours by remember {
+                                mutableStateOf(currentData.hours)
+                            }
                             SelectableChip(
                                 title = it,
-                                isActive = currentData.hours.contains(it),
+                                isActive = composableHours.contains(it),
                                 onClick = { selectedHour ->
                                     currentData = if(currentData.hours.contains(selectedHour)) {
                                         val listHours = currentData.hours.toMutableList()
                                         listHours.remove(selectedHour)
+                                        composableHours = listHours
                                         currentData.copy(hours = listHours)
                                     } else {
                                         val listHours = currentData.hours.toMutableList()
                                         listHours.add(selectedHour)
+                                        composableHours = listHours
                                         currentData.copy(hours = listHours)
                                     }
-                                }
-                            )
-                        }
-                    }
-                }
-            )
-
-            ListItem(
-                headlineContent = {
-                    Text(
-                        text = stringResource(R.string.schedule_room),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                },
-                supportingContent = {
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(rooms){
-                            SelectableChip(
-                                title = it,
-                                isActive = scheduledLoaded.rooms.contains(it),
-                                onClick = { selectedRoom ->
-                                    currentData = if(currentData.rooms.contains(selectedRoom)) {
-                                        val listRooms = currentData.rooms.toMutableList()
-                                        listRooms.remove(selectedRoom)
-                                        currentData.copy(rooms = listRooms)
-                                    } else {
-                                        val listRooms = currentData.rooms.toMutableList()
-                                        listRooms.add(selectedRoom)
-                                        currentData.copy(rooms = listRooms)
-                                    }
-
                                 }
                             )
                         }
