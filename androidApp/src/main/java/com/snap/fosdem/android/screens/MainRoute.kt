@@ -1,5 +1,6 @@
 package com.snap.fosdem.android.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -49,6 +50,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.core.content.ContextCompat
+import com.snap.fosdem.android.MainActivity
 import com.snap.fosdem.android.MyApplicationTheme
 import com.snap.fosdem.android.R
 import com.snap.fosdem.android.extension.splitImage
@@ -81,6 +83,7 @@ fun MainRoute(
     val standState = viewModel.stateStand.collectAsState().value
     val refreshing = viewModel.isRefreshing.collectAsState().value
     val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.onRefresh() })
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.getScheduleByMoment()
@@ -89,11 +92,18 @@ fun MainRoute(
         viewModel.getSpeakerList()
         viewModel.getStandList()
     }
+
+    BackHandler {
+        (context as MainActivity).finish()
+    }
+
     Box {
         PullRefreshIndicator(
             refreshing = refreshing,
             state = pullRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter).zIndex(1f)
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .zIndex(1f)
         )
         MainScreen(
             modifier = Modifier
@@ -143,6 +153,7 @@ fun MainScreen(
             favourites = favourites,
             onNavigate = onNavigate
         )
+
         favouriteEvents(
             favourites = favourites,
             onNavigate = onNavigate
@@ -255,15 +266,16 @@ fun LazyListScope.rightNowItems(
     favourites: FavouriteEventsState,
     onNavigate: (String) -> Unit
 ) {
-    item {
-        Text(
-            modifier = Modifier.padding(start = 16.dp),
-            text = stringResource(R.string.main_right_now),
-            style = MaterialTheme.typography.bodyMedium
-        )
-    }
+
     when(tracksNow) {
         is MainTracksNowState.Loaded -> {
+            item {
+                Text(
+                    modifier = Modifier.padding(start = 16.dp),
+                    text = stringResource(R.string.main_right_now),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
             item {
                 LazyRow(
                     modifier = Modifier.padding(vertical = 8.dp),
@@ -284,6 +296,7 @@ fun LazyListScope.rightNowItems(
         MainTracksNowState.Loading -> item {
             LoadingItem()
         }
+        MainTracksNowState.Empty -> {}
     }
 }
 
@@ -291,15 +304,16 @@ fun LazyListScope.favouriteEvents(
     favourites: FavouriteEventsState,
     onNavigate: (String) -> Unit
 ) {
-    item {
-        Text(
-            modifier = Modifier.padding(start = 16.dp),
-            text = stringResource(R.string.main_your_favourites_talks),
-            style = MaterialTheme.typography.bodyMedium
-        )
-    }
+
     when(favourites) {
         is FavouriteEventsState.Loaded -> {
+            item {
+                Text(
+                    modifier = Modifier.padding(start = 16.dp),
+                    text = stringResource(R.string.main_your_favourites_talks),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
             item {
                 LazyRow(
                     modifier = Modifier.padding(vertical = 8.dp),
@@ -320,6 +334,7 @@ fun LazyListScope.favouriteEvents(
         FavouriteEventsState.Loading -> item {
             LoadingItem()
         }
+        FavouriteEventsState.Empty -> {}
     }
 }
 

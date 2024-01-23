@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 
 class MainViewModel(
     private val getSchedule: GetScheduleDataUseCase,
@@ -86,10 +87,16 @@ class MainViewModel(
 
     fun getScheduleByMoment() {
         scope.launch {
-            getScheduleByHour.invoke("10:30")
+            val now = Clock.System.now().toEpochMilliseconds()
+            getScheduleByHour.invoke(now)
                 .onSuccess { events ->
+
                     _stateCurrentTracks.update {
-                        MainTracksNowState.Loaded(events)
+                        if (events.isEmpty()) {
+                            MainTracksNowState.Empty
+                        } else {
+                            MainTracksNowState.Loaded(events)
+                        }
                     }
                 }
                 .onFailure {
@@ -103,7 +110,11 @@ class MainViewModel(
             getFavouritesEvents.invoke()
                 .onSuccess { events ->
                     _stateFavouriteEvents.update {
-                        FavouriteEventsState.Loaded(events)
+                        if (events.isEmpty()) {
+                            FavouriteEventsState.Empty
+                        } else {
+                            FavouriteEventsState.Loaded(events)
+                        }
                     }
                 }
                 .onFailure {  }
