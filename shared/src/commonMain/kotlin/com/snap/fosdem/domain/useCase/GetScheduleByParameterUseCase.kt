@@ -25,8 +25,9 @@ class GetScheduleByParameterUseCase(
             val filterDayHourTrack = if (track.isNotEmpty() && track != "All") filterDayHour.filter { track == it.talk.track } else filterDayHour
             if (room.isNotEmpty() && room != "All") filterDayHourTrack.filter { room == it.talk.room.name } else filterDayHourTrack
         }
+
         return events?.let {
-            Result.success(it)
+            Result.success(it.sortedBy { item -> item.startHour })
         } ?: Result.failure(Error())
     }
 }
