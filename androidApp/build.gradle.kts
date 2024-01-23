@@ -95,6 +95,7 @@ dependencies {
     implementation(libs.lottie.compose)
     //material
     implementation(libs.androidx.material)
-
+    //datetime
+    implementation(libs.kotlinx.datetime)
 
 }

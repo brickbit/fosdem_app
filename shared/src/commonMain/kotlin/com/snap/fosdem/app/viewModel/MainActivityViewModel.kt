@@ -40,6 +40,7 @@ class MainActivityViewModel(
             Routes.Schedule.name -> Routes.Schedule
             Routes.Language.name -> Routes.Language
             Routes.WebView.name -> Routes.WebView
+            Routes.ThirdPartyLibraries.name -> Routes.ThirdPartyLibraries
             else -> null
         }
     }
@@ -55,6 +56,7 @@ class MainActivityViewModel(
             Routes.Schedule -> false
             Routes.Language -> true
             Routes.WebView -> true
+            Routes.ThirdPartyLibraries -> true
             else -> false
         }
     }
