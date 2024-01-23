@@ -88,9 +88,9 @@ class ScheduleViewModel(
         }
     }
 
-    fun getRooms() {
+    fun getRooms(track: String) {
         scope.launch {
-            getRoomsUseCase.invoke()
+            getRoomsUseCase.invoke(track)
                 .onSuccess { rooms ->
                     val list = rooms.map { it }.toMutableList()
                     list.add(0, "All")

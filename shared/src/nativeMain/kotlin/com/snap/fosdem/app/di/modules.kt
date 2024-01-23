@@ -26,10 +26,10 @@ val providerModule = module {
     }
 }
 val viewModelModules = module {
-    single { SplashViewModel(get(), get(), get(), get()) }
+    single { SplashViewModel(get(), get(), get(), get(), get()) }
     single { OnBoardingViewModel(get()) }
     single { PreferencesViewModel(get(), get(), get()) }
-    single { MainViewModel(get(),get(), get(), get()) }
+    single { MainViewModel(get(),get(), get(), get(), get(), get(), get(), get()) }
     single { TalkViewModel(get(), get(), get()) }
 }
 

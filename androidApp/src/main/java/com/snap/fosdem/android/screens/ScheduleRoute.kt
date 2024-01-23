@@ -72,7 +72,7 @@ fun ScheduleRoute(
     LaunchedEffect(Unit) {
         viewModel.getHours(day = "Saturday")
         viewModel.getTracks()
-        viewModel.getRooms()
+        viewModel.getRooms("All")
         viewModel.getFavouritesEvents()
         viewModel.getScheduleBy(
             day = "Saturday",
@@ -106,6 +106,15 @@ fun ScheduleRoute(
                         track = filter.track,
                         room = filter.room
                     )
+                },
+                updateRoom = { filter ->
+                    viewModel.getRooms(filter.track)
+                    viewModel.getScheduleBy(
+                        day = filter.day,
+                        hours = filter.hours,
+                        track = filter.track,
+                        room = filter.room
+                    )
                 }
             )
         }
@@ -128,6 +137,15 @@ fun ScheduleRoute(
                 onEventClicked = onEventClicked,
                 updateHour = { filter ->
                     viewModel.getHours(filter.day)
+                    viewModel.getScheduleBy(
+                        day = filter.day,
+                        hours = filter.hours,
+                        track = filter.track,
+                        room = filter.room
+                    )
+                },
+                updateRoom = { filter ->
+                    viewModel.getRooms(filter.track)
                     viewModel.getScheduleBy(
                         day = filter.day,
                         hours = filter.hours,
@@ -170,7 +188,8 @@ fun ScheduleScreen(
     favourites: FavouriteEventsState,
     onFilter: (ScheduleFilter) -> Unit,
     onEventClicked: (String) -> Unit,
-    updateHour: (ScheduleFilter) -> Unit
+    updateHour: (ScheduleFilter) -> Unit,
+    updateRoom: (ScheduleFilter) -> Unit
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -218,7 +237,8 @@ fun ScheduleScreen(
                     }
                 }
             },
-            updateHour = updateHour
+            updateHour = updateHour,
+            updateRoom = updateRoom
         )
     }
 }
@@ -334,7 +354,8 @@ fun ScheduleBottomSheet(
     sheetState: SheetState,
     onDismiss: () -> Unit,
     filterSchedule: (ScheduleFilter) -> Unit,
-    updateHour: (ScheduleFilter) -> Unit
+    updateHour: (ScheduleFilter) -> Unit,
+    updateRoom: (ScheduleFilter) -> Unit
 ) {
     var currentData = scheduledLoaded
 
@@ -383,7 +404,10 @@ fun ScheduleBottomSheet(
                     FilterDropDownMenu(
                         selectedItem = if(currentData.track == "" || currentData.track == "All") { stringResource(R.string.schedule_all) } else { currentData.track },
                         items = tracks,
-                        onItemSelected = { currentData = currentData.copy(track = it) }
+                        onItemSelected = {
+                            currentData = currentData.copy(track = it)
+                            updateRoom(currentData)
+                        }
                     )
                 }
             )
