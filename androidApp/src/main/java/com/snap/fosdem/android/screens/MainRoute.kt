@@ -47,8 +47,8 @@ import com.snap.fosdem.android.extension.splitImage
 import com.snap.fosdem.android.mainBrushColor
 import com.snap.fosdem.android.screens.common.EventItem
 import com.snap.fosdem.android.screens.common.shimmerEffect
+import com.snap.fosdem.app.state.FavouriteEventsState
 import com.snap.fosdem.app.state.MainPreferredTracksState
-import com.snap.fosdem.app.state.MainTracksBuildingState
 import com.snap.fosdem.app.state.MainTracksNowState
 import com.snap.fosdem.app.viewModel.MainViewModel
 import com.snap.fosdem.domain.model.EventBo
@@ -63,17 +63,17 @@ fun MainRoute(
 ) {
     val preferredTracksState = viewModel.statePreferredTracks.collectAsState().value
     val tracksNowState = viewModel.stateCurrentTracks.collectAsState().value
-    val tracksBuildingState = viewModel.stateBuildingTracks.collectAsState().value
+    val favouriteEventsState = viewModel.stateFavouriteEvents.collectAsState().value
 
     LaunchedEffect(Unit) {
         viewModel.getScheduleByMoment()
         viewModel.getPreferredTracks()
-        viewModel.getScheduleByBuilding()
+        viewModel.getFavouritesEvents()
     }
     MainScreen(
         preferredTracks = preferredTracksState,
         tracksNow = tracksNowState,
-        tracksBuilding = tracksBuildingState,
+        favourites = favouriteEventsState,
         onNavigate = onNavigate,
         navigateToSchedule = navigateToSchedule
     )
@@ -83,7 +83,7 @@ fun MainRoute(
 fun MainScreen(
     preferredTracks: MainPreferredTracksState,
     tracksNow: MainTracksNowState,
-    tracksBuilding: MainTracksBuildingState,
+    favourites: FavouriteEventsState,
     onNavigate: (String) -> Unit,
     navigateToSchedule: () -> Unit
 ) {
@@ -96,10 +96,12 @@ fun MainScreen(
         }
         rightNowItems(
             tracksNow = tracksNow,
+            favourites = favourites,
             onNavigate = onNavigate
         )
         preferredTracks(
             preferredTracks = preferredTracks,
+            favourites = favourites,
             onNavigate = onNavigate
         )
     }
@@ -108,6 +110,7 @@ fun MainScreen(
 @Composable
 fun TrackRow(
     track: TrackBo,
+    favourites: FavouriteEventsState,
     onNavigate: (String) -> Unit
 ) {
     Column {
@@ -128,6 +131,7 @@ fun TrackRow(
                     modifier = Modifier
                         .fillParentMaxWidth(0.8f)
                         .padding(horizontal = 8.dp, vertical = 8.dp),
+                    favourites = favourites,
                     event = event,
                     onClickAction = onNavigate
                 )
@@ -287,6 +291,7 @@ fun ScheduleCard(
 
 fun LazyListScope.rightNowItems(
     tracksNow: MainTracksNowState,
+    favourites: FavouriteEventsState,
     onNavigate: (String) -> Unit
 ) {
     item {
@@ -308,6 +313,7 @@ fun LazyListScope.rightNowItems(
                                 .fillParentMaxWidth(0.8f)
                                 .padding(horizontal = 8.dp, vertical = 8.dp),
                             event = event,
+                            favourites = favourites,
                             onClickAction = onNavigate
                         )
                     }
@@ -320,44 +326,9 @@ fun LazyListScope.rightNowItems(
     }
 }
 
-fun LazyListScope.tracksByBuilding(
-    tracksBuilding: MainTracksBuildingState,
-    onNavigate: (String) -> Unit
-) {
-    item {
-        Text(
-            modifier = Modifier.padding(start = 16.dp),
-            text = stringResource(R.string.main_closest),
-            style = MaterialTheme.typography.titleMedium
-        )
-    }
-
-    when(tracksBuilding) {
-        is MainTracksBuildingState.Loaded -> {
-            item {
-                LazyRow(
-                    modifier = Modifier.padding(vertical = 8.dp),
-                ) {
-                    items(tracksBuilding.events) { event ->
-                        EventItem(
-                            modifier = Modifier
-                                .fillParentMaxWidth(0.8f)
-                                .padding(horizontal = 8.dp, vertical = 8.dp),
-                            event = event,
-                            onClickAction = onNavigate
-                        )
-                    }
-                }
-            }
-        }
-        MainTracksBuildingState.Loading -> item{
-            LoadingItem()
-        }
-    }
-}
-
 fun LazyListScope.preferredTracks(
     preferredTracks: MainPreferredTracksState,
+    favourites: FavouriteEventsState,
     onNavigate: (String) -> Unit
 ) {
     item {
@@ -372,6 +343,7 @@ fun LazyListScope.preferredTracks(
             items(preferredTracks.tracks) { track ->
                 TrackRow(
                     track = track,
+                    favourites = favourites,
                     onNavigate = onNavigate
                 )
             }

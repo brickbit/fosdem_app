@@ -50,6 +50,7 @@ import com.snap.fosdem.android.screens.common.FilterDropDownMenu
 import com.snap.fosdem.android.screens.common.LoadingScreen
 import com.snap.fosdem.android.screens.common.SelectableChip
 import com.snap.fosdem.android.transparentBrushColorReversed
+import com.snap.fosdem.app.state.FavouriteEventsState
 import com.snap.fosdem.app.state.ScheduleFilter
 import com.snap.fosdem.app.state.ScheduleState
 import com.snap.fosdem.app.viewModel.ScheduleViewModel
@@ -64,12 +65,14 @@ fun ScheduleRoute(
     val stateHour = viewModel.stateHour.collectAsState().value
     val stateTrack = viewModel.stateTracks.collectAsState().value
     val stateRooms = viewModel.stateRooms.collectAsState().value
+    val favouriteEventsState = viewModel.stateFavouriteEvents.collectAsState().value
     val state = viewModel.state.collectAsState().value
 
     LaunchedEffect(Unit) {
         viewModel.getHours()
         viewModel.getTracks()
         viewModel.getRooms()
+        viewModel.getFavouritesEvents()
         viewModel.getScheduleBy(
             day = "Saturday",
             hours = emptyList(),
@@ -84,6 +87,7 @@ fun ScheduleRoute(
                 tracks = stateTrack,
                 rooms = stateRooms,
                 scheduledLoaded = state.filter,
+                favourites = favouriteEventsState,
                 onFilter = { filter ->
                     viewModel.getScheduleBy(
                         day = filter.day,
@@ -102,6 +106,7 @@ fun ScheduleRoute(
                 tracks = stateTrack,
                 rooms = stateRooms,
                 scheduledLoaded = state.filter,
+                favourites = favouriteEventsState,
                 onFilter = { filter ->
                     viewModel.getScheduleBy(
                         day = filter.day,
@@ -143,6 +148,7 @@ fun ScheduleScreen(
     tracks: List<String>,
     rooms: List<String>,
     scheduledLoaded: ScheduleFilter,
+    favourites: FavouriteEventsState,
     onFilter: (ScheduleFilter) -> Unit,
     onEventClicked: (String) -> Unit
 ) {
@@ -165,6 +171,7 @@ fun ScheduleScreen(
                 EventItem(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                     event = event,
+                    favourites = favourites,
                     onClickAction = onEventClicked
                 )
             }

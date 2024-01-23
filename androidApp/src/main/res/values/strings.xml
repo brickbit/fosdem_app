@@ -56,10 +56,13 @@
     <string name="schedule_filter">Filtrar</string>
     <string name="schedule_rooms">Salas</string>
     <string name="schedule_no_items_found">No se ha encontrado ningún elemento con los parámetros seleccionados</string>
+    <string name="schedule_saturday">Sábado</string>
+    <string name="schedule_sunday">Domingo</string>
     <!--NOTIFICATION-->
     <string name="notification_description">La charla empieza en %1$s minutos en la sala %2$s</string>
     <!--SPLASH-->
     <string name="top_bar_fosdem">Fosdem</string>
-    <string name="schedule_saturday">Sábado</string>
-    <string name="schedule_sunday">Domingo</string>
+    <!--EVENT-->
+    <string name="event_saturday_mini">Sáb</string>
+    <string name="event_sunday_mini">Dom</string>
 </resources>

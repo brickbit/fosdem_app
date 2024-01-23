@@ -9,6 +9,7 @@ import com.snap.fosdem.domain.repository.ScheduleRepository
 import com.snap.fosdem.domain.useCase.ChangeLanguageUseCase
 import com.snap.fosdem.domain.useCase.GetEventByIdUseCase
 import com.snap.fosdem.domain.useCase.GetEventsForNotificationUseCase
+import com.snap.fosdem.domain.useCase.GetFavouritesEventsUseCase
 import com.snap.fosdem.domain.useCase.GetHoursUseCase
 import com.snap.fosdem.domain.useCase.GetLanguageUseCase
 import com.snap.fosdem.domain.useCase.GetNotificationTimeUseCase
@@ -17,7 +18,6 @@ import com.snap.fosdem.domain.useCase.GetOnBoardingStatusUseCase
 import com.snap.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.snap.fosdem.domain.useCase.GetRoomsUseCase
 import com.snap.fosdem.domain.useCase.GetSavedTracksUseCase
-import com.snap.fosdem.domain.useCase.GetScheduleByBuildingUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByHourUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByParameterUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByTrackUseCase
@@ -49,7 +49,7 @@ val useCaseModule = module {
     single { GetHoursUseCase(get(), get()) }
     single { GetRoomsUseCase(get(), get()) }
     single { GetSavedTracksUseCase(get()) }
-    single { GetScheduleByBuildingUseCase(get(), get()) }
+    single { GetFavouritesEventsUseCase(get()) }
     single { GetEventByIdUseCase(get(), get()) }
     single { GetLanguageUseCase(get()) }
     single { ChangeLanguageUseCase(get()) }

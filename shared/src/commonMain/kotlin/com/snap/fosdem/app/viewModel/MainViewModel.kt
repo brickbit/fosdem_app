@@ -1,11 +1,11 @@
 package com.snap.fosdem.app.viewModel
 
 import com.snap.fosdem.app.flow.toCommonStateFlow
+import com.snap.fosdem.app.state.FavouriteEventsState
 import com.snap.fosdem.app.state.MainPreferredTracksState
-import com.snap.fosdem.app.state.MainTracksBuildingState
 import com.snap.fosdem.app.state.MainTracksNowState
+import com.snap.fosdem.domain.useCase.GetFavouritesEventsUseCase
 import com.snap.fosdem.domain.useCase.GetPreferredTracksUseCase
-import com.snap.fosdem.domain.useCase.GetScheduleByBuildingUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByHourUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByTrackUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,7 @@ class MainViewModel(
     private val getPreferredTracks: GetPreferredTracksUseCase,
     private val getScheduleByTrack: GetScheduleByTrackUseCase,
     private val getScheduleByHour: GetScheduleByHourUseCase,
-    private val getSchedulesByBuilding: GetScheduleByBuildingUseCase
+    private val getFavouritesEvents: GetFavouritesEventsUseCase
 ): BaseViewModel() {
 
     private val _statePreferredTracks: MutableStateFlow<MainPreferredTracksState> = MutableStateFlow(MainPreferredTracksState.Loading)
@@ -33,11 +33,12 @@ class MainViewModel(
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = MainTracksNowState.Loading
     ).toCommonStateFlow()
-    private val _stateBuildingTracks: MutableStateFlow<MainTracksBuildingState> = MutableStateFlow(MainTracksBuildingState.Loading)
-    val stateBuildingTracks = _stateBuildingTracks.stateIn(
+
+    private val _stateFavouriteEvents: MutableStateFlow<FavouriteEventsState> = MutableStateFlow(FavouriteEventsState.Loading)
+    val stateFavouriteEvents = _stateFavouriteEvents.stateIn(
         scope = scope,
         started = SharingStarted.WhileSubscribed(5000),
-        initialValue = MainTracksBuildingState.Loading
+        initialValue = FavouriteEventsState.Loading
     ).toCommonStateFlow()
 
     fun getPreferredTracks() {
@@ -66,12 +67,12 @@ class MainViewModel(
         }
     }
 
-    fun getScheduleByBuilding() {
+    fun getFavouritesEvents() {
         scope.launch {
-            getSchedulesByBuilding.invoke("UB2.252A (Lameere)")
+            getFavouritesEvents.invoke()
                 .onSuccess { events ->
-                    _stateBuildingTracks.update {
-                        MainTracksBuildingState.Loaded(events)
+                    _stateFavouriteEvents.update {
+                        FavouriteEventsState.Loaded(events)
                     }
                 }
                 .onFailure {  }

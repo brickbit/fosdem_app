@@ -1,8 +1,10 @@
 package com.snap.fosdem.app.viewModel
 
 import com.snap.fosdem.app.flow.toCommonStateFlow
+import com.snap.fosdem.app.state.FavouriteEventsState
 import com.snap.fosdem.app.state.ScheduleFilter
 import com.snap.fosdem.app.state.ScheduleState
+import com.snap.fosdem.domain.useCase.GetFavouritesEventsUseCase
 import com.snap.fosdem.domain.useCase.GetHoursUseCase
 import com.snap.fosdem.domain.useCase.GetRoomsUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByParameterUseCase
@@ -17,7 +19,8 @@ class ScheduleViewModel(
     private val getHoursUseCase: GetHoursUseCase,
     private val getTracksUseCase: GetTracksUseCase,
     private val getRoomsUseCase: GetRoomsUseCase,
-    private val getScheduleByParameter: GetScheduleByParameterUseCase
+    private val getScheduleByParameter: GetScheduleByParameterUseCase,
+    private val getFavouritesEvents: GetFavouritesEventsUseCase
 ): BaseViewModel() {
 
     private val _stateHour: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
@@ -46,6 +49,13 @@ class ScheduleViewModel(
         scope = scope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = ScheduleState.Loading
+    ).toCommonStateFlow()
+
+    private val _stateFavouriteEvents: MutableStateFlow<FavouriteEventsState> = MutableStateFlow(FavouriteEventsState.Loading)
+    val stateFavouriteEvents = _stateFavouriteEvents.stateIn(
+        scope = scope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = FavouriteEventsState.Loading
     ).toCommonStateFlow()
 
     fun getHours() {
@@ -132,6 +142,18 @@ class ScheduleViewModel(
                 .onFailure {
 
                 }
+        }
+    }
+
+    fun getFavouritesEvents() {
+        scope.launch {
+            getFavouritesEvents.invoke()
+                .onSuccess { events ->
+                    _stateFavouriteEvents.update {
+                        FavouriteEventsState.Loaded(events)
+                    }
+                }
+                .onFailure {  }
         }
     }
 }

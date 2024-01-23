@@ -87,3 +87,11 @@ fun String.allToTranslatable(context: Context): String {
 fun String.allFromTranslatable(context: Context): String {
     return "All"
 }
+
+fun String.dayMiniToTranslatable(context: Context): String {
+    return if(this == "Sat") {
+        context.getString(R.string.event_saturday_mini)
+    } else {
+        context.getString(R.string.event_sunday_mini)
+    }
+}

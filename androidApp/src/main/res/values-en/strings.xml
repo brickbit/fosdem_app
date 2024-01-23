@@ -56,8 +56,13 @@
     <string name="schedule_filter">Filter</string>
     <string name="schedule_rooms">Rooms</string>
     <string name="schedule_no_items_found">No item found with the selected parameters</string>
+    <string name="schedule_saturday">Saturday</string>
+    <string name="schedule_sunday">Sunday</string>
     <!--NOTIFICATION-->
     <string name="notification_description">The talk starts in %1$s minutes in room %2$s</string>
     <!--SPLASH-->
     <string name="top_bar_fosdem">Fosdem</string>
+    <!--EVENT-->
+    <string name="event_saturday_mini">Sat</string>
+    <string name="event_sunday_mini">Sun</string>
 </resources>

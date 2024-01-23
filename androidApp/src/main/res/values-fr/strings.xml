@@ -56,8 +56,13 @@
     <string name="schedule_filter">Filtre</string>
     <string name="schedule_rooms">Salle</string>
     <string name="schedule_no_items_found">Aucun élément trouvé avec les paramètres sélectionnés</string>
+    <string name="schedule_saturday">Samedi</string>
+    <string name="schedule_sunday">Dimanche</string>
     <!--NOTIFICATION-->
     <string name="notification_description">La conférence commence dans %1$s minutes dans la salle %2$s</string>
     <!--SPLASH-->
     <string name="top_bar_fosdem">Fosdem</string>
+    <!--EVENT-->
+    <string name="event_saturday_mini">Sam</string>
+    <string name="event_sunday_mini">Dim</string>
 </resources>
