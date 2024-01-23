@@ -22,6 +22,9 @@
     <string name="main_right_now">Maintenant</string>
     <string name="main_closest">Le plus proche</string>
     <string name="main_your_favourite_tracks">Vos tracks préférés</string>
+    <string name="main_your_favourites_talks">Vos conférences préférées</string>
+    <string name="main_speakers">Speakers</string>
+    <string name="main_stands">Stands</string>
     <!--SETTINGS-->
     <string name="settings">Paramètres</string>
     <string name="settings_licenses">Licences tierces</string>

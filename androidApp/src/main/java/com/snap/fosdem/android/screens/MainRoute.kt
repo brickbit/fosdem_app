@@ -17,13 +17,20 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,12 +53,16 @@ import com.snap.fosdem.android.R
 import com.snap.fosdem.android.extension.splitImage
 import com.snap.fosdem.android.mainBrushColor
 import com.snap.fosdem.android.screens.common.EventItem
+import com.snap.fosdem.android.screens.common.SpeakerBottomSheet
+import com.snap.fosdem.android.screens.common.SpeakerItem
+import com.snap.fosdem.android.screens.common.StandItem
 import com.snap.fosdem.android.screens.common.shimmerEffect
 import com.snap.fosdem.app.state.FavouriteEventsState
 import com.snap.fosdem.app.state.MainPreferredTracksState
 import com.snap.fosdem.app.state.MainTracksNowState
+import com.snap.fosdem.app.state.SpeakersState
+import com.snap.fosdem.app.state.StandsState
 import com.snap.fosdem.app.viewModel.MainViewModel
-import com.snap.fosdem.domain.model.EventBo
 import com.snap.fosdem.domain.model.TrackBo
 import org.koin.androidx.compose.koinViewModel
 
@@ -64,33 +75,52 @@ fun MainRoute(
     val preferredTracksState = viewModel.statePreferredTracks.collectAsState().value
     val tracksNowState = viewModel.stateCurrentTracks.collectAsState().value
     val favouriteEventsState = viewModel.stateFavouriteEvents.collectAsState().value
+    val speakerState = viewModel.stateSpeaker.collectAsState().value
+    val standState = viewModel.stateStand.collectAsState().value
 
     LaunchedEffect(Unit) {
         viewModel.getScheduleByMoment()
         viewModel.getPreferredTracks()
         viewModel.getFavouritesEvents()
+        viewModel.getSpeakerList()
+        viewModel.getStandList()
     }
     MainScreen(
         preferredTracks = preferredTracksState,
         tracksNow = tracksNowState,
         favourites = favouriteEventsState,
+        speakers = speakerState,
+        stands = standState,
         onNavigate = onNavigate,
         navigateToSchedule = navigateToSchedule
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     preferredTracks: MainPreferredTracksState,
     tracksNow: MainTracksNowState,
     favourites: FavouriteEventsState,
+    speakers: SpeakersState,
+    stands: StandsState,
     onNavigate: (String) -> Unit,
     navigateToSchedule: () -> Unit
 ) {
+    var showSpeakerBottomSheet by remember { mutableStateOf( Pair(0,false)) }
+    val speakerSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+
+    if(showSpeakerBottomSheet.second) {
+        SpeakerBottomSheet(
+            position = showSpeakerBottomSheet.first,
+            speakers = (speakers as? SpeakersState.Loaded)?.speakers ?: emptyList(),
+            sheetState = speakerSheetState,
+            onDismiss = { showSpeakerBottomSheet = Pair(showSpeakerBottomSheet.first,false)},
+        )
+    }
     LazyColumn {
-        /*item {
-            MainHeader()
-        }*/
         item {
             ScheduleCard (navigateToSchedule = navigateToSchedule)
         }
@@ -99,10 +129,21 @@ fun MainScreen(
             favourites = favourites,
             onNavigate = onNavigate
         )
+        favouriteEvents(
+            favourites = favourites,
+            onNavigate = onNavigate
+        )
+        speakerItems(
+            speakers = speakers,
+            onNavigate = { showSpeakerBottomSheet = Pair(it,true)  }
+        )
         preferredTracks(
             preferredTracks = preferredTracks,
             favourites = favourites,
             onNavigate = onNavigate
+        )
+        standItems(
+            stands = stands
         )
     }
 }
@@ -134,100 +175,6 @@ fun TrackRow(
                     favourites = favourites,
                     event = event,
                     onClickAction = onNavigate
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun FooterEventItem(
-    event: EventBo
-) {
-    Row(
-        modifier = Modifier
-            .padding(top = 8.dp),
-        horizontalArrangement = Arrangement.Start
-    ) {
-        Image(
-            modifier = Modifier
-                .size(16.dp),
-            painter = painterResource(id = R.drawable.ic_location),
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
-        )
-        Text(
-            text = event.talk.room.name,
-            style = MaterialTheme.typography.bodySmall,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-    }
-}
-
-@Composable
-fun CardImageEvent(
-    image: String?,
-) {
-    Box(
-        modifier = Modifier
-            .padding(top = 16.dp)
-            .background(Color.White, shape = CircleShape)
-            .size(50.dp),
-    ) {
-        if (image != null) {
-            AsyncImage(
-                modifier = Modifier
-                    .size(50.dp)
-                    .clip(CircleShape),
-                model = image,
-                contentScale = ContentScale.Crop,
-                contentDescription = null,
-            )
-        } else {
-            Image(
-                modifier = Modifier
-                    .size(50.dp),
-                painter = painterResource(id = R.drawable.ic_account),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
-            )
-        }
-    }
-}
-
-@Composable
-fun MainHeader() {
-    Box(
-        contentAlignment = Alignment.Center
-    ) {
-        Image(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .padding(top = 24.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
-                .clip(RoundedCornerShape(20.dp)),
-            contentScale = ContentScale.Crop,
-            painter = painterResource(id = R.drawable.fosdem_background),
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
-        )
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                colorFilter = ColorFilter.tint(color = Color.White),
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription = null,
-            )
-            Row {
-                Text(
-                    modifier = Modifier
-                        .background(Color.Black)
-                        .padding(8.dp),
-                    text = stringResource(R.string.main_date),
-                    style = MaterialTheme.typography.titleSmall.copy(color = Color.White)
                 )
             }
         }
@@ -325,6 +272,107 @@ fun LazyListScope.rightNowItems(
         }
     }
 }
+
+fun LazyListScope.favouriteEvents(
+    favourites: FavouriteEventsState,
+    onNavigate: (String) -> Unit
+) {
+    item {
+        Text(
+            modifier = Modifier.padding(start = 16.dp),
+            text = stringResource(R.string.main_your_favourites_talks),
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
+    when(favourites) {
+        is FavouriteEventsState.Loaded -> {
+            item {
+                LazyRow(
+                    modifier = Modifier.padding(vertical = 8.dp),
+                ) {
+                    items(favourites.events) { event ->
+                        EventItem(
+                            modifier = Modifier
+                                .fillParentMaxWidth(0.8f)
+                                .padding(horizontal = 8.dp, vertical = 8.dp),
+                            event = event,
+                            favourites = favourites,
+                            onClickAction = onNavigate
+                        )
+                    }
+                }
+            }
+        }
+        FavouriteEventsState.Loading -> item {
+            LoadingItem()
+        }
+    }
+}
+
+fun LazyListScope.speakerItems(
+    speakers: SpeakersState,
+    onNavigate: (Int) -> Unit
+) {
+    item {
+        Text(
+            modifier = Modifier.padding(start = 16.dp),
+            text = stringResource(R.string.main_speakers),
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
+    when(speakers) {
+        is SpeakersState.Loaded -> {
+            item {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp, vertical = 8.dp),
+                ) {
+                    itemsIndexed(speakers.speakers) { index, speaker ->
+                        SpeakerItem(
+                            modifier = Modifier.clickable { onNavigate(index) },
+                            speaker = speaker
+                        )
+                    }
+                }
+            }
+        }
+        SpeakersState.Loading -> item {
+            LoadingItem()
+        }
+    }
+}
+
+fun LazyListScope.standItems(
+    stands: StandsState,
+) {
+    item {
+        Text(
+            modifier = Modifier.padding(start = 16.dp),
+            text = stringResource(R.string.main_stands),
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
+    when(stands) {
+        is StandsState.Loaded -> {
+            item {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp, vertical = 8.dp)
+                ) {
+                    items(stands.stands) { stand ->
+                        StandItem(stand = stand)
+                    }
+                }
+            }
+        }
+        StandsState.Loading -> item {
+            LoadingItem()
+        }
+    }
+}
+
 
 fun LazyListScope.preferredTracks(
     preferredTracks: MainPreferredTracksState,

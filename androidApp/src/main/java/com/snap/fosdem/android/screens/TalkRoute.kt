@@ -11,15 +11,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -47,6 +44,7 @@ import com.snap.fosdem.android.MyApplicationTheme
 import com.snap.fosdem.android.R
 import com.snap.fosdem.android.mainBrushColor
 import com.snap.fosdem.android.screens.common.LoadingScreen
+import com.snap.fosdem.android.screens.common.SpeakerBottomSheet
 import com.snap.fosdem.app.state.TalkState
 import com.snap.fosdem.app.viewModel.TalkViewModel
 import com.snap.fosdem.domain.model.EventBo
@@ -106,7 +104,9 @@ fun TalkContent(
     removeNotifyEvent: (EventBo) -> Unit
 ) {
     var showSpeakerBottomSheet by remember { mutableStateOf( Pair(0,false)) }
-    val speakerSheetState = rememberModalBottomSheetState()
+    val speakerSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
     var showRoomBottomSheet by remember { mutableStateOf(false) }
 
     Column(
@@ -143,45 +143,6 @@ fun TalkContent(
         showRoomBottomSheet = false
     }
 
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SpeakerBottomSheet(
-    position: Int,
-    event: EventBo,
-    sheetState: SheetState,
-    onDismiss: () -> Unit
-) {
-    ModalBottomSheet(
-        onDismissRequest = { onDismiss() },
-        sheetState = sheetState
-    ) {
-        Column(
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 64.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            AsyncImage(
-                modifier = Modifier
-                    .size(70.dp)
-                    .clip(CircleShape),
-                model = event.speaker[position].image ?: "",
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
-            Text(
-                text = event.speaker[position].name,
-                style = MaterialTheme.typography.titleSmall,
-                textAlign = TextAlign.Center
-            )
-            Text(
-                text = event.speaker[position].description ?: "",
-                style = MaterialTheme.typography.bodySmall,
-                textAlign = TextAlign.Center
-            )
-        }
-    }
 }
 
 @Composable

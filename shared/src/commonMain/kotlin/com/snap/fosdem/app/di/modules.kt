@@ -22,6 +22,8 @@ import com.snap.fosdem.domain.useCase.GetScheduleByHourUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByParameterUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByTrackUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleDataUseCase
+import com.snap.fosdem.domain.useCase.GetSpeakersUseCase
+import com.snap.fosdem.domain.useCase.GetStandsUseCase
 import com.snap.fosdem.domain.useCase.GetTracksUseCase
 import com.snap.fosdem.domain.useCase.IsEventNotifiedUseCase
 import com.snap.fosdem.domain.useCase.ManageEventNotificationUseCase
@@ -60,4 +62,6 @@ val useCaseModule = module {
     single { GetEventsForNotificationUseCase(get()) }
     single { GetNotificationTimeUseCase(get()) }
     single { ManageNotificationTimeUseCase(get()) }
+    single { GetSpeakersUseCase(get(), get()) }
+    single { GetStandsUseCase(get(), get()) }
 }

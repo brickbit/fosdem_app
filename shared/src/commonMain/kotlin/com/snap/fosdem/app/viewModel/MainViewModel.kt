@@ -4,10 +4,14 @@ import com.snap.fosdem.app.flow.toCommonStateFlow
 import com.snap.fosdem.app.state.FavouriteEventsState
 import com.snap.fosdem.app.state.MainPreferredTracksState
 import com.snap.fosdem.app.state.MainTracksNowState
+import com.snap.fosdem.app.state.SpeakersState
+import com.snap.fosdem.app.state.StandsState
 import com.snap.fosdem.domain.useCase.GetFavouritesEventsUseCase
 import com.snap.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByHourUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleByTrackUseCase
+import com.snap.fosdem.domain.useCase.GetSpeakersUseCase
+import com.snap.fosdem.domain.useCase.GetStandsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -18,7 +22,9 @@ class MainViewModel(
     private val getPreferredTracks: GetPreferredTracksUseCase,
     private val getScheduleByTrack: GetScheduleByTrackUseCase,
     private val getScheduleByHour: GetScheduleByHourUseCase,
-    private val getFavouritesEvents: GetFavouritesEventsUseCase
+    private val getFavouritesEvents: GetFavouritesEventsUseCase,
+    private val getSpeakers: GetSpeakersUseCase,
+    private val getStands: GetStandsUseCase
 ): BaseViewModel() {
 
     private val _statePreferredTracks: MutableStateFlow<MainPreferredTracksState> = MutableStateFlow(MainPreferredTracksState.Loading)
@@ -39,6 +45,20 @@ class MainViewModel(
         scope = scope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = FavouriteEventsState.Loading
+    ).toCommonStateFlow()
+
+    private val _stateSpeaker: MutableStateFlow<SpeakersState> = MutableStateFlow(SpeakersState.Loading)
+    val stateSpeaker = _stateSpeaker.stateIn(
+        scope = scope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = SpeakersState.Loading
+    ).toCommonStateFlow()
+
+    private val _stateStand: MutableStateFlow<StandsState> = MutableStateFlow(StandsState.Loading)
+    val stateStand = _stateStand.stateIn(
+        scope = scope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = StandsState.Loading
     ).toCommonStateFlow()
 
     fun getPreferredTracks() {
@@ -73,6 +93,30 @@ class MainViewModel(
                 .onSuccess { events ->
                     _stateFavouriteEvents.update {
                         FavouriteEventsState.Loaded(events)
+                    }
+                }
+                .onFailure {  }
+        }
+    }
+
+    fun getSpeakerList() {
+        scope.launch {
+            getSpeakers.invoke()
+                .onSuccess { speakers ->
+                    _stateSpeaker.update {
+                        SpeakersState.Loaded(speakers)
+                    }
+                }
+                .onFailure {  }
+        }
+    }
+
+    fun getStandList() {
+        scope.launch {
+            getStands.invoke()
+                .onSuccess { stands ->
+                    _stateStand.update {
+                        StandsState.Loaded(stands)
                     }
                 }
                 .onFailure {  }

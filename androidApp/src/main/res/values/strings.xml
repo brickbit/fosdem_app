@@ -22,6 +22,9 @@
     <string name="main_right_now">Ahora mismo</string>
     <string name="main_closest">Más cercanos</string>
     <string name="main_your_favourite_tracks">Tus tracks favoritos</string>
+    <string name="main_your_favourites_talks">Tus charlas favoritas</string>
+    <string name="main_speakers">Speakers</string>
+    <string name="main_stands">Stands</string>
     <!--SETTINGS-->
     <string name="settings">Ajustes</string>
     <string name="settings_licenses">Licencias de terceros</string>
