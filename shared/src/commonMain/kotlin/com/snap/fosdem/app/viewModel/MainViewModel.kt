@@ -93,10 +93,8 @@ class MainViewModel(
 
     fun getScheduleByMoment() {
         scope.launch {
-            val now = Clock.System.now().toEpochMilliseconds()
-            getScheduleByHour.invoke(now)
+            getScheduleByHour.invoke()
                 .onSuccess { events ->
-
                     _stateCurrentTracks.update {
                         if (events.isEmpty()) {
                             MainTracksNowState.Empty
