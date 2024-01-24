@@ -56,7 +56,7 @@ fun EventItem(
                     shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp)
                 )
                 .padding(4.dp)
-                .heightIn(110.dp + (event.speaker.count() * 10).dp)
+                .heightIn(110.dp + (event.speaker.count() * 15).dp)
                 .widthIn(45.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally

@@ -150,14 +150,15 @@ fun TalkHeader(
     event: EventBo,
     onSpeakerClicked: (Int) -> Unit
 ) {
-    event.speaker.forEach {speaker ->
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                text = (event.talk.title).uppercase(),
-                style = MaterialTheme.typography.titleMedium
-            )
+    Column {
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            text = (event.talk.title).uppercase(),
+            style = MaterialTheme.typography.titleMedium
+        )
+        event.speaker.forEach { speaker ->
             Row(
                 modifier = Modifier
                     .padding(top = 8.dp)
@@ -165,14 +166,25 @@ fun TalkHeader(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                AsyncImage(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape),
-                    model = speaker.image ?: "",
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
+                if(!speaker.image.isNullOrEmpty()) {
+                    AsyncImage(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape),
+                        model = speaker.image ?: "",
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    Image(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
+                        painter = painterResource(id = R.drawable.ic_account),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
+                    )
+                }
                 Column {
                     Text(
                         text = speaker.name,
@@ -190,6 +202,7 @@ fun TalkHeader(
                 }
             }
         }
+    }
 }
 
 @Composable

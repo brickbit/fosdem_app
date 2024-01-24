@@ -56,7 +56,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.core.content.ContextCompat
-import coil.compose.AsyncImage
 import com.snap.fosdem.android.BuildConfig
 import com.snap.fosdem.android.MainActivity
 import com.snap.fosdem.android.MyApplicationTheme
