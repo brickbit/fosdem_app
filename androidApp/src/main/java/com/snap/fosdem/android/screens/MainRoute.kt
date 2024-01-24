@@ -57,6 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
+import com.snap.fosdem.android.BuildConfig
 import com.snap.fosdem.android.MainActivity
 import com.snap.fosdem.android.MyApplicationTheme
 import com.snap.fosdem.android.R
@@ -218,7 +219,7 @@ fun PlaceComposable() {
                 .padding(16.dp)
                 .clip(RoundedCornerShape(20.dp))
                 .clickable {
-                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(""))
+                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.location))
                     context.startActivity(browserIntent)
                 },
             painter = painterResource(id = R.drawable.ic_place),

@@ -16,6 +16,7 @@
     <string name="favourite_tracks_track_subtitle">Sélectionnez les tracks qui vous intéressent le plus</string>
     <string name="favourite_tracks_next_button">Continuer</string>
     <string name="favourite_error">Erreur</string>
+    <string name="favourite_skip">Sauter</string>
     <!--MAIN_TRACKS-->
     <string name="main_date">Bruxelles | 3 &amp; 4 février 2024</string>
     <string name="main_check_schedule">Consultez dès maintenant l\'agenda complet</string>
@@ -26,7 +27,9 @@
     <string name="main_speakers">Speakers</string>
     <string name="main_stands">Stands</string>
     <string name="main_how_to_get">Comment arriver?</string>
-    <string name="favourite_skip">Sauter</string>
+    <string name="main_favourite_events">Vos conférences préférées apparaîtront ici. Pour enregistrer une discussion, appuyez sur le bouton Enregistrer comme favori dans sa description</string>
+    <string name="main_talks_right_now">Les discussions qui ont commencé ou vont commencer apparaîtront ici</string>
+    <string name="main_select_favourite_tracks">Vos morceaux préférés apparaîtront ici, vous pouvez les sélectionner depuis l\'écran des paramètres</string>
     <!--SETTINGS-->
     <string name="settings">Paramètres</string>
     <string name="settings_licenses">Licences tierces</string>
@@ -70,5 +73,4 @@
     <!--EVENT-->
     <string name="event_saturday_mini">Sam</string>
     <string name="event_sunday_mini">Dim</string>
-    <string name="main_favourite_events">Tus charlas favoritas aparecerán aquí. Para guardar una charla pulsa el botó Guardar como favorito en su descripción</string>
 </resources>

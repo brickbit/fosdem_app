@@ -153,7 +153,7 @@ fun PreferenceTitle(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                modifier = Modifier.fillMaxWidth(0.85f),
+                modifier = Modifier.fillMaxWidth(0.82f),
                 text = stringResource(R.string.favourite_tracks_track),
                 style = MaterialTheme.typography.titleMedium
             )
