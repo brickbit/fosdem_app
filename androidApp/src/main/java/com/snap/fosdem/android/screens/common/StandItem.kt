@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
@@ -34,6 +35,7 @@ import com.snap.fosdem.domain.model.StandBo
 fun StandItem(
     modifier: Modifier = Modifier,
     stand: StandBo,
+    onClickItem: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -45,6 +47,7 @@ fun StandItem(
                 border = BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface),
                 shape = RoundedCornerShape(20.dp)
             )
+            .clickable { onClickItem() }
     ) {
         Box(
             modifier = Modifier
@@ -74,31 +77,5 @@ fun StandItem(
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
-        LazyColumn(
-            modifier = Modifier
-                .padding(horizontal = 10.dp)
-                .height(300.dp)
-        ) {
-            items(stand.features) {
-                Text(
-                    modifier = Modifier.width(220.dp),
-                    text = "${it.subtitle} - ${it.type}",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.background),
-                    textAlign = TextAlign.Center
-                )
-                LazyColumn(
-                    modifier = Modifier.height(70.dp)
-                ) {
-                    items(it.companies) { company ->
-                        Text(
-                            modifier = Modifier.width(220.dp),
-                            text = company,
-                            style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.background),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
-            }
-        }
     }
 }

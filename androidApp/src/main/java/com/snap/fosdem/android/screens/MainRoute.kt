@@ -58,6 +58,7 @@ import com.snap.fosdem.android.mainBrushColor
 import com.snap.fosdem.android.screens.common.EventItem
 import com.snap.fosdem.android.screens.common.SpeakerBottomSheet
 import com.snap.fosdem.android.screens.common.SpeakerItem
+import com.snap.fosdem.android.screens.common.StandBottomSheet
 import com.snap.fosdem.android.screens.common.StandItem
 import com.snap.fosdem.android.screens.common.shimmerEffect
 import com.snap.fosdem.app.state.FavouriteEventsState
@@ -135,6 +136,10 @@ fun MainScreen(
     val speakerSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
+    var showStandBottomSheet by remember { mutableStateOf( Pair(0,false)) }
+    val standSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
 
     if(showSpeakerBottomSheet.second) {
         SpeakerBottomSheet(
@@ -144,6 +149,15 @@ fun MainScreen(
             onDismiss = { showSpeakerBottomSheet = Pair(showSpeakerBottomSheet.first,false)},
         )
     }
+    if(showStandBottomSheet.second) {
+        StandBottomSheet(
+            position = showStandBottomSheet.first,
+            stands = (stands as? StandsState.Loaded)?.stands ?: emptyList(),
+            sheetState = standSheetState,
+            onDismiss = { showStandBottomSheet = Pair(showStandBottomSheet.first,false) }
+        )
+    }
+
     LazyColumn(modifier = modifier) {
         item {
             ScheduleCard(navigateToSchedule = navigateToSchedule)
@@ -168,7 +182,8 @@ fun MainScreen(
             onNavigate = onNavigate
         )
         standItems(
-            stands = stands
+            stands = stands,
+            onNavigate = { showStandBottomSheet = Pair(it, true) }
         )
     }
 }
@@ -374,6 +389,7 @@ fun LazyListScope.speakerItems(
 
 fun LazyListScope.standItems(
     stands: StandsState,
+    onNavigate: (Int) -> Unit
 ) {
     item {
         Text(
@@ -390,8 +406,11 @@ fun LazyListScope.standItems(
                     modifier = Modifier
                         .padding(horizontal = 8.dp, vertical = 8.dp)
                 ) {
-                    items(stands.stands) { stand ->
-                        StandItem(stand = stand)
+                    itemsIndexed(stands.stands) { index, stand ->
+                        StandItem(
+                            stand = stand,
+                            onClickItem = { onNavigate(index) }
+                        )
                     }
                 }
             }
