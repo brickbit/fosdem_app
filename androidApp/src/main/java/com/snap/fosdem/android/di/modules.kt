@@ -41,7 +41,7 @@ val viewModelModules = module {
     viewModel { MainActivityViewModel(get()) }
     viewModel { SplashViewModel(get(), get(), get(), get(), get()) }
     viewModel { OnBoardingViewModel(get()) }
-    viewModel { PreferencesViewModel(get(), get(), get()) }
+    viewModel { PreferencesViewModel(get(), get(), get(), get()) }
     viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { TalkViewModel(get(), get(), get()) }
     viewModel { LanguageViewModel(get(), get()) }

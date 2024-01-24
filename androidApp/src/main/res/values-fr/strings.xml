@@ -70,4 +70,5 @@
     <!--EVENT-->
     <string name="event_saturday_mini">Sam</string>
     <string name="event_sunday_mini">Dim</string>
+    <string name="main_favourite_events">Tus charlas favoritas aparecerán aquí. Para guardar una charla pulsa el botó Guardar como favorito en su descripción</string>
 </resources>

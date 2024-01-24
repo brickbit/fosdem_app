@@ -44,6 +44,10 @@ fun OnBoardingRoute(
         onContinueClicked = {
             viewModel.saveOnBoarding()
             onNavigate()
+        },
+        onSkipClicked = {
+            viewModel.saveOnBoarding()
+            onNavigate()
         }
     )
 }
@@ -52,6 +56,7 @@ fun OnBoardingRoute(
 @Composable
 fun OnBoardingScreen(
     onContinueClicked: () -> Unit,
+    onSkipClicked: () -> Unit
 ) {
     val pagerState = rememberPagerState(pageCount = { 3 })
     Box(
@@ -64,17 +69,20 @@ fun OnBoardingScreen(
             when(page) {
                 0 -> ContentForPage(
                     title = stringResource(R.string.on_boarding_title_1),
-                    description = stringResource(R.string.on_boarding_description_1)
+                    description = stringResource(R.string.on_boarding_description_1),
+                    onSkipClicked = onSkipClicked
                 )
                 1 -> ContentForPage(
                     title = stringResource(R.string.on_boarding_title_2),
-                    description = stringResource(R.string.on_boarding_description_2)
+                    description = stringResource(R.string.on_boarding_description_2),
+                    onSkipClicked = onSkipClicked
                 )
                 else -> ContentForPage(
                     title = stringResource(R.string.on_boarding_title_3),
                     description = stringResource(R.string.on_boarding_description_3),
                     hasButton = true,
-                    onContinueClicked = onContinueClicked
+                    onContinueClicked = onContinueClicked,
+                    onSkipClicked = onSkipClicked
                 )
             }
 
@@ -88,44 +96,58 @@ fun ContentForPage(
     title: String,
     description: String,
     hasButton: Boolean = false,
-    onContinueClicked: () -> Unit = {}
+    onContinueClicked: () -> Unit = {},
+    onSkipClicked: () -> Unit,
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 32.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.End
     ) {
-        Image(
-            modifier = Modifier.size(dimensionResource(id = R.dimen.splash_image_size)),
-            painter = painterResource(id = R.drawable.ic_launcher_foreground),
-            contentDescription = stringResource(R.string.splash_fosdem_logo_description)
-        )
         Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            textAlign = TextAlign.Center
+            modifier = Modifier
+                .padding(16.dp)
+                .clickable{ onSkipClicked() },
+            text = stringResource(R.string.favourite_skip),
+            style = MaterialTheme.typography.titleSmall.copy(Color.Gray)
         )
-        Text(
-            modifier = Modifier.padding(top = 8.dp),
-            text = description,
-            style = MaterialTheme.typography.bodyMedium,
-            textAlign = TextAlign.Center
-        )
-        if(hasButton) {
-            Text(
-                modifier = Modifier
-                    .padding(top = 16.dp)
-                    .background(
-                        brush = Brush.linearGradient(colorStops = mainBrushColor),
-                        shape = CircleShape
-                    )
-                    .padding(vertical = 16.dp, horizontal = 32.dp)
-                    .clickable { onContinueClicked() },
-                text = stringResource(R.string.on_boarding_next_button),
-                style = MaterialTheme.typography.titleSmall.copy(Color.White)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 32.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                modifier = Modifier.size(dimensionResource(id = R.dimen.splash_image_size)),
+                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                contentDescription = stringResource(R.string.splash_fosdem_logo_description)
             )
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                modifier = Modifier.padding(top = 8.dp),
+                text = description,
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center
+            )
+            if (hasButton) {
+                Text(
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .background(
+                            brush = Brush.linearGradient(colorStops = mainBrushColor),
+                            shape = CircleShape
+                        )
+                        .padding(vertical = 16.dp, horizontal = 32.dp)
+                        .clickable { onContinueClicked() },
+                    text = stringResource(R.string.on_boarding_next_button),
+                    style = MaterialTheme.typography.titleSmall.copy(Color.White)
+                )
+            }
         }
     }
 }

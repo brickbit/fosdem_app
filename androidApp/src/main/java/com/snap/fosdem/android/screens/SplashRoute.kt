@@ -71,7 +71,6 @@ fun SplashRoute(
 
 @Composable
 fun SplashScreen() {
-    val context = LocalContext.current
     Box(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier.fillMaxSize(),

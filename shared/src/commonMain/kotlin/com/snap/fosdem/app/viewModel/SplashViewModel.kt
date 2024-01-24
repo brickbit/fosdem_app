@@ -4,6 +4,7 @@ import com.snap.fosdem.app.flow.toCommonStateFlow
 import com.snap.fosdem.app.navigation.Routes
 import com.snap.fosdem.app.state.SplashState
 import com.snap.fosdem.domain.useCase.GetOnBoardingStatusUseCase
+import com.snap.fosdem.domain.useCase.GetPreferredTracksShownUseCase
 import com.snap.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleDataUseCase
 import com.snap.fosdem.domain.useCase.IsUpdateNeeded
@@ -19,7 +20,7 @@ class SplashViewModel(
     private val needUpdate: IsUpdateNeeded,
     private val getSchedule: GetScheduleDataUseCase,
     private val getOnBoardingStatus: GetOnBoardingStatusUseCase,
-    private val getPreferredTask: GetPreferredTracksUseCase,
+    private val isFavouriteTracksShown: GetPreferredTracksShownUseCase,
     private val manageNotificationPermission: ManageNotificationPermissionUseCase
 ): BaseViewModel() {
 
@@ -39,10 +40,10 @@ class SplashViewModel(
                         .onSuccess {
                             _state.update {
                                 val onBoardingShown = getOnBoardingStatus.invoke()
-                                val listTracks = getPreferredTask.invoke()
-                                val route = if(onBoardingShown && listTracks.isEmpty()) {
+                                val favouriteTracksShown = isFavouriteTracksShown.invoke()
+                                val route = if(onBoardingShown && !favouriteTracksShown) {
                                     Routes.FavouriteTracks
-                                } else if(onBoardingShown && listTracks.isNotEmpty()){
+                                } else if(onBoardingShown && favouriteTracksShown){
                                     Routes.Main
                                 } else {
                                     Routes.OnBoarding

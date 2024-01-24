@@ -79,8 +79,14 @@ class MainViewModel(
             val schedules = tracks.mapNotNull { track ->
                 getScheduleByTrack.invoke(track.name).getOrNull()
             }
-            _statePreferredTracks.update {
-                MainPreferredTracksState.Loaded(schedules)
+            if(schedules.isEmpty()) {
+                _statePreferredTracks.update {
+                    MainPreferredTracksState.Empty
+                }
+            } else {
+                _statePreferredTracks.update {
+                    MainPreferredTracksState.Loaded(schedules)
+                }
             }
         }
     }

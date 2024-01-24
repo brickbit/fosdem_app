@@ -70,4 +70,7 @@
     <!--EVENT-->
     <string name="event_saturday_mini">Sáb</string>
     <string name="event_sunday_mini">Dom</string>
+    <string name="main_select_favourite_tracks">Tus tracks favoritos aparecerán aquí, puedes seleccionarlos desde la pantalla de ajustes</string>
+    <string name="main_favourite_events">Tus charlas favoritas aparecerán aquí. Para guardar una charla pulsa el botón Guardar como favorito en su descripción</string>
+    <string name="main_talks_right_now">Aquí aparecerán las charlas que hayan empezado o vayan a empezar</string>
 </resources>

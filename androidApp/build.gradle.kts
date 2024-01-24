@@ -36,7 +36,7 @@ android {
             buildConfigField("String", "license", "\"https://www.apache.org/licenses/LICENSE-2.0.txt\"")
             buildConfigField("String", "linkedIn", "\"https://www.linkedin.com/in/rgr92\"")
             buildConfigField("String", "gitHub", "\"https://github.com/brickbit/fosdem_app\"")
-
+            buildConfigField("String", "location", "\"https://fosdem.org/2024/practical/transportation/\"")
         }
         getByName("release") {
             isMinifyEnabled = false
@@ -44,6 +44,7 @@ android {
             buildConfigField("String", "license", "\"https://www.apache.org/licenses/LICENSE-2.0.txt\"")
             buildConfigField("String", "linkedIn", "\"https://www.linkedin.com/in/rgr92\"")
             buildConfigField("String", "gitHub", "\"https://github.com/brickbit/fosdem_app\"")
+            buildConfigField("String", "location", "\"https://fosdem.org/2024/practical/transportation/\"")
         }
     }
     compileOptions {

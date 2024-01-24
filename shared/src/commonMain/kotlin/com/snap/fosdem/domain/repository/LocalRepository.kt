@@ -9,6 +9,9 @@ interface LocalRepository {
     suspend fun setOnBoardingSeen(): Preferences
     suspend fun isOnBoardingSeen(): Boolean
 
+    suspend fun setFavouritesTracksSeen(): Preferences
+    suspend fun isFavouriteTracksSeen(): Boolean
+
     suspend fun setPreferences(preferences: List<TrackBo>)
     suspend fun getPreferences(): List<TrackBo>
 

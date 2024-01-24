@@ -1,8 +1,12 @@
 package com.snap.fosdem.android.screens
 
+import android.content.Intent
+import android.net.Uri
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,6 +15,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -43,6 +48,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -50,6 +56,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.core.content.ContextCompat
+import coil.compose.AsyncImage
 import com.snap.fosdem.android.MainActivity
 import com.snap.fosdem.android.MyApplicationTheme
 import com.snap.fosdem.android.R
@@ -181,9 +188,42 @@ fun MainScreen(
             favourites = favourites,
             onNavigate = onNavigate
         )
+        item {
+            PlaceComposable()
+        }
         standItems(
             stands = stands,
             onNavigate = { showStandBottomSheet = Pair(it, true) }
+        )
+    }
+}
+
+@Composable
+fun PlaceComposable() {
+    val context = LocalContext.current
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.Start
+    ) {
+        Text(
+            modifier = Modifier.padding(start = 16.dp),
+            text = stringResource(R.string.main_how_to_get),
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .clickable {
+                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(""))
+                    context.startActivity(browserIntent)
+                },
+            painter = painterResource(id = R.drawable.ic_place),
+            contentScale = ContentScale.FillWidth,
+            contentDescription = null,
         )
     }
 }
@@ -311,7 +351,12 @@ fun LazyListScope.rightNowItems(
         MainTracksNowState.Loading -> item {
             LoadingItem()
         }
-        MainTracksNowState.Empty -> {}
+        MainTracksNowState.Empty -> item {
+            EmptySection(
+                title = stringResource(R.string.main_right_now),
+                description = stringResource(R.string.main_talks_right_now)
+            )
+        }
     }
 }
 
@@ -349,7 +394,46 @@ fun LazyListScope.favouriteEvents(
         FavouriteEventsState.Loading -> item {
             LoadingItem()
         }
-        FavouriteEventsState.Empty -> {}
+        FavouriteEventsState.Empty -> item {
+            EmptySection(
+                title = stringResource(R.string.main_your_favourites_talks),
+                description = stringResource(R.string.main_favourite_events),
+            )
+        }
+    }
+}
+
+@Composable
+fun EmptySection(
+    title: String,
+    description: String,
+) {
+    Column {
+        Text(
+            modifier = Modifier.padding(top= 16.dp, start = 16.dp),
+            text = title,
+            style = MaterialTheme.typography.titleSmall
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .border(
+                    border = BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface),
+                    shape = RoundedCornerShape(20.dp)
+                )
+                .background(
+                    color = Color.LightGray.copy(alpha = 0.5f),
+                    shape = RoundedCornerShape(20.dp)
+                )
+        ) {
+            Text(
+                modifier = Modifier.padding(16.dp),
+                text = description,
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 
@@ -427,15 +511,15 @@ fun LazyListScope.preferredTracks(
     favourites: FavouriteEventsState,
     onNavigate: (String) -> Unit
 ) {
-    item {
-        Text(
-            modifier = Modifier.padding(top= 16.dp, start = 16.dp),
-            text = stringResource(R.string.main_your_favourite_tracks),
-            style = MaterialTheme.typography.titleSmall
-        )
-    }
     when(preferredTracks) {
         is MainPreferredTracksState.Loaded -> {
+            item {
+                Text(
+                    modifier = Modifier.padding(top= 16.dp, start = 16.dp),
+                    text = stringResource(R.string.main_your_favourite_tracks),
+                    style = MaterialTheme.typography.titleSmall
+                )
+            }
             items(preferredTracks.tracks) { track ->
                 TrackRow(
                     track = track,
@@ -446,6 +530,12 @@ fun LazyListScope.preferredTracks(
         }
         MainPreferredTracksState.Loading -> item {
             LoadingItem()
+        }
+        MainPreferredTracksState.Empty -> item {
+            EmptySection(
+                title = stringResource(R.string.main_your_favourite_tracks),
+                description = stringResource(R.string.main_select_favourite_tracks),
+            )
         }
     }
 }

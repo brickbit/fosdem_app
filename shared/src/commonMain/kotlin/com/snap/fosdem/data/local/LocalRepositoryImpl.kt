@@ -22,7 +22,8 @@ class LocalRepositoryImpl(
     private companion object {
         private const val PREFS_TAG_KEY = "AppPreferences"
         private const val IS_ON_BOARDING_SHOWN = "IS_ON_BOARDING_SHOWN"
-        private const val PREFERRED_TRACK_LIST = "PREFERRED_TRACK_LIST"
+        private const val FAVOURITE_TRACKS_SHOWN = "FAVOURITE_TRACKS_SHOWN"
+        private const val FAVOURITE_TRACK_LIST = "PREFERRED_TRACK_LIST"
         private const val NOTIFICATIONS_ENABLED = "NOTIFICATIONS_ENABLED"
         private const val EVENT_NOTIFICATIONS = "EVENT_NOTIFICATIONS"
         private const val NOTIFICATION_TIME = "NOTIFICATION_TIME"
@@ -30,7 +31,8 @@ class LocalRepositoryImpl(
     }
 
     private val onboardingShown = booleanPreferencesKey("$PREFS_TAG_KEY$IS_ON_BOARDING_SHOWN")
-    private val preferredTracks = stringPreferencesKey("$PREFS_TAG_KEY$PREFERRED_TRACK_LIST")
+    private val favouriteTracksShown = booleanPreferencesKey("$PREFS_TAG_KEY$FAVOURITE_TRACKS_SHOWN")
+    private val preferredTracks = stringPreferencesKey("$PREFS_TAG_KEY$FAVOURITE_TRACK_LIST")
     private val notificationsPreferences = booleanPreferencesKey("$PREFS_TAG_KEY$NOTIFICATIONS_ENABLED")
     private val eventNotificationPreferences = stringPreferencesKey("$PREFS_TAG_KEY$EVENT_NOTIFICATIONS")
     private val notificationTime = intPreferencesKey("$PREFS_TAG_KEY$NOTIFICATION_TIME")
@@ -41,6 +43,14 @@ class LocalRepositoryImpl(
     }
     override suspend fun isOnBoardingSeen() = dataStore.data.map { preferences ->
         preferences[onboardingShown] ?: false
+    }.first()
+
+    override suspend fun setFavouritesTracksSeen()= dataStore.edit { preferences ->
+        preferences[favouriteTracksShown] = true
+    }
+
+    override suspend fun isFavouriteTracksSeen() = dataStore.data.map { preferences ->
+        preferences[favouriteTracksShown] ?: false
     }.first()
 
     override suspend fun setPreferences(preferences: List<TrackBo>) {

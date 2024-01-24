@@ -15,6 +15,7 @@ import com.snap.fosdem.domain.useCase.GetLanguageUseCase
 import com.snap.fosdem.domain.useCase.GetNotificationTimeUseCase
 import com.snap.fosdem.domain.useCase.GetNotificationsEnabledUseCase
 import com.snap.fosdem.domain.useCase.GetOnBoardingStatusUseCase
+import com.snap.fosdem.domain.useCase.GetPreferredTracksShownUseCase
 import com.snap.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.snap.fosdem.domain.useCase.GetRoomsUseCase
 import com.snap.fosdem.domain.useCase.GetSavedTracksUseCase
@@ -30,6 +31,7 @@ import com.snap.fosdem.domain.useCase.IsEventNotifiedUseCase
 import com.snap.fosdem.domain.useCase.ManageEventNotificationUseCase
 import com.snap.fosdem.domain.useCase.ManageNotificationPermissionUseCase
 import com.snap.fosdem.domain.useCase.ManageNotificationTimeUseCase
+import com.snap.fosdem.domain.useCase.SaveFavouriteTracksShownUseCase
 import com.snap.fosdem.domain.useCase.SaveOnBoardingUseCase
 import com.snap.fosdem.domain.useCase.SavePreferredTracksUseCase
 import org.koin.dsl.module
@@ -43,6 +45,8 @@ val useCaseModule = module {
     single { GetScheduleDataUseCase(get(),get()) }
     single { GetTracksUseCase(get(), get()) }
     single { SaveOnBoardingUseCase(get()) }
+    single { SaveFavouriteTracksShownUseCase(get()) }
+    single { GetPreferredTracksShownUseCase(get()) }
     single { GetOnBoardingStatusUseCase(get()) }
     single { SavePreferredTracksUseCase(get()) }
     single { GetPreferredTracksUseCase(get()) }

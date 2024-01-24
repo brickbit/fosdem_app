@@ -6,14 +6,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +40,7 @@ import com.snap.fosdem.android.mainBrushColor
 import com.snap.fosdem.android.screens.common.LoadingScreen
 import com.snap.fosdem.android.transparentBrushColor
 import com.snap.fosdem.android.transparentBrushColorReversed
+import com.snap.fosdem.app.navigation.Routes
 import com.snap.fosdem.app.state.PreferencesState
 import com.snap.fosdem.app.viewModel.PreferencesViewModel
 import com.snap.fosdem.domain.model.TrackBo
@@ -46,7 +50,7 @@ import org.koin.androidx.compose.koinViewModel
 fun PreferencesRoute(
     viewModel: PreferencesViewModel = koinViewModel(),
     previousRoute: String,
-    onNavigate: (String) -> Unit
+    onNavigate: (String) -> Unit,
 ) {
     val state = viewModel.state.collectAsState().value
     LaunchedEffect(Unit) {
@@ -57,11 +61,16 @@ fun PreferencesRoute(
         PreferencesState.Error -> Text(stringResource(R.string.favourite_error))
         is PreferencesState.Loaded -> {
             PreferenceScreen(
+                previousRoute = previousRoute,
                 tracks = state.tracks,
                 onTackChecked = { track, checked -> viewModel.onTrackChecked(track, checked) },
                 enableContinueButton = { viewModel.enableContinueButton(it) },
                 onContinueButtonClicked = {
                     viewModel.savePreferredTracks(state.tracks)
+                },
+                onSkipClicked = {
+                    viewModel.skipFavouriteTracks()
+                    onNavigate(previousRoute)
                 }
             )
         }
@@ -80,10 +89,12 @@ fun PreferencesRoute(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PreferenceScreen(
+    previousRoute: String,
     tracks: List<TrackBo>,
     onTackChecked: (TrackBo, Boolean) -> Unit,
     enableContinueButton: (List<TrackBo>) -> Boolean,
-    onContinueButtonClicked: () -> Unit
+    onContinueButtonClicked: () -> Unit,
+    onSkipClicked: () -> Unit
 ) {
     Box(
         contentAlignment = Alignment.BottomCenter
@@ -94,7 +105,10 @@ fun PreferenceScreen(
                 .fillMaxSize()
         ) {
             stickyHeader {
-                PreferenceTitle()
+                PreferenceTitle(
+                    previousRoute = previousRoute,
+                    onSkipClicked = onSkipClicked
+                )
             }
             items(tracks) { track ->
                 ListItem(
@@ -112,7 +126,7 @@ fun PreferenceScreen(
                     }
                 )
             }
-            item{ Spacer(modifier = Modifier.padding(bottom= 20.dp)) }
+            item{ Spacer(modifier = Modifier.padding(bottom = 90.dp)) }
         }
         PreferenceButton(
             tracks = tracks,
@@ -122,7 +136,10 @@ fun PreferenceScreen(
     }
 }
 @Composable
-fun PreferenceTitle() {
+fun PreferenceTitle(
+    previousRoute: String,
+    onSkipClicked: () -> Unit
+) {
     val context = LocalContext.current
     Column(
         modifier = Modifier
@@ -131,11 +148,28 @@ fun PreferenceTitle() {
             .padding(16.dp),
         verticalArrangement = Arrangement.Top
     ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                modifier = Modifier.fillMaxWidth(0.85f),
+                text = stringResource(R.string.favourite_tracks_track),
+                style = MaterialTheme.typography.titleMedium
+            )
+            if(previousRoute == Routes.Splash.name || previousRoute == Routes.OnBoarding.name) {
+                Text(
+                    modifier = Modifier
+                        .width(300.dp)
+                        .padding(top = 8.dp)
+                        .clickable{ onSkipClicked() },
+                    text = stringResource(R.string.favourite_skip),
+                    style = MaterialTheme.typography.titleSmall.copy(Color.Gray)
+                )
+            }
+        }
         Text(
-            text = stringResource(R.string.favourite_tracks_track),
-            style = MaterialTheme.typography.titleMedium
-        )
-        Text(
+            modifier = Modifier.padding(top = 16.dp),
             text = stringResource(R.string.favourite_tracks_track_subtitle),
             style = MaterialTheme.typography.bodyMedium
         )
@@ -205,7 +239,9 @@ fun PreferenceScreenPreview() {
             ),
             onTackChecked = {_,_ ->},
             enableContinueButton = { true },
-            onContinueButtonClicked = {}
+            onContinueButtonClicked = {},
+            onSkipClicked = {},
+            previousRoute = ""
         )
     }
 }
