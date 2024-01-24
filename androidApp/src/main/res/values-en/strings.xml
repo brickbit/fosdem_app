@@ -16,6 +16,7 @@
     <string name="favourite_tracks_track_subtitle">Select the tracks you are most interested in</string>
     <string name="favourite_tracks_next_button">Next</string>
     <string name="favourite_error">Error</string>
+    <string name="favourite_skip">Skip</string>
     <!--MAIN_TRACKS-->
     <string name="main_date">Brussels | 3 &amp; 4 February 2024</string>
     <string name="main_check_schedule">Check the complete schedule now</string>
@@ -25,6 +26,7 @@
     <string name="main_your_favourites_talks">Your favorite talks</string>
     <string name="main_speakers">Speakers</string>
     <string name="main_stands">Stands</string>
+    <string name="main_how_to_get">How to get?</string>
     <!--SETTINGS-->
     <string name="settings">Settings</string>
     <string name="settings_licenses">Third Party Licenses</string>

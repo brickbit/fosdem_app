@@ -25,6 +25,8 @@
     <string name="main_your_favourites_talks">Vos conférences préférées</string>
     <string name="main_speakers">Speakers</string>
     <string name="main_stands">Stands</string>
+    <string name="main_how_to_get">Comment arriver?</string>
+    <string name="favourite_skip">Sauter</string>
     <!--SETTINGS-->
     <string name="settings">Paramètres</string>
     <string name="settings_licenses">Licences tierces</string>
