@@ -45,7 +45,6 @@ import com.snap.fosdem.android.extension.dayFromTranslatable
 import com.snap.fosdem.android.extension.dayToTranslatable
 import com.snap.fosdem.android.mainBrushColor
 import com.snap.fosdem.android.screens.common.AnimatedPreloader
-import com.snap.fosdem.android.screens.common.Chip
 import com.snap.fosdem.android.screens.common.EventItem
 import com.snap.fosdem.android.screens.common.FilterDropDownMenu
 import com.snap.fosdem.android.screens.common.LoadingScreen
@@ -82,12 +81,13 @@ fun ScheduleRoute(
         )
     }
     when(state) {
-        is ScheduleState.Loaded -> {
+        is ScheduleState.Loaded, is ScheduleState.Empty -> {
             ScheduleScreen(
+                empty = state is ScheduleState.Empty,
                 hours = stateHour,
                 tracks = stateTrack,
                 rooms = stateRooms,
-                scheduledLoaded = state.filter,
+                scheduledLoaded = if(state is ScheduleState.Loaded) state.filter else if(state is ScheduleState.Empty) state.filter else null,
                 favourites = favouriteEventsState,
                 onFilter = { filter ->
                     viewModel.getScheduleBy(
@@ -115,44 +115,9 @@ fun ScheduleRoute(
                         track = filter.track,
                         room = filter.room
                     )
-                }
-            )
-        }
-        is ScheduleState.Empty -> {
-            ScheduleScreen(
-                empty = true,
-                hours = stateHour,
-                tracks = stateTrack,
-                rooms = stateRooms,
-                scheduledLoaded = state.filter,
-                favourites = favouriteEventsState,
-                onFilter = { filter ->
-                    viewModel.getScheduleBy(
-                        day = filter.day,
-                        hours = filter.hours,
-                        track = filter.track,
-                        room = filter.room
-                    )
                 },
-                onEventClicked = onEventClicked,
-                updateHour = { filter ->
-                    viewModel.getHours(filter.day)
-                    viewModel.getScheduleBy(
-                        day = filter.day,
-                        hours = filter.hours,
-                        track = filter.track,
-                        room = filter.room
-                    )
-                },
-                updateRoom = { filter ->
-                    viewModel.getRooms(filter.track)
-                    viewModel.getScheduleBy(
-                        day = filter.day,
-                        hours = filter.hours,
-                        track = filter.track,
-                        room = filter.room
-                    )
-                }
+                removeSelectedHourFilter = { viewModel.removeSelectedHour(it) },
+                addSelectedHourFilter = { viewModel.addSelectedHour(it) }
             )
         }
         ScheduleState.Loading -> {
@@ -184,12 +149,14 @@ fun ScheduleScreen(
     hours: List<String>,
     tracks: List<String>,
     rooms: List<String>,
-    scheduledLoaded: ScheduleFilter,
+    scheduledLoaded: ScheduleFilter?,
     favourites: FavouriteEventsState,
     onFilter: (ScheduleFilter) -> Unit,
     onEventClicked: (String) -> Unit,
     updateHour: (ScheduleFilter) -> Unit,
-    updateRoom: (ScheduleFilter) -> Unit
+    updateRoom: (ScheduleFilter) -> Unit,
+    removeSelectedHourFilter: (String) -> Unit,
+    addSelectedHourFilter: (String) -> Unit
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -201,12 +168,13 @@ fun ScheduleScreen(
         item { FilterTopBar(onClickAction = { showBottomSheet = true }) }
         item {
             FiltersUsed(
-                scheduledLoaded = scheduledLoaded,
-                onFilterResultClicked = { showBottomSheet = true }
+                scheduledLoaded = scheduledLoaded!!,
+                onFilterResultClicked = { showBottomSheet = true },
+                removeSelectedHourFilter = removeSelectedHourFilter
             )
         }
         if(!empty) {
-            items(scheduledLoaded.events) { event ->
+            items(scheduledLoaded!!.events) { event ->
                 EventItem(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                     event = event,
@@ -226,7 +194,7 @@ fun ScheduleScreen(
             hours = hours,
             tracks = tracks,
             rooms = rooms,
-            scheduledLoaded = scheduledLoaded,
+            scheduledLoaded = scheduledLoaded!!,
             sheetState = sheetState,
             onDismiss = { showBottomSheet = false},
             filterSchedule = {filters ->
@@ -238,7 +206,9 @@ fun ScheduleScreen(
                 }
             },
             updateHour = updateHour,
-            updateRoom = updateRoom
+            updateRoom = updateRoom,
+            removeSelectedHourFilter = removeSelectedHourFilter,
+            addSelectedHourFilter = addSelectedHourFilter
         )
     }
 }
@@ -274,6 +244,7 @@ fun FilterTopBar(
 fun FiltersUsed(
     scheduledLoaded: ScheduleFilter,
     onFilterResultClicked: () -> Unit,
+    removeSelectedHourFilter: (String) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -332,8 +303,11 @@ fun FiltersUsed(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         items(scheduledLoaded.hours) { hour ->
-                            Chip(
-                                modifier = Modifier.clickable { onFilterResultClicked() },
+                            SelectableChip(
+                                isActive = true,
+                                onClick =  { selectedHour ->
+                                    removeSelectedHourFilter(selectedHour)
+                                },
                                 title = hour
                             )
                         }
@@ -355,7 +329,9 @@ fun ScheduleBottomSheet(
     onDismiss: () -> Unit,
     filterSchedule: (ScheduleFilter) -> Unit,
     updateHour: (ScheduleFilter) -> Unit,
-    updateRoom: (ScheduleFilter) -> Unit
+    updateRoom: (ScheduleFilter) -> Unit,
+    removeSelectedHourFilter: (String) -> Unit,
+    addSelectedHourFilter: (String) -> Unit
 ) {
     var currentData = scheduledLoaded
 
@@ -438,23 +414,14 @@ fun ScheduleBottomSheet(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         items(hours){
-                            var composableHours by remember {
-                                mutableStateOf(currentData.hours)
-                            }
                             SelectableChip(
                                 title = it,
-                                isActive = composableHours.contains(it),
+                                isActive = currentData.hours.contains(it),
                                 onClick = { selectedHour ->
-                                    currentData = if(currentData.hours.contains(selectedHour)) {
-                                        val listHours = currentData.hours.toMutableList()
-                                        listHours.remove(selectedHour)
-                                        composableHours = listHours
-                                        currentData.copy(hours = listHours)
+                                    if(currentData.hours.contains(selectedHour)) {
+                                        removeSelectedHourFilter(selectedHour)
                                     } else {
-                                        val listHours = currentData.hours.toMutableList()
-                                        listHours.add(selectedHour)
-                                        composableHours = listHours
-                                        currentData.copy(hours = listHours)
+                                        addSelectedHourFilter(selectedHour)
                                     }
                                 }
                             )

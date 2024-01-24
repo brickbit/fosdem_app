@@ -159,4 +159,48 @@ class ScheduleViewModel(
                 .onFailure {  }
         }
     }
+
+    fun removeSelectedHour(hour: String) {
+        scope.launch {
+            (state.value as? ScheduleState.Loaded)?.let { oldState ->
+                removeHour(hour,oldState.filter)
+            }
+            (state.value as? ScheduleState.Empty)?.let { oldState ->
+                removeHour(hour,oldState.filter)
+            }
+        }
+    }
+
+    private fun removeHour(hour: String, filter: ScheduleFilter) {
+        val newHours = filter.hours.toMutableList()
+        newHours.remove(hour)
+        getScheduleBy(
+            day = filter.day,
+            hours = newHours,
+            track = filter.track,
+            room = filter.room
+        )
+    }
+
+    fun addSelectedHour(hour: String) {
+        scope.launch {
+            (state.value as? ScheduleState.Loaded)?.let { oldState ->
+                addHour(hour,oldState.filter)
+            }
+            (state.value as? ScheduleState.Empty)?.let { oldState ->
+                addHour(hour,oldState.filter)
+            }
+        }
+    }
+
+    private fun addHour(hour: String, filter: ScheduleFilter) {
+        val newHours = filter.hours.toMutableList()
+        newHours.add(hour)
+        getScheduleBy(
+            day = filter.day,
+            hours = newHours,
+            track = filter.track,
+            room = filter.room
+        )
+    }
 }
