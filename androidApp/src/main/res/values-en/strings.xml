@@ -73,4 +73,7 @@
     <!--EVENT-->
     <string name="event_saturday_mini">Sat</string>
     <string name="event_sunday_mini">Sun</string>
+    <!--NO CONNECTION-->
+    <string name="no_connection_description">There is no connection or it is of poor quality. You can continue using the app in offline mode but you will not have the most recent data</string>
+    <string name="use_offline_mode">Use offline mode</string>
 </resources>

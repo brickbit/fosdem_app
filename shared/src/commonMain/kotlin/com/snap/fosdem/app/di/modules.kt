@@ -1,8 +1,10 @@
 package com.snap.fosdem.app.di
 
 import com.snap.fosdem.data.local.LocalRepositoryImpl
+import com.snap.fosdem.data.repository.JsonRepositoryImpl
 import com.snap.fosdem.data.repository.RealmRepositoryImpl
 import com.snap.fosdem.data.repository.ScheduleRepositoryImpl
+import com.snap.fosdem.domain.repository.JsonRepository
 import com.snap.fosdem.domain.repository.LocalRepository
 import com.snap.fosdem.domain.repository.RealmRepository
 import com.snap.fosdem.domain.repository.ScheduleRepository
@@ -40,9 +42,10 @@ val repositoryModule = module {
     factory<ScheduleRepository> { ScheduleRepositoryImpl() }
     factory<LocalRepository> { LocalRepositoryImpl(get()) }
     factory<RealmRepository> { RealmRepositoryImpl() }
+    factory<JsonRepository> { JsonRepositoryImpl() }
 }
 val useCaseModule = module {
-    single { GetScheduleDataUseCase(get(),get()) }
+    single { GetScheduleDataUseCase(get(),get(), get()) }
     single { GetTracksUseCase(get(), get()) }
     single { SaveOnBoardingUseCase(get()) }
     single { SaveFavouriteTracksShownUseCase(get()) }

@@ -19,6 +19,8 @@ suspend fun makeRequest(
         Result.failure(ErrorType.TimeOutError)
     } catch (e: ErrorType.UnknownHostException) {
         Result.failure(ErrorType.UnknownHostException)
+    } catch(e: ErrorType.HttpError) {
+        Result.failure(ErrorType.HttpError(e.code))
     } catch (e: Exception) {
         Result.failure(ErrorType.UnknownNetworkError)
     }

@@ -73,4 +73,7 @@
     <!--EVENT-->
     <string name="event_saturday_mini">Sam</string>
     <string name="event_sunday_mini">Dim</string>
+    <!--NO CONNECTION-->
+    <string name="no_connection_description">Il n\'y a pas de connexion ou elle est de mauvaise qualité. Vous pouvez continuer à utiliser l\'application en mode offline mais vous n\'aurez pas les données les plus récentes</string>
+    <string name="use_offline_mode">Utiliser le mode offline</string>
 </resources>

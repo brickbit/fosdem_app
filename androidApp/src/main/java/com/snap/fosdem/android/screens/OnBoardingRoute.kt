@@ -142,7 +142,7 @@ fun ContentForPage(
                             brush = Brush.linearGradient(colorStops = mainBrushColor),
                             shape = CircleShape
                         )
-                        .padding(vertical = 16.dp, horizontal = 32.dp)
+                        .padding(vertical = 12.dp, horizontal = 32.dp)
                         .clickable { onContinueClicked() },
                     text = stringResource(R.string.on_boarding_next_button),
                     style = MaterialTheme.typography.titleSmall.copy(Color.White)

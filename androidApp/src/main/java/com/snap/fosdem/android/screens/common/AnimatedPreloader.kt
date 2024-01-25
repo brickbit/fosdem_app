@@ -1,5 +1,6 @@
 package com.snap.fosdem.android.screens.common
 
+import androidx.annotation.RawRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -11,11 +12,12 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.snap.fosdem.android.R
 
 @Composable
-fun AnimatedPreloader(modifier: Modifier = Modifier) {
+fun AnimatedPreloader(
+    modifier: Modifier = Modifier,
+    @RawRes resId: Int
+) {
     val preloaderLottieComposition by rememberLottieComposition(
-        LottieCompositionSpec.RawRes(
-            R.raw.not_found
-        )
+        LottieCompositionSpec.RawRes(resId)
     )
 
     val preloaderProgress by animateLottieCompositionAsState(

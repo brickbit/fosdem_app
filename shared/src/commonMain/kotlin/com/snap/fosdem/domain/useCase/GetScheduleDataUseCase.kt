@@ -1,10 +1,12 @@
 package com.snap.fosdem.domain.useCase
 
 import com.snap.fosdem.domain.model.TrackBo
+import com.snap.fosdem.domain.repository.JsonRepository
 import com.snap.fosdem.domain.repository.RealmRepository
 import com.snap.fosdem.domain.repository.ScheduleRepository
 
 class GetScheduleDataUseCase(
+    private var jsonRepository: JsonRepository,
     private var networkRepository: ScheduleRepository,
     private var realmRepository: RealmRepository
 ) {

@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.snap.fosdem.android.provider.ActivityProvider
 import com.snap.fosdem.android.provider.LanguageProviderImpl
+import com.snap.fosdem.android.provider.NetworkConnectivityProvider
 import com.snap.fosdem.app.viewModel.LanguageViewModel
 import com.snap.fosdem.app.viewModel.MainActivityViewModel
 import com.snap.fosdem.app.viewModel.MainViewModel
@@ -16,6 +17,7 @@ import com.snap.fosdem.app.viewModel.SplashViewModel
 import com.snap.fosdem.app.viewModel.TalkViewModel
 import com.snap.fosdem.data.local.SETTINGS_PREFERENCES
 import com.snap.fosdem.data.local.dataStorePreferences
+import com.snap.fosdem.domain.provider.ConnectivityProvider
 import com.snap.fosdem.domain.provider.LanguageProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +36,7 @@ fun providerModule(context: Context) = module {
         )
     }
     factory<LanguageProvider> { LanguageProviderImpl(get()) }
+    factory<ConnectivityProvider> { NetworkConnectivityProvider(context) }
     single { ActivityProvider() }
 }
 

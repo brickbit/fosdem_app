@@ -34,26 +34,41 @@ class NotificationService: BroadcastReceiver() {
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        val bitmap =  BitmapFactory.decodeByteArray(image, 0, image?.size ?: 0)
         val flag = PendingIntent.FLAG_IMMUTABLE
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, flag)
 
-        val notification = NotificationCompat.Builder(context, MY_CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle(event.talk?.title?: "")
+        val notification = image?.let {
+            val bitmap =  BitmapFactory.decodeByteArray(image, 0, image.size)
+            NotificationCompat.Builder(context, MY_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification_logo)
+                .setContentTitle(event.talk.title)
+                .setContentText(
+                    context.getString(
+                        R.string.notification_description,
+                        time.toString(),
+                        event.talk.room.name
+                    ))
+                .setContentIntent(pendingIntent)
+                .setLargeIcon(bitmap)
+                .setStyle(NotificationCompat.BigPictureStyle()
+                    .bigPicture(bitmap))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setOnlyAlertOnce(true)
+                .build()
+        } ?: NotificationCompat.Builder(context, MY_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_notification_logo)
+            .setContentTitle(event.talk.title)
             .setContentText(
                 context.getString(
                     R.string.notification_description,
                     time.toString(),
-                    event.talk?.room?.name
+                    event.talk.room.name
                 ))
             .setContentIntent(pendingIntent)
-            .setLargeIcon(bitmap)
-            .setStyle(NotificationCompat.BigPictureStyle()
-                .bigPicture(bitmap))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setOnlyAlertOnce(true)
             .build()
+
 
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.notify(NOTIFICATION_ID, notification)

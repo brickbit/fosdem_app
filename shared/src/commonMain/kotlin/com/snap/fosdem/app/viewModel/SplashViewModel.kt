@@ -5,11 +5,9 @@ import com.snap.fosdem.app.navigation.Routes
 import com.snap.fosdem.app.state.SplashState
 import com.snap.fosdem.domain.useCase.GetOnBoardingStatusUseCase
 import com.snap.fosdem.domain.useCase.GetPreferredTracksShownUseCase
-import com.snap.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.snap.fosdem.domain.useCase.GetScheduleDataUseCase
 import com.snap.fosdem.domain.useCase.IsUpdateNeeded
 import com.snap.fosdem.domain.useCase.ManageNotificationPermissionUseCase
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -33,7 +31,6 @@ class SplashViewModel(
 
     fun initializeSplash() {
         scope.launch {
-            delay(2000)
             needUpdate.invoke()
                 .onSuccess { shouldUpdate ->
                     getSchedule.invoke(shouldUpdate)

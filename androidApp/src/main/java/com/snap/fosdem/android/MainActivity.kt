@@ -16,6 +16,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.Lifecycle
@@ -26,14 +29,18 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.snap.fosdem.android.provider.ActivityProvider
 import com.snap.fosdem.android.scaffold.FosdemScaffold
+import com.snap.fosdem.android.screens.common.Main
+import com.snap.fosdem.android.screens.common.NoConnection
 import com.snap.fosdem.android.service.NotificationService
 import com.snap.fosdem.android.service.NotificationService.Companion.MY_CHANNEL_ID
 import com.snap.fosdem.android.service.NotificationService.Companion.NOTIFICATION_ID
+import com.snap.fosdem.app.navigation.Routes
 import com.snap.fosdem.app.state.ScaffoldState
 import com.snap.fosdem.app.state.SendNotificationState
 import com.snap.fosdem.app.viewModel.MainActivityViewModel
 import com.snap.fosdem.domain.model.EventBo
 import com.snap.fosdem.domain.model.calculateTimeInMillis
+import com.snap.fosdem.domain.provider.ConnectivityProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
@@ -44,6 +51,7 @@ import java.net.URL
 class MainActivity : ComponentActivity() {
     private val viewModel: MainActivityViewModel by inject()
     private val provider: ActivityProvider by inject()
+    private val connectivityObserver: ConnectivityProvider by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,25 +59,36 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController: NavHostController = rememberNavController()
             createChannel()
-            MyApplicationTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color.White
-                ) {
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val state = viewModel.state.collectAsState().value as ScaffoldState.Initialized
-                    val routeName = navBackStackEntry?.destination?.route
+            val status by connectivityObserver.observe().collectAsState(
+                initial = ConnectivityProvider.Status.Unavailable
+            )
+            var useOfflineMode by remember { mutableStateOf(false) }
 
-                    LaunchedEffect(routeName) {
-                        viewModel.getRouteInformation(routeName)
+            when(status) {
+                ConnectivityProvider.Status.Available -> { Main(navController = navController) }
+                ConnectivityProvider.Status.Unavailable -> {
+                    if(useOfflineMode) {
+                        Main(navController = navController)
+                    } else {
+                        NoConnection{ useOfflineMode = true}
                     }
-                    FosdemScaffold(
-                        navController = navController,
-                        visible = state.visible,
-                        route = state.route
-                    )
+                }
+                ConnectivityProvider.Status.Losing ->  {
+                    if(useOfflineMode) {
+                        Main(navController = navController)
+                    } else {
+                        NoConnection{ useOfflineMode = true}
+                    }
+                }
+                ConnectivityProvider.Status.Lost ->  {
+                    if(useOfflineMode) {
+                        Main(navController = navController)
+                    } else {
+                        NoConnection{ useOfflineMode = true}
+                    }
                 }
             }
+
         }
     }
 
@@ -103,7 +122,7 @@ class MainActivity : ComponentActivity() {
 
     private fun scheduleNotification(event: EventBo, timeBefore: Int) {
         lifecycleScope.launch(Dispatchers.IO) {
-            val image = URL(event.talk.room.building.map).readBytes()
+            val image = try { URL(event.talk.room.building.map).readBytes() } catch (e: Exception) { null }
             val intent = Intent(applicationContext, NotificationService::class.java)
             intent.putExtra("NOTIFICATION_EVENT_ID", Json.encodeToString(event))
             intent.putExtra("NOTIFICATION_TIME_ID", timeBefore)

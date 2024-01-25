@@ -132,7 +132,10 @@ fun NoItemFound() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        AnimatedPreloader(modifier = Modifier.size(200.dp))
+        AnimatedPreloader(
+            modifier = Modifier.size(200.dp),
+            resId = R.raw.not_found
+        )
         Text(
             modifier = Modifier.padding(horizontal = 24.dp),
             text = stringResource(R.string.schedule_no_items_found),
