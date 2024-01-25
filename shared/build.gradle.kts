@@ -36,6 +36,8 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.cio)
+            implementation("io.ktor:ktor-client-logging:2.3.7")
+
             //datastore
             implementation(libs.androidx.data.store.core)
             //koin
@@ -61,7 +63,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.snap.fosdem"
+    namespace = "com.rgr.fosdem"
     compileSdk = 34
     defaultConfig {
         minSdk = 27

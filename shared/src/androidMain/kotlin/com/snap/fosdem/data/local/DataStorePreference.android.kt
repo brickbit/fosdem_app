@@ -1,4 +1,4 @@
-package com.snap.fosdem.data.local
+package com.rgr.fosdem.data.local
 
 import androidx.datastore.core.DataMigration
 import androidx.datastore.core.DataStore

@@ -1,4 +1,4 @@
-package com.snap.fosdem.app.viewModel
+package com.rgr.fosdem.app.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

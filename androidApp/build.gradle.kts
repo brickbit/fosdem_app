@@ -10,14 +10,14 @@ apply(plugin= "com.mikepenz.aboutlibraries.plugin")
 
 
 android {
-    namespace = "com.snap.fosdem.android"
+    namespace = "com.rgr.fosdem.android"
     compileSdk = 34
     defaultConfig {
-        applicationId = "com.snap.fosdem.android"
+        applicationId = "com.rgr.fosdem.android"
         minSdk = 27
         targetSdk = 34
-        versionCode = 20240124
-        versionName = "0.0.5"
+        versionCode = 20240125
+        versionName = "0.0.6"
     }
     buildFeatures {
         compose = true

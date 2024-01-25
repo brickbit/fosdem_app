@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:892847897919:android:647cd4c3e8cf86290a678a",
         "android_client_info": {
-          "package_name": "com.snap.fosdem.android"
+          "package_name": "com.rgr.fosdem.android"
         }
       },
       "oauth_client": [],

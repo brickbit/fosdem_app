@@ -1,4 +1,4 @@
-package com.snap.fosdem.app.flow
+package com.rgr.fosdem.app.flow
 
 import kotlinx.coroutines.flow.StateFlow
 
