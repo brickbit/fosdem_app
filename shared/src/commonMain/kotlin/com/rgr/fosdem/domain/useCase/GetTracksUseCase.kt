@@ -1,10 +1,12 @@
 package com.rgr.fosdem.domain.useCase
 
 import com.rgr.fosdem.domain.model.TrackBo
+import com.rgr.fosdem.domain.repository.JsonProvider
 import com.rgr.fosdem.domain.repository.RealmRepository
 import com.rgr.fosdem.domain.repository.ScheduleRepository
 
 class GetTracksUseCase(
+    private val jsonProvider: JsonProvider,
     private val repository: ScheduleRepository,
     private var realmRepository: RealmRepository,
 ) {
@@ -16,7 +18,7 @@ class GetTracksUseCase(
         return if(preferences != null) {
             Result.success(preferences)
         } else {
-            Result.failure(Error())
+            return jsonProvider.getSchedule()
         }
     }
 }

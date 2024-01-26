@@ -1,11 +1,12 @@
 package com.rgr.fosdem.domain.useCase
 
 import com.rgr.fosdem.domain.model.SpeakerBo
-import com.rgr.fosdem.domain.model.TrackBo
+import com.rgr.fosdem.domain.repository.JsonProvider
 import com.rgr.fosdem.domain.repository.RealmRepository
 import com.rgr.fosdem.domain.repository.ScheduleRepository
 
 class GetSpeakersUseCase(
+    private val jsonProvider: JsonProvider,
     private val repository: ScheduleRepository,
     private var realmRepository: RealmRepository,
 ) {
@@ -18,7 +19,9 @@ class GetSpeakersUseCase(
             val speakers = preferences.map { it.events.map { it.speaker }.flatten() }
             Result.success(speakers.flatten().toSet().toList())
         } else {
-            Result.failure(Error())
+            val jsonResult = jsonProvider.getSchedule()
+            val speakers = jsonResult.getOrNull()!!.map { it.events.map {event -> event.speaker }.flatten() }
+            Result.success(speakers.flatten().toSet().toList())
         }
     }
 }

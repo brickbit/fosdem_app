@@ -12,6 +12,7 @@ import com.rgr.fosdem.domain.model.VersionBo
 import com.rgr.fosdem.domain.repository.ScheduleRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpResponseValidator
 import io.ktor.client.plugins.HttpTimeout
@@ -34,7 +35,10 @@ import kotlinx.serialization.json.Json
 
 class ScheduleRepositoryImpl: ScheduleRepository {
 
-    private val client = HttpClient() {
+    private val client = HttpClient(CIO) {
+        engine {
+            requestTimeout = 0 // 0 to disable, or a millisecond value to fit your needs
+        }
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true
@@ -51,6 +55,7 @@ class ScheduleRepositoryImpl: ScheduleRepository {
             level = LogLevel.ALL
         }
     }
+
     override suspend fun getSchedule(): Result<List<TrackBo>> {
         val apiResponse = makeRequest { client.get(Constant.BASE_URL+Constant.GET_TRACKS) }
         apiResponse.onFailure {

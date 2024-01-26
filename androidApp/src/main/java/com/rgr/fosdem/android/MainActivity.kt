@@ -53,6 +53,7 @@ class MainActivity : ComponentActivity() {
             val status by connectivityObserver.observe().collectAsState(
                 initial = ConnectivityProvider.Status.Available
             )
+
             var useOfflineMode by remember { mutableStateOf(false) }
 
             when(status) {
@@ -79,7 +80,6 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-
         }
     }
 

@@ -27,42 +27,45 @@ import com.rgr.fosdem.android.mainBrushColor
 fun NoConnection(
     onClickAction: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(vertical = 48.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        Spacer(modifier = Modifier.size(48.dp))
+    MaterialTheme {
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.background)
+                .padding(vertical = 48.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            AnimatedPreloader(
-                modifier = Modifier.size(140.dp),
-                resId = R.raw.no_connection
-            )
+            Spacer(modifier = Modifier.size(48.dp))
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                AnimatedPreloader(
+                    modifier = Modifier.size(140.dp),
+                    resId = R.raw.no_connection
+                )
+                Text(
+                    modifier = Modifier.padding(16.dp),
+                    text = stringResource(R.string.no_connection_description),
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center
+                )
+            }
             Text(
-                modifier = Modifier.padding(16.dp),
-                text = stringResource(R.string.no_connection_description),
-                style = MaterialTheme.typography.titleMedium,
-                textAlign = TextAlign.Center
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 32.dp, start = 32.dp, end = 32.dp)
+                    .background(
+                        brush = Brush.linearGradient(colorStops = mainBrushColor),
+                        shape = CircleShape
+                    )
+                    .padding(vertical = 12.dp, horizontal = 32.dp)
+                    .clickable { onClickAction() },
+                text = stringResource(R.string.use_offline_mode),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleSmall.copy(Color.White)
             )
         }
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 32.dp, start = 32.dp, end = 32.dp)
-                .background(
-                    brush = Brush.linearGradient(colorStops = mainBrushColor),
-                    shape = CircleShape
-                )
-                .padding(vertical = 12.dp, horizontal = 32.dp)
-                .clickable { onClickAction() },
-            text = stringResource(R.string.use_offline_mode),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleSmall.copy(Color.White)
-        )
     }
 }

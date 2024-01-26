@@ -36,8 +36,9 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.cio)
-            implementation("io.ktor:ktor-client-logging:2.3.7")
-
+            implementation(libs.ktor.client.logging)
+            //okio for files
+            implementation(libs.okio)
             //datastore
             implementation(libs.androidx.data.store.core)
             //koin

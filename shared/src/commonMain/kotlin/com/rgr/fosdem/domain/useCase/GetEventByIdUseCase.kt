@@ -1,10 +1,12 @@
 package com.rgr.fosdem.domain.useCase
 
 import com.rgr.fosdem.domain.model.EventBo
+import com.rgr.fosdem.domain.repository.JsonProvider
 import com.rgr.fosdem.domain.repository.RealmRepository
 import com.rgr.fosdem.domain.repository.ScheduleRepository
 
 class GetEventByIdUseCase(
+    private val jsonProvider: JsonProvider,
     private val repository: ScheduleRepository,
     private var realmRepository: RealmRepository
 ) {
@@ -17,8 +19,10 @@ class GetEventByIdUseCase(
             schedules.map { it.events }.flatten().first { it.id == id }
         }
 
-        return event?.let {
-            Result.success(it)
-        } ?: Result.failure(Error())
+        return if(event != null) {
+            Result.success(event)
+        } else {
+            Result.success(jsonProvider.getSchedule().getOrNull()!!.map { it.events }.flatten().first { it.id == id })
+        }
     }
 }

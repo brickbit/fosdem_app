@@ -1,12 +1,12 @@
 package com.rgr.fosdem.domain.useCase
 
 import com.rgr.fosdem.domain.model.TrackBo
-import com.rgr.fosdem.domain.repository.JsonRepository
+import com.rgr.fosdem.domain.repository.JsonProvider
 import com.rgr.fosdem.domain.repository.RealmRepository
 import com.rgr.fosdem.domain.repository.ScheduleRepository
 
 class GetScheduleDataUseCase(
-    private var jsonRepository: JsonRepository,
+    private var jsonRepository: JsonProvider,
     private var networkRepository: ScheduleRepository,
     private var realmRepository: RealmRepository
 ) {
@@ -19,8 +19,10 @@ class GetScheduleDataUseCase(
             val ktorResult = networkRepository.getSchedule()
             if(ktorResult.isSuccess) {
                 realmRepository.saveSchedule(ktorResult.getOrNull()!!)
+                ktorResult
+            } else {
+                jsonRepository.getSchedule()
             }
-            ktorResult
         }
     }
 }

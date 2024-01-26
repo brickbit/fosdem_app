@@ -1,10 +1,12 @@
 package com.rgr.fosdem.domain.useCase
 
 import com.rgr.fosdem.domain.model.TrackBo
+import com.rgr.fosdem.domain.repository.JsonProvider
 import com.rgr.fosdem.domain.repository.RealmRepository
 import com.rgr.fosdem.domain.repository.ScheduleRepository
 
 class GetScheduleByTrackUseCase(
+    private val jsonProvider: JsonProvider,
     private val repository: ScheduleRepository,
     private var realmRepository: RealmRepository
 ) {
@@ -16,8 +18,10 @@ class GetScheduleByTrackUseCase(
         val track = schedulesData?.let { schedules ->
             schedules.first { it.name == trackName }
         }
-        return track?.let {
-            Result.success(it)
-        } ?: Result.failure(Error())
+        return if(track != null) {
+            Result.success(track)
+        } else {
+            Result.success(jsonProvider.getSchedule().getOrNull()!!.first { it.name == trackName })
+        }
     }
 }
