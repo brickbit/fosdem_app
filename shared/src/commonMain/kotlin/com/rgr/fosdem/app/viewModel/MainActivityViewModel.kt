@@ -55,7 +55,7 @@ class MainActivityViewModel(
             Routes.Talk -> true
             Routes.Schedule -> false
             Routes.Language -> true
-            Routes.WebView -> true
+            Routes.WebView -> false
             Routes.ThirdPartyLibraries -> true
             else -> false
         }

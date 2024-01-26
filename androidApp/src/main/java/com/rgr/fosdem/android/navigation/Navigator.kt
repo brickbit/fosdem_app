@@ -69,6 +69,10 @@ fun Navigator(
                 },
                 navigateToSchedule = {
                     navController.navigate(Routes.Schedule.name)
+                },
+                navigateToWebSchedule = { url ->
+                    val encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
+                    navController.navigate(Routes.WebView.loadWebView(encodedUrl))
                 }
             )
         }

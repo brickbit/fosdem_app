@@ -15,8 +15,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -83,6 +83,7 @@ fun MainRoute(
     viewModel: MainViewModel = koinViewModel(),
     onNavigate: (String) -> Unit,
     navigateToSchedule: () -> Unit,
+    navigateToWebSchedule: (String) -> Unit,
 ) {
     val preferredTracksState = viewModel.statePreferredTracks.collectAsState().value
     val tracksNowState = viewModel.stateCurrentTracks.collectAsState().value
@@ -122,7 +123,8 @@ fun MainRoute(
             speakers = speakerState,
             stands = standState,
             onNavigate = onNavigate,
-            navigateToSchedule = navigateToSchedule
+            navigateToSchedule = navigateToSchedule,
+            navigateToWebSchedule = navigateToWebSchedule
         )
     }
 }
@@ -137,7 +139,8 @@ fun MainScreen(
     speakers: SpeakersState,
     stands: StandsState,
     onNavigate: (String) -> Unit,
-    navigateToSchedule: () -> Unit
+    navigateToSchedule: () -> Unit,
+    navigateToWebSchedule: (String) -> Unit,
 ) {
     var showSpeakerBottomSheet by remember { mutableStateOf( Pair(0,false)) }
     val speakerSheetState = rememberModalBottomSheetState(
@@ -179,6 +182,25 @@ fun MainScreen(
             favourites = favourites,
             onNavigate = onNavigate
         )
+        item {
+            Row(
+                modifier = Modifier.padding(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(space = 16.dp, Alignment.CenterHorizontally)
+            ) {
+                CheckScheduleWeb(
+                    modifier = Modifier.weight(1f),
+                    title = stringResource(R.string.main_saturday_schedule),
+                    url = BuildConfig.scheduleSaturday,
+                    openWebView = { navigateToWebSchedule(it) }
+                )
+                CheckScheduleWeb(
+                    modifier = Modifier.weight(1f),
+                    title = stringResource(R.string.main_sunday_schedule),
+                    url = BuildConfig.scheduleSunday,
+                    openWebView = { navigateToWebSchedule(it) }
+                )
+            }
+        }
         speakerItems(
             speakers = speakers,
             onNavigate = { showSpeakerBottomSheet = Pair(it, true) }
@@ -194,6 +216,41 @@ fun MainScreen(
         standItems(
             stands = stands,
             onNavigate = { showStandBottomSheet = Pair(it, true) }
+        )
+    }
+}
+
+@Composable
+fun CheckScheduleWeb(
+    modifier: Modifier = Modifier,
+    title: String,
+    url: String,
+    openWebView: (String) -> Unit
+) {
+    Column(
+        modifier = modifier
+            .background(
+                brush = Brush.linearGradient(colorStops = mainBrushColor),
+                shape = RoundedCornerShape(20.dp)
+            )
+            .padding(
+                horizontal = 8.dp,
+                vertical = 16.dp
+            )
+            .clickable { openWebView(url) },
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            modifier = Modifier.size(48.dp),
+            painter = painterResource(id = R.drawable.ic_calendar),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(Color.White)
+        )
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleSmall.copy(Color.White),
+            textAlign = TextAlign.Center
         )
     }
 }

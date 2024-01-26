@@ -53,7 +53,6 @@ class MainActivity : ComponentActivity() {
             val status by connectivityObserver.observe().collectAsState(
                 initial = ConnectivityProvider.Status.Available
             )
-
             var useOfflineMode by remember { mutableStateOf(false) }
 
             when(status) {
@@ -80,6 +79,7 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+
         }
     }
 
@@ -96,17 +96,15 @@ class MainActivity : ComponentActivity() {
     private fun searchNotification() {
         viewModel.getEventsForNotification()
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.sendNotificationState.collect { eventState ->
-                    when (eventState) {
-                        is SendNotificationState.Ready -> {
-                            eventState.notification.events.map { event ->
-                                scheduleNotification(event,eventState.notification.time)
-                            }
+            viewModel.sendNotificationState.collect { eventState ->
+                when (eventState) {
+                    is SendNotificationState.Ready -> {
+                        eventState.notification.events.map { event ->
+                            scheduleNotification(event,eventState.notification.time)
                         }
-
-                        SendNotificationState.Initialized -> {}
                     }
+
+                    SendNotificationState.Initialized -> {}
                 }
             }
         }

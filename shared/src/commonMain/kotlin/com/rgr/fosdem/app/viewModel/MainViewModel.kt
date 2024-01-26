@@ -161,7 +161,6 @@ class MainViewModel(
                         getSpeakerList()
                         getStandList()
                     } else {
-                        _isRefreshing.update { false }
                     }
                 }
                 .onFailure {

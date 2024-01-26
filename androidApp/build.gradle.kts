@@ -37,6 +37,8 @@ android {
             buildConfigField("String", "linkedIn", "\"https://www.linkedin.com/in/rgr92\"")
             buildConfigField("String", "gitHub", "\"https://github.com/brickbit/fosdem_app\"")
             buildConfigField("String", "location", "\"https://fosdem.org/2024/practical/transportation/\"")
+            buildConfigField("String", "scheduleSaturday", "\"https://fosdem.org/2024/schedule/day/saturday/\"")
+            buildConfigField("String", "scheduleSunday", "\"https://fosdem.org/2024/schedule/day/sunday/\"")
         }
         getByName("release") {
             isMinifyEnabled = false
@@ -45,6 +47,8 @@ android {
             buildConfigField("String", "linkedIn", "\"https://www.linkedin.com/in/rgr92\"")
             buildConfigField("String", "gitHub", "\"https://github.com/brickbit/fosdem_app\"")
             buildConfigField("String", "location", "\"https://fosdem.org/2024/practical/transportation/\"")
+            buildConfigField("String", "scheduleSaturday", "\"https://fosdem.org/2024/schedule/day/saturday/\"")
+            buildConfigField("String", "scheduleSunday", "\"https://fosdem.org/2024/schedule/day/sunday/\"")
         }
     }
     compileOptions {

@@ -30,13 +30,15 @@
     <string name="main_favourite_events">Your favorite talks will appear here. To save a talk, press the Save as favorite button in its description</string>
     <string name="main_talks_right_now">The talks that have started or are going to start will appear here</string>
     <string name="main_select_favourite_tracks">Your favorite tracks will appear here, you can select them from the settings screen</string>
+    <string name="main_saturday_schedule">Saturday schedule (web)</string>
+    <string name="main_sunday_schedule">Sunday schedule (web)</string>
     <!--SETTINGS-->
     <string name="settings">Settings</string>
     <string name="settings_licenses">Third Party Licenses</string>
     <string name="settings_app_license">App license</string>
     <string name="settings_developed_by">"Developed by "</string>
     <string name="settings_developer">Roberto García</string>
-    <string name="settings_source_code">"code available in"</string>
+    <string name="settings_source_code">" code available in "</string>
     <string name="settings_github">GitHub</string>
     <string name="settings_developer_tag">linkedIn</string>
     <string name="settings_github_tag">gitHub</string>

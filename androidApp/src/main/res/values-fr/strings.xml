@@ -30,13 +30,15 @@
     <string name="main_favourite_events">Vos conférences préférées apparaîtront ici. Pour enregistrer une discussion, appuyez sur le bouton Enregistrer comme favori dans sa description</string>
     <string name="main_talks_right_now">Les discussions qui ont commencé ou vont commencer apparaîtront ici</string>
     <string name="main_select_favourite_tracks">Vos morceaux préférés apparaîtront ici, vous pouvez les sélectionner depuis l\'écran des paramètres</string>
+    <string name="main_saturday_schedule">Agenda du samedi (web)</string>
+    <string name="main_sunday_schedule">Agenda du dimanche (web)</string>
     <!--SETTINGS-->
     <string name="settings">Paramètres</string>
     <string name="settings_licenses">Licences tierces</string>
     <string name="settings_app_license">Licence d\'application</string>
     <string name="settings_developed_by">"Développé par "</string>
     <string name="settings_developer">Roberto García</string>
-    <string name="settings_source_code">"code disponible dans"</string>
+    <string name="settings_source_code">" code disponible dans "</string>
     <string name="settings_github">GitHub</string>
     <string name="settings_developer_tag">linkedIn</string>
     <string name="settings_github_tag">gitHub</string>
