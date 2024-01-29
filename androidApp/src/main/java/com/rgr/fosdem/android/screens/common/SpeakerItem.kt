@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,6 +34,7 @@ fun SpeakerItem(
 ) {
     Column(
         modifier = modifier
+            .padding(start = 8.dp)
             .background(
                 color = MaterialTheme.colorScheme.onSurface,
                 shape = RoundedCornerShape(20.dp)
@@ -72,6 +74,7 @@ fun SpeakerItem(
         Text(
             modifier = Modifier
                 .width(100.dp)
+                .height(70.dp)
                 .padding(10.dp),
             text = speaker.name,
             style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.background),

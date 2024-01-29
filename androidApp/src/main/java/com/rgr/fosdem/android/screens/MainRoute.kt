@@ -302,7 +302,7 @@ fun TrackRow(
         )
         LazyRow(
             modifier = Modifier
-                .padding(horizontal = 8.dp, vertical = 8.dp),
+                .padding(vertical = 8.dp),
         ) {
             items(track.events) { event ->
                 EventItem(
@@ -509,9 +509,9 @@ fun LazyListScope.speakerItems(
         is SpeakersState.Loaded -> {
             item {
                 LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier
-                        .padding(horizontal = 8.dp, vertical = 8.dp),
+                        .padding(vertical = 8.dp),
                 ) {
                     itemsIndexed(speakers.speakers) { index, speaker ->
                         SpeakerItem(
@@ -543,9 +543,9 @@ fun LazyListScope.standItems(
         is StandsState.Loaded -> {
             item {
                 LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier
-                        .padding(horizontal = 8.dp, vertical = 8.dp)
+                        .padding(vertical = 8.dp)
                 ) {
                     itemsIndexed(stands.stands) { index, stand ->
                         StandItem(
@@ -572,7 +572,7 @@ fun LazyListScope.preferredTracks(
         is MainPreferredTracksState.Loaded -> {
             item {
                 Text(
-                    modifier = Modifier.padding(top= 16.dp, start = 16.dp),
+                    modifier = Modifier.padding(top= 16.dp),
                     text = stringResource(R.string.main_your_favourite_tracks),
                     style = MaterialTheme.typography.titleSmall
                 )

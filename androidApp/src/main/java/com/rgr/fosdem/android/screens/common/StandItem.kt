@@ -39,6 +39,7 @@ fun StandItem(
 ) {
     Column(
         modifier = modifier
+            .padding(start= 8.dp)
             .background(
                 color = MaterialTheme.colorScheme.onSurface,
                 shape = RoundedCornerShape(20.dp)

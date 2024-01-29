@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -56,7 +58,7 @@ fun EventItem(
                     shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp)
                 )
                 .padding(4.dp)
-                .heightIn(110.dp + (event.speaker.count() * 15).dp)
+                .height(130.dp)
                 .widthIn(45.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -95,26 +97,33 @@ fun EventItem(
                 .heightIn(80.dp)
         ) {
             Text(
+                modifier = Modifier.height(80.dp),
                 text = event.talk.title,
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis
             )
-            event.speaker.forEach {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Image(
-                        modifier = Modifier
-                            .size(16.dp),
-                        painter = painterResource(id = R.drawable.ic_account),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
-                    )
-                    Text(
-                        text = it.name,
-                        style = MaterialTheme.typography.bodySmall
-                    )
+            Column(
+                modifier = Modifier
+                    .height(35.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                event.speaker.forEach {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Image(
+                            modifier = Modifier
+                                .size(16.dp),
+                            painter = painterResource(id = R.drawable.ic_account),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
+                        )
+                        Text(
+                            text = it.name,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
                 }
             }
             Row(

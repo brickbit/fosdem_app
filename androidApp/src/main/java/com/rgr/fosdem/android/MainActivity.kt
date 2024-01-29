@@ -16,9 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.rgr.fosdem.android.provider.ActivityProvider
@@ -129,13 +127,11 @@ class MainActivity : ComponentActivity() {
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 when {
-                    // If permission is granted, proceed with scheduling exact alarms.
                     alarmManager.canScheduleExactAlarms() -> {
                         event.calculateTimeInMillis(timeBefore)
                             ?.let { alarmManager.setExact(AlarmManager.RTC_WAKEUP, it, pendingIntent) }
                     }
                     else -> {
-                        // Ask users to go to exact alarm page in system settings.
                         startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
                     }
                 }
