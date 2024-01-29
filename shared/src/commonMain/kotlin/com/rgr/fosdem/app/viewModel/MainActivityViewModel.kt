@@ -41,6 +41,7 @@ class MainActivityViewModel(
             Routes.Language.name -> Routes.Language
             Routes.WebView.name -> Routes.WebView
             Routes.ThirdPartyLibraries.name -> Routes.ThirdPartyLibraries
+            Routes.ListEvents.name -> Routes.ListEvents
             else -> null
         }
     }
@@ -57,6 +58,7 @@ class MainActivityViewModel(
             Routes.Language -> true
             Routes.WebView -> false
             Routes.ThirdPartyLibraries -> true
+            Routes.ListEvents -> false
             else -> false
         }
     }

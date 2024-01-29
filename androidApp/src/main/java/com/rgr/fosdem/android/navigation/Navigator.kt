@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.rgr.fosdem.android.screens.LanguageRoute
+import com.rgr.fosdem.android.screens.ListEventsRoute
 import com.rgr.fosdem.android.screens.MainRoute
 import com.rgr.fosdem.android.screens.OnBoardingRoute
 import com.rgr.fosdem.android.screens.PreferencesRoute
@@ -17,6 +18,7 @@ import com.rgr.fosdem.android.screens.TalkRoute
 import com.rgr.fosdem.android.screens.ThirdPartyLibrariesRoute
 import com.rgr.fosdem.android.screens.common.CustomWebView
 import com.rgr.fosdem.app.navigation.Routes
+import com.rgr.fosdem.app.viewModel.EventType
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -73,6 +75,9 @@ fun Navigator(
                 navigateToWebSchedule = { url ->
                     val encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
                     navController.navigate(Routes.WebView.loadWebView(encodedUrl))
+                },
+                onSeeAllClicked = { title, eventType ->
+                    navController.navigate(Routes.ListEvents.goToDetail(title,eventType))
                 }
             )
         }
@@ -124,6 +129,27 @@ fun Navigator(
             route = Routes.ThirdPartyLibraries.name
         ) {
             ThirdPartyLibrariesRoute()
+        }
+        composable(
+            route = Routes.ListEvents.name,
+            arguments = listOf(
+                navArgument("title") { type = NavType.StringType },
+                navArgument("eventType") { type = NavType.StringType },
+            )
+        ) { backStackEntry ->
+            val eventTypeString = backStackEntry.arguments?.getString("eventType") ?: ""
+            val eventType = when (eventTypeString) {
+                "CurrentEvents" -> EventType.CurrentEvents
+                "FavoriteEvents" -> EventType.FavoriteEvents
+                else -> EventType.FavoriteTracks(eventTypeString)
+            }
+            ListEventsRoute(
+                title = backStackEntry.arguments?.getString("title") ?: "",
+                eventType = eventType,
+                onEventClicked = { id ->
+                    navController.navigate(Routes.Talk.goToDetail(id))
+                }
+            )
         }
     }
 }

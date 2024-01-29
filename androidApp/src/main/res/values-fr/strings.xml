@@ -32,6 +32,7 @@
     <string name="main_select_favourite_tracks">Vos morceaux préférés apparaîtront ici, vous pouvez les sélectionner depuis l\'écran des paramètres</string>
     <string name="main_saturday_schedule">Agenda du samedi (web)</string>
     <string name="main_sunday_schedule">Agenda du dimanche (web)</string>
+    <string name="main_see_all">voir tout</string>
     <!--SETTINGS-->
     <string name="settings">Paramètres</string>
     <string name="settings_licenses">Licences tierces</string>

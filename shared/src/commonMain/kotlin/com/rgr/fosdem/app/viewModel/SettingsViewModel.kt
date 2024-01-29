@@ -26,7 +26,7 @@ class SettingsViewModel(
     ).toCommonStateFlow()
 
 
-    fun checkNotifications() {
+    private fun checkNotifications() {
         scope.launch {
             _state.update {
                 val enabled = notificationsEnabled.invoke()

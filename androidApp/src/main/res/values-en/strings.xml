@@ -32,6 +32,7 @@
     <string name="main_select_favourite_tracks">Your favorite tracks will appear here, you can select them from the settings screen</string>
     <string name="main_saturday_schedule">Saturday schedule (web)</string>
     <string name="main_sunday_schedule">Sunday schedule (web)</string>
+    <string name="main_see_all">see all</string>
     <!--SETTINGS-->
     <string name="settings">Settings</string>
     <string name="settings_licenses">Third Party Licenses</string>

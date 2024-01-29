@@ -18,4 +18,8 @@ sealed class Routes(val name: String) {
         fun loadWebView(url: String): String = "WebView/$url"
     }
     data object ThirdPartyLibraries: Routes("ThirdLibraries")
+
+    data object ListEvents: Routes("ListEvents/{title}/{eventType}") {
+        fun goToDetail(title: String, eventType: String): String = "ListEvents/$title/$eventType"
+    }
 }

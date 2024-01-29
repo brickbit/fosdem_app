@@ -20,12 +20,12 @@ import com.rgr.fosdem.domain.provider.ConnectivityProvider
 import com.rgr.fosdem.domain.provider.LanguageProvider
 import com.rgr.fosdem.android.provider.LanguageProviderImpl
 import com.rgr.fosdem.android.provider.NetworkConnectivityProvider
+import com.rgr.fosdem.app.viewModel.ListEventsViewModel
 import com.rgr.fosdem.domain.repository.JsonProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.scope.get
 import org.koin.dsl.module
 import java.io.File
 
@@ -54,5 +54,5 @@ val viewModelModules = module {
     viewModel { LanguageViewModel(get(), get()) }
     viewModel { ScheduleViewModel(get(), get(), get(), get(), get()) }
     viewModel { SettingsViewModel(get(), get(), get(), get()) }
-
+    viewModel { ListEventsViewModel(get(), get(), get(), get()) }
 }

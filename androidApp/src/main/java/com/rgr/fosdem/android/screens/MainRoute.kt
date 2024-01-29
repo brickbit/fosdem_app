@@ -73,7 +73,9 @@ import com.rgr.fosdem.app.state.MainPreferredTracksState
 import com.rgr.fosdem.app.state.MainTracksNowState
 import com.rgr.fosdem.app.state.SpeakersState
 import com.rgr.fosdem.app.state.StandsState
+import com.rgr.fosdem.app.viewModel.EventType
 import com.rgr.fosdem.app.viewModel.MainViewModel
+import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.domain.model.TrackBo
 import org.koin.androidx.compose.koinViewModel
 
@@ -84,6 +86,7 @@ fun MainRoute(
     onNavigate: (String) -> Unit,
     navigateToSchedule: () -> Unit,
     navigateToWebSchedule: (String) -> Unit,
+    onSeeAllClicked: (String, String) -> Unit
 ) {
     val preferredTracksState = viewModel.statePreferredTracks.collectAsState().value
     val tracksNowState = viewModel.stateCurrentTracks.collectAsState().value
@@ -124,7 +127,8 @@ fun MainRoute(
             stands = standState,
             onNavigate = onNavigate,
             navigateToSchedule = navigateToSchedule,
-            navigateToWebSchedule = navigateToWebSchedule
+            navigateToWebSchedule = navigateToWebSchedule,
+            onSeeAllClicked = onSeeAllClicked
         )
     }
 }
@@ -141,6 +145,7 @@ fun MainScreen(
     onNavigate: (String) -> Unit,
     navigateToSchedule: () -> Unit,
     navigateToWebSchedule: (String) -> Unit,
+    onSeeAllClicked: (String, String) -> Unit
 ) {
     var showSpeakerBottomSheet by remember { mutableStateOf( Pair(0,false)) }
     val speakerSheetState = rememberModalBottomSheetState(
@@ -175,12 +180,14 @@ fun MainScreen(
         rightNowItems(
             tracksNow = tracksNow,
             favourites = favourites,
-            onNavigate = onNavigate
+            onNavigate = onNavigate,
+            onSeeAllClicked = { title -> onSeeAllClicked(title, "CurrentEvents") }
         )
 
         favouriteEvents(
             favourites = favourites,
-            onNavigate = onNavigate
+            onNavigate = onNavigate,
+            onSeeAllClicked = { title -> onSeeAllClicked(title, "FavoriteEvents") }
         )
         item {
             Row(
@@ -208,7 +215,8 @@ fun MainScreen(
         preferredTracks(
             preferredTracks = preferredTracks,
             favourites = favourites,
-            onNavigate = onNavigate
+            onNavigate = onNavigate,
+            onSeeAllClicked = { title, track -> onSeeAllClicked(title,track) }
         )
         item {
             PlaceComposable()
@@ -289,17 +297,32 @@ fun PlaceComposable() {
 fun TrackRow(
     track: TrackBo,
     favourites: FavouriteEventsState,
-    onNavigate: (String) -> Unit
+    onNavigate: (String) -> Unit,
+    onSeeAllClicked: (String, String) -> Unit
 ) {
     Column {
-        Text(
-            modifier = Modifier
-                .padding(start = 16.dp, top = 8.dp),
-            text = track.name,
-            style = MaterialTheme.typography.bodyMedium,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                modifier = Modifier
+                    .width(200.dp)
+                    .padding(start = 16.dp, top = 8.dp),
+                text = track.name,
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                modifier = Modifier
+                    .padding(end = 16.dp)
+                    .clickable { onSeeAllClicked(track.name, track.id) },
+                text = stringResource(R.string.main_see_all),
+                style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary)
+            )
+        }
         LazyRow(
             modifier = Modifier
                 .padding(vertical = 8.dp),
@@ -376,17 +399,31 @@ fun ScheduleCard(
 fun LazyListScope.rightNowItems(
     tracksNow: MainTracksNowState,
     favourites: FavouriteEventsState,
-    onNavigate: (String) -> Unit
+    onNavigate: (String) -> Unit,
+    onSeeAllClicked: (String) -> Unit
 ) {
-
     when(tracksNow) {
         is MainTracksNowState.Loaded -> {
             item {
-                Text(
-                    modifier = Modifier.padding(start = 16.dp),
-                    text = stringResource(R.string.main_right_now),
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                val context = LocalContext.current
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        modifier = Modifier.padding(start = 16.dp),
+                        text = stringResource(R.string.main_right_now),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        modifier = Modifier
+                            .padding(end = 16.dp)
+                            .clickable { onSeeAllClicked(context.getString(R.string.main_right_now)) },
+                        text = stringResource(R.string.main_see_all),
+                        style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary)
+                    )
+                }
             }
             item {
                 LazyRow(
@@ -419,17 +456,32 @@ fun LazyListScope.rightNowItems(
 
 fun LazyListScope.favouriteEvents(
     favourites: FavouriteEventsState,
-    onNavigate: (String) -> Unit
+    onNavigate: (String) -> Unit,
+    onSeeAllClicked: (String) -> Unit
 ) {
 
     when(favourites) {
         is FavouriteEventsState.Loaded -> {
             item {
-                Text(
-                    modifier = Modifier.padding(start = 16.dp),
-                    text = stringResource(R.string.main_your_favourites_talks),
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                val context = LocalContext.current
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        modifier = Modifier.padding(start = 16.dp),
+                        text = stringResource(R.string.main_your_favourites_talks),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        modifier = Modifier
+                            .padding(end = 16.dp)
+                            .clickable { onSeeAllClicked(context.getString(R.string.main_your_favourites_talks)) },
+                        text = stringResource(R.string.main_see_all),
+                        style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary)
+                    )
+                }
             }
             item {
                 LazyRow(
@@ -566,13 +618,14 @@ fun LazyListScope.standItems(
 fun LazyListScope.preferredTracks(
     preferredTracks: MainPreferredTracksState,
     favourites: FavouriteEventsState,
-    onNavigate: (String) -> Unit
+    onNavigate: (String) -> Unit,
+    onSeeAllClicked: (String, String) -> Unit
 ) {
     when(preferredTracks) {
         is MainPreferredTracksState.Loaded -> {
             item {
                 Text(
-                    modifier = Modifier.padding(top= 16.dp),
+                    modifier = Modifier.padding(start = 16.dp, top = 16.dp),
                     text = stringResource(R.string.main_your_favourite_tracks),
                     style = MaterialTheme.typography.titleSmall
                 )
@@ -581,7 +634,8 @@ fun LazyListScope.preferredTracks(
                 TrackRow(
                     track = track,
                     favourites = favourites,
-                    onNavigate = onNavigate
+                    onNavigate = onNavigate,
+                    onSeeAllClicked = onSeeAllClicked
                 )
             }
         }
