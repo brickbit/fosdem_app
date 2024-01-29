@@ -111,7 +111,9 @@ fun PreferenceScreen(
             }
             items(tracks) { track ->
                 ListItem(
-                    modifier = Modifier.padding(end = 16.dp),
+                    modifier = Modifier
+                        .padding(end = 16.dp)
+                        .clickable { onTackChecked(track, !track.checked)  },
                     leadingContent = {
                         Checkbox(
                             checked = track.checked,
