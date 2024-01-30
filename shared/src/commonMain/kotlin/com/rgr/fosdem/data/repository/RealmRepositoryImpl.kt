@@ -43,6 +43,9 @@ class RealmRepositoryImpl: RealmRepository {
     }
 
     override suspend fun saveSchedule(schedules: List<TrackBo>){
+        realm.writeBlocking {
+            deleteAll()
+        }
         schedules.map {
             realm.writeBlocking {
                 copyToRealm(it.toDao())
