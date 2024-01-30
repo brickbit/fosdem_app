@@ -35,7 +35,7 @@ fun EventBo.calculateTimeInMillis(timeBefore: Int): Long? {
                 hour = hour,
                 minute = minutes
         )
-        val eventMilliseconds = eventTime.toInstant(TimeZone.UTC).toEpochMilliseconds()
+        val eventMilliseconds = eventTime.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
         val millisecondsBefore = timeBefore * 60 * 1000
         return eventMilliseconds - currentMilliseconds - millisecondsBefore
 }

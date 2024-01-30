@@ -70,7 +70,7 @@
     <string name="schedule_saturday">Samedi</string>
     <string name="schedule_sunday">Dimanche</string>
     <!--NOTIFICATION-->
-    <string name="notification_description">La conférence commence dans %1$s minutes dans la salle %2$s</string>
+    <string name="notification_description">La conférence commence bientôt dans la salle %1$s</string>
     <!--SPLASH-->
     <string name="top_bar_fosdem">Fosdem</string>
     <!--EVENT-->

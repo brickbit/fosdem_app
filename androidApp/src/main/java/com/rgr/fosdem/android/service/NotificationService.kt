@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat
 import com.rgr.fosdem.android.MainActivity
 import com.rgr.fosdem.android.R
 import com.rgr.fosdem.domain.model.EventBo
+import com.rgr.fosdem.domain.model.calculateTimeInMillis
 import kotlinx.serialization.json.Json
 
 
@@ -37,6 +38,7 @@ class NotificationService: BroadcastReceiver() {
         val flag = PendingIntent.FLAG_IMMUTABLE
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, flag)
 
+
         val notification = image?.let {
             val bitmap =  BitmapFactory.decodeByteArray(image, 0, image.size)
             NotificationCompat.Builder(context, MY_CHANNEL_ID)
@@ -45,7 +47,6 @@ class NotificationService: BroadcastReceiver() {
                 .setContentText(
                     context.getString(
                         R.string.notification_description,
-                        time.toString(),
                         event.talk.room.name
                     ))
                 .setContentIntent(pendingIntent)
@@ -61,7 +62,6 @@ class NotificationService: BroadcastReceiver() {
             .setContentText(
                 context.getString(
                     R.string.notification_description,
-                    time.toString(),
                     event.talk.room.name
                 ))
             .setContentIntent(pendingIntent)
@@ -71,7 +71,11 @@ class NotificationService: BroadcastReceiver() {
 
 
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        manager.notify(NOTIFICATION_ID, notification)
+        event.calculateTimeInMillis(time)?.let {
+                if(it/60000 < time) {
+                manager.notify(NOTIFICATION_ID, notification)
+            }
+        }
     }
 
 }

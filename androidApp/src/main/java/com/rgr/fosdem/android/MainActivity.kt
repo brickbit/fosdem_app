@@ -97,9 +97,7 @@ class MainActivity : ComponentActivity() {
             viewModel.sendNotificationState.collect { eventState ->
                 when (eventState) {
                     is SendNotificationState.Ready -> {
-                        eventState.notification.events.map { event ->
-                            scheduleNotification(event,eventState.notification.time)
-                        }
+                        scheduleNotification(eventState.notification.events,eventState.notification.time)
                     }
 
                     SendNotificationState.Initialized -> {}
@@ -108,39 +106,57 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun scheduleNotification(event: EventBo, timeBefore: Int) {
+    private fun scheduleNotification(events: List<EventBo>, timeBefore: Int) {
         lifecycleScope.launch(Dispatchers.IO) {
-            val image = try { URL(event.talk.room.building.map).readBytes() } catch (e: Exception) { null }
-            val intent = Intent(applicationContext, NotificationService::class.java)
-            intent.putExtra("NOTIFICATION_EVENT_ID", Json.encodeToString(event))
-            intent.putExtra("NOTIFICATION_TIME_ID", timeBefore)
-            intent.putExtra("NOTIFICATION_IMAGE_ID", image)
-
-
-            val pendingIntent = PendingIntent.getBroadcast(
-                applicationContext,
-                NOTIFICATION_ID,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-
-            val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                when {
-                    alarmManager.canScheduleExactAlarms() -> {
-                        event.calculateTimeInMillis(timeBefore)
-                            ?.let { alarmManager.setExact(AlarmManager.RTC_WAKEUP, it, pendingIntent) }
-                    }
-                    else -> {
-                        startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
-                    }
+            events.map { event ->
+                val image = try {
+                    URL(event.talk.room.building.map).readBytes()
+                } catch (e: Exception) {
+                    null
                 }
-            } else {
-                event.calculateTimeInMillis(timeBefore)
-                    ?.let { alarmManager.setExact(AlarmManager.RTC_WAKEUP, it, pendingIntent) }
+                val intent = Intent(applicationContext, NotificationService::class.java)
+                intent.putExtra("NOTIFICATION_EVENT_ID", Json.encodeToString(event))
+                intent.putExtra("NOTIFICATION_TIME_ID", timeBefore)
+                intent.putExtra("NOTIFICATION_IMAGE_ID", image)
+
+
+                val pendingIntent = PendingIntent.getBroadcast(
+                    applicationContext,
+                    NOTIFICATION_ID,
+                    intent,
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                )
+
+                val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    when {
+                        alarmManager.canScheduleExactAlarms() -> {
+                            event.calculateTimeInMillis(timeBefore)
+                                ?.let {
+                                    alarmManager.setExactAndAllowWhileIdle(
+                                        AlarmManager.RTC_WAKEUP,
+                                        it,
+                                        pendingIntent
+                                    )
+                                }
+                        }
+
+                        else -> {
+                            startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
+                        }
+                    }
+                } else {
+                    event.calculateTimeInMillis(timeBefore)
+                        ?.let {
+                            alarmManager.setExactAndAllowWhileIdle(
+                                AlarmManager.RTC_WAKEUP,
+                                it,
+                                pendingIntent
+                            )
+                        }
+                }
             }
         }
-
     }
 
     private fun createChannel() {

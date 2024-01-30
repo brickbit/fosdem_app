@@ -70,7 +70,7 @@
     <string name="schedule_saturday">Saturday</string>
     <string name="schedule_sunday">Sunday</string>
     <!--NOTIFICATION-->
-    <string name="notification_description">The talk starts in %1$s minutes in room %2$s</string>
+    <string name="notification_description">The talk starts shortly in room %1$s</string>
     <!--SPLASH-->
     <string name="top_bar_fosdem">Fosdem</string>
     <!--EVENT-->
