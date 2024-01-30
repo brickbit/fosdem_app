@@ -58,7 +58,7 @@ fun EventItem(
                     shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp)
                 )
                 .padding(4.dp)
-                .height(130.dp)
+                .height(135.dp)
                 .widthIn(45.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
