@@ -16,8 +16,8 @@ android {
         applicationId = "com.rgr.fosdem.android"
         minSdk = 27
         targetSdk = 34
-        versionCode = 20240125
-        versionName = "0.0.6"
+        versionCode = 20240130
+        versionName = "0.5.0"
     }
     buildFeatures {
         compose = true
