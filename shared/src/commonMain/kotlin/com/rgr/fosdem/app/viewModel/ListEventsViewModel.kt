@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 
 class ListEventsViewModel(
     private val getFavouritesEvents: GetFavouritesEventsUseCase,
@@ -46,17 +48,23 @@ class ListEventsViewModel(
         scope.launch {
             getFavouritesEvents.invoke()
                 .onSuccess { events ->
-                    _stateFavouriteEvents.update {
-                        FavouriteEventsState.Loaded(events)
+                    if(events.isEmpty()) {
+                        _stateFavouriteEvents.update {
+                            FavouriteEventsState.Empty
+                        }
+                    } else {
+                        _stateFavouriteEvents.update {
+                            FavouriteEventsState.Loaded(events)
+                        }
                     }
                 }
                 .onFailure {  }
         }
     }
 
-    fun getScheduleByMoment() {
+    fun getScheduleByMoment(instant: Instant = Clock.System.now()) {
         scope.launch {
-            getScheduleByHour.invoke()
+            getScheduleByHour.invoke(instant)
                 .onSuccess { events ->
                     _stateCurrentTracks.update {
                         if (events.isEmpty()) {

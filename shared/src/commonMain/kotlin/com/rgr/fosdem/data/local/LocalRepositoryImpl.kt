@@ -6,7 +6,6 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.core.stringSetPreferencesKey
 import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.domain.model.TrackBo
 import com.rgr.fosdem.domain.repository.LocalRepository
@@ -38,15 +37,19 @@ class LocalRepositoryImpl(
     private val notificationTime = intPreferencesKey("$PREFS_TAG_KEY$NOTIFICATION_TIME")
     private val versionStored = stringPreferencesKey("$PREFS_TAG_KEY$VERSION")
 
-    override suspend fun setOnBoardingSeen() = dataStore.edit { preferences ->
-        preferences[onboardingShown] = true
+    override suspend fun setOnBoardingSeen() {
+        dataStore.edit { preferences ->
+            preferences[onboardingShown] = true
+        }
     }
     override suspend fun isOnBoardingSeen() = dataStore.data.map { preferences ->
         preferences[onboardingShown] ?: false
     }.first()
 
-    override suspend fun setFavouritesTracksSeen()= dataStore.edit { preferences ->
-        preferences[favouriteTracksShown] = true
+    override suspend fun setFavouritesTracksSeen() {
+        dataStore.edit { preferences ->
+            preferences[favouriteTracksShown] = true
+        }
     }
 
     override suspend fun isFavouriteTracksSeen() = dataStore.data.map { preferences ->
@@ -72,8 +75,10 @@ class LocalRepositoryImpl(
         }
     }
 
-    override suspend fun setNotificationsPermission(permission: Boolean) = dataStore.edit { preferences ->
-        preferences[notificationsPreferences] = permission
+    override suspend fun setNotificationsPermission(permission: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[notificationsPreferences] = permission
+        }
     }
 
     override suspend fun getNotificationsPermission(): Boolean = dataStore.data.map { preferences ->
@@ -110,8 +115,10 @@ class LocalRepositoryImpl(
         }
     }
 
-    override suspend fun setNotificationTime(time: Int) = dataStore.edit { preferences ->
-        preferences[notificationTime] = time
+    override suspend fun setNotificationTime(time: Int) {
+        dataStore.edit { preferences ->
+            preferences[notificationTime] = time
+        }
     }
 
     override suspend fun getNotificationTime() = dataStore.data.map { preferences ->
@@ -122,7 +129,9 @@ class LocalRepositoryImpl(
         preferences[versionStored] ?: ""
     }.first()
 
-    override suspend fun saveVersion(version: String)= dataStore.edit { preferences ->
-        preferences[versionStored] = version
+    override suspend fun saveVersion(version: String) {
+        dataStore.edit { preferences ->
+            preferences[versionStored] = version
+        }
     }
 }

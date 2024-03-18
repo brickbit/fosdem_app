@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     kotlin("plugin.serialization") version "1.9.0"
     id("io.realm.kotlin") version "1.11.0"
+    id("org.kodein.mock.mockmp") version "1.17.0"
 }
 
 kotlin {
@@ -51,6 +52,11 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
+            //Test for viewModel
+            implementation(libs.turbine)
+            //datetime
+            implementation(libs.kotlinx.datetime)
         }
         androidMain.dependencies {
             //viewModel
@@ -61,6 +67,11 @@ kotlin {
             implementation(libs.ktor.client.darwin)
         }
     }
+}
+
+mockmp {
+    usesHelper = true
+    installWorkaround()
 }
 
 android {

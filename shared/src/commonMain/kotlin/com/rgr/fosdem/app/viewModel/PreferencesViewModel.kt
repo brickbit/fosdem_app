@@ -33,7 +33,8 @@ class PreferencesViewModel(
                 .onSuccess { tracks ->
                     val savedTracks = getSavedTracks.invoke()
                     val checkedTracks = tracks.map { track ->
-                        track.copy(checked = savedTracks.count { track.name == it.name } > 0) }
+                        track.copy(checked = savedTracks.count { track.name == it.name } > 0)
+                    }
                     _state.update {
                         PreferencesState.Loaded(checkedTracks)
                     }

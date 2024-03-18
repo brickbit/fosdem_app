@@ -8,6 +8,9 @@ import com.rgr.fosdem.domain.useCase.GetPreferredTracksShownUseCase
 import com.rgr.fosdem.domain.useCase.GetScheduleDataUseCase
 import com.rgr.fosdem.domain.useCase.IsUpdateNeeded
 import com.rgr.fosdem.domain.useCase.ManageNotificationPermissionUseCase
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -15,7 +18,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
-    private val needUpdate: IsUpdateNeeded,
+    private val dispatcher: CoroutineDispatcher,
     private val getSchedule: GetScheduleDataUseCase,
     private val getOnBoardingStatus: GetOnBoardingStatusUseCase,
     private val isFavouriteTracksShown: GetPreferredTracksShownUseCase,
@@ -30,8 +33,8 @@ class SplashViewModel(
     ).toCommonStateFlow()
 
     fun initializeSplash() {
-        scope.launch {
-            getSchedule.invoke(false)
+        scope.launch(dispatcher) {
+            getSchedule.invoke()
                 .onSuccess {
                     _state.update {
                         val onBoardingShown = getOnBoardingStatus.invoke()

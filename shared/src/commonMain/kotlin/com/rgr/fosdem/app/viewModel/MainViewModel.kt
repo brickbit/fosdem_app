@@ -19,6 +19,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 
 class MainViewModel(
     private val getSchedule: GetScheduleDataUseCase,
@@ -90,9 +92,12 @@ class MainViewModel(
         }
     }
 
-    fun getScheduleByMoment() {
+    fun getScheduleByMoment(instant: Instant = Clock.System.now()) {
         scope.launch {
-            getScheduleByHour.invoke()
+            _stateCurrentTracks.update {
+                MainTracksNowState.Loading
+            }
+            getScheduleByHour.invoke(instant)
                 .onSuccess { events ->
                     _stateCurrentTracks.update {
                         if (events.isEmpty()) {
@@ -103,13 +108,18 @@ class MainViewModel(
                     }
                 }
                 .onFailure {
-
+                    _stateCurrentTracks.update {
+                        MainTracksNowState.Error
+                    }
                 }
         }
     }
 
     fun getFavouritesEvents() {
         scope.launch {
+            _stateFavouriteEvents.update {
+                FavouriteEventsState.Loading
+            }
             getFavouritesEvents.invoke()
                 .onSuccess { events ->
                     _stateFavouriteEvents.update {
@@ -126,10 +136,19 @@ class MainViewModel(
 
     fun getSpeakerList() {
         scope.launch {
+            _stateSpeaker.update {
+                SpeakersState.Loading
+            }
             getSpeakers.invoke()
                 .onSuccess { speakers ->
-                    _stateSpeaker.update {
-                        SpeakersState.Loaded(speakers)
+                    if(speakers.isEmpty()) {
+                        _stateSpeaker.update {
+                            SpeakersState.Empty
+                        }
+                    } else {
+                        _stateSpeaker.update {
+                            SpeakersState.Loaded(speakers)
+                        }
                     }
                 }
                 .onFailure {  }
@@ -140,8 +159,14 @@ class MainViewModel(
         scope.launch {
             getStands.invoke()
                 .onSuccess { stands ->
-                    _stateStand.update {
-                        StandsState.Loaded(stands)
+                    if(stands.isEmpty()) {
+                        _stateStand.update {
+                            StandsState.Empty
+                        }
+                    } else {
+                        _stateStand.update {
+                            StandsState.Loaded(stands)
+                        }
                     }
                 }
                 .onFailure {  }
@@ -149,11 +174,11 @@ class MainViewModel(
     }
 
     fun onRefresh() {
-        scope.launch {
+        /*scope.launch {
             needUpdate.invoke()
                 .onSuccess { shouldUpdate ->
                     if (shouldUpdate) {
-                        getSchedule.invoke(shouldUpdate)
+                        getSchedule.invoke()
                             .onSuccess{
                                 _isRefreshing.update { false }
                             }
@@ -166,6 +191,6 @@ class MainViewModel(
                     _isRefreshing.update { false }
                 }
 
-        }
+        }*/
     }
 }

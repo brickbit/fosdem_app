@@ -70,7 +70,7 @@ class ScheduleViewModel(
                     }
                 }
                 .onFailure {
-
+                    print("")
                 }
         }
     }

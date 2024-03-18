@@ -3,9 +3,9 @@ package com.rgr.fosdem.domain.useCase
 import com.rgr.fosdem.domain.repository.LocalRepository
 
 class GetOnBoardingStatusUseCase(
-    private val repositoryImpl: LocalRepository
+    private val localRepository: LocalRepository
 ) {
     suspend operator fun invoke(): Boolean {
-        return repositoryImpl.isOnBoardingSeen()
+        return localRepository.isOnBoardingSeen()
     }
 }

@@ -6,6 +6,7 @@ import com.rgr.fosdem.domain.repository.JsonProvider
 import com.rgr.fosdem.domain.repository.RealmRepository
 import com.rgr.fosdem.domain.repository.ScheduleRepository
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
@@ -15,22 +16,28 @@ class GetScheduleByHourUseCase(
     private val repository: ScheduleRepository,
     private var realmRepository: RealmRepository
 ) {
-    suspend operator fun invoke(): Result<List<EventBo>> {
+    suspend operator fun invoke(instant: Instant): Result<List<EventBo>> {
         val realmResult = realmRepository.getSchedule()
         val schedulesData = realmResult.ifEmpty {
             repository.getSchedule().getOrNull()
         }
-        val events = getEventsByHour(schedulesData)
+        val events = getEventsByHour(
+            schedulesData,
+            instant
+        )
 
         return if(events != null) {
             Result.success(events)
         } else {
-            Result.success(getEventsByHour(jsonProvider.getSchedule().getOrNull())!!)
+            Result.success(getEventsByHour(
+                instant = instant,
+                schedulesData = jsonProvider.getSchedule().getOrNull())!!,
+                )
         }
     }
 
-    private fun calculateHour(event: EventBo): Boolean {
-        val nowDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+    private fun calculateHour(instant: Instant, event: EventBo): Boolean {
+        val nowDate = instant.toLocalDateTime(TimeZone.currentSystemDefault())
         val now = nowDate.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
         val day = if(event.day == "Saturday") 3 else 4
         val eventDate = "2024-02-0${day}T${event.startHour}:00.000000".toLocalDateTime()
@@ -39,11 +46,12 @@ class GetScheduleByHourUseCase(
     }
 
     private fun getEventsByHour(
-        schedulesData: List<TrackBo>?
+        schedulesData: List<TrackBo>?,
+        instant: Instant,
     ): List<EventBo>? {
         return schedulesData?.let { schedules ->
             schedules.map { it.events }.flatten().filter { event ->
-                calculateHour(event)
+                calculateHour(instant, event)
             }.sortedBy { it.startHour }
         }
     }
