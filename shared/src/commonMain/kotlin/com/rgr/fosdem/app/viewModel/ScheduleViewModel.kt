@@ -1,6 +1,7 @@
 package com.rgr.fosdem.app.viewModel
 
-import com.rgr.fosdem.app.flow.toCommonStateFlow
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.rgr.fosdem.app.state.FavouriteEventsState
 import com.rgr.fosdem.app.state.ScheduleFilter
 import com.rgr.fosdem.app.state.ScheduleState
@@ -10,13 +11,9 @@ import com.rgr.fosdem.domain.useCase.GetRoomsUseCase
 import com.rgr.fosdem.domain.useCase.GetScheduleByParameterUseCase
 import com.rgr.fosdem.domain.useCase.GetTracksUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 
 class ScheduleViewModel(
     private val getHoursUseCase: GetHoursUseCase,
@@ -24,45 +21,25 @@ class ScheduleViewModel(
     private val getRoomsUseCase: GetRoomsUseCase,
     private val getScheduleByParameter: GetScheduleByParameterUseCase,
     private val getFavouritesEvents: GetFavouritesEventsUseCase
-): BaseViewModel() {
+): ViewModel() {
 
     private val _stateHour: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
-    val stateHour = _stateHour.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = emptyList()
-    ).toCommonStateFlow()
+    val stateHour = _stateHour.asStateFlow()
 
     private val _stateTracks: MutableStateFlow<List<String>> = MutableStateFlow(listOf(""))
-    val stateTracks = _stateTracks.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = listOf("")
-    ).toCommonStateFlow()
+    val stateTracks = _stateTracks.asStateFlow()
 
     private val _stateRooms: MutableStateFlow<List<String>> = MutableStateFlow(listOf(""))
-    val stateRooms = _stateRooms.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = listOf("")
-    ).toCommonStateFlow()
+    val stateRooms = _stateRooms.asStateFlow()
 
     private val _state: MutableStateFlow<ScheduleState> = MutableStateFlow(ScheduleState.Loading)
-    val state = _state.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = ScheduleState.Loading
-    ).toCommonStateFlow()
+    val state = _state.asStateFlow()
 
     private val _stateFavouriteEvents: MutableStateFlow<FavouriteEventsState> = MutableStateFlow(FavouriteEventsState.Loading)
-    val stateFavouriteEvents = _stateFavouriteEvents.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = FavouriteEventsState.Loading
-    ).toCommonStateFlow()
+    val stateFavouriteEvents = _stateFavouriteEvents.asStateFlow()
 
     fun getHours(day: String) {
-        scope.launch {
+        viewModelScope.launch {
             getHoursUseCase.invoke(day)
                 .onSuccess { hours ->
                     _stateHour.update {
@@ -76,7 +53,7 @@ class ScheduleViewModel(
     }
 
     fun getTracks() {
-        scope.launch {
+        viewModelScope.launch {
             getTracksUseCase.invoke()
                 .onSuccess { tracks ->
                     val list = tracks.map { it.name }.toMutableList()
@@ -89,7 +66,7 @@ class ScheduleViewModel(
     }
 
     fun getRooms(track: String) {
-        scope.launch {
+        viewModelScope.launch {
             getRoomsUseCase.invoke(track)
                 .onSuccess { rooms ->
                     val list = rooms.map { it }.toMutableList()
@@ -107,7 +84,7 @@ class ScheduleViewModel(
         track: String,
         room: String,
     ) {
-        scope.launch {
+        viewModelScope.launch {
             _state.update{
                 ScheduleState.Loading
             }
@@ -149,7 +126,7 @@ class ScheduleViewModel(
     }
 
     fun getFavouritesEvents() {
-        scope.launch {
+        viewModelScope.launch {
             getFavouritesEvents.invoke()
                 .onSuccess { events ->
                     _stateFavouriteEvents.update {
@@ -161,7 +138,7 @@ class ScheduleViewModel(
     }
 
     fun removeSelectedHour(hour: String) {
-        scope.launch {
+        viewModelScope.launch {
             (state.value as? ScheduleState.Loaded)?.let { oldState ->
                 removeHour(hour,oldState.filter)
             }
@@ -183,7 +160,7 @@ class ScheduleViewModel(
     }
 
     fun addSelectedHour(hour: String) {
-        scope.launch {
+        viewModelScope.launch {
             (state.value as? ScheduleState.Loaded)?.let { oldState ->
                 addHour(hour,oldState.filter)
             }

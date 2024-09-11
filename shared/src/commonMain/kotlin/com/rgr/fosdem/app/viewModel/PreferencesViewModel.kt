@@ -1,6 +1,7 @@
 package com.rgr.fosdem.app.viewModel
 
-import com.rgr.fosdem.app.flow.toCommonStateFlow
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.rgr.fosdem.app.state.PreferencesState
 import com.rgr.fosdem.domain.model.TrackBo
 import com.rgr.fosdem.domain.useCase.GetSavedTracksUseCase
@@ -8,8 +9,7 @@ import com.rgr.fosdem.domain.useCase.GetTracksUseCase
 import com.rgr.fosdem.domain.useCase.SaveFavouriteTracksShownUseCase
 import com.rgr.fosdem.domain.useCase.SavePreferredTracksUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -18,17 +18,13 @@ class PreferencesViewModel(
     private val saveTracks: SavePreferredTracksUseCase,
     private val checkShownTracks: SaveFavouriteTracksShownUseCase,
     private val getSavedTracks: GetSavedTracksUseCase
-): BaseViewModel() {
+): ViewModel() {
 
     private val _state: MutableStateFlow<PreferencesState> = MutableStateFlow(PreferencesState.Loading)
-    val state = _state.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = PreferencesState.Loading
-    ).toCommonStateFlow()
+    val state = _state.asStateFlow()
 
     fun getPreferences() {
-        scope.launch {
+        viewModelScope.launch {
             getTracks.invoke()
                 .onSuccess { tracks ->
                     val savedTracks = getSavedTracks.invoke()
@@ -64,7 +60,7 @@ class PreferencesViewModel(
         _state.update {
             PreferencesState.Loading
         }
-        scope.launch {
+        viewModelScope.launch {
             checkShownTracks.invoke()
             saveTracks.invoke(tracks.filter { it.checked })
             _state.update {
@@ -74,7 +70,7 @@ class PreferencesViewModel(
     }
 
     fun skipFavouriteTracks() {
-        scope.launch {
+        viewModelScope.launch {
             checkShownTracks.invoke()
         }
     }

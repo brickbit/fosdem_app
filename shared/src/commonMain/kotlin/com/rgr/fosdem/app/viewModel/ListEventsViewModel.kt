@@ -1,6 +1,7 @@
 package com.rgr.fosdem.app.viewModel
 
-import com.rgr.fosdem.app.flow.toCommonStateFlow
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.rgr.fosdem.app.state.FavouriteEventsState
 import com.rgr.fosdem.app.state.MainPreferredTracksState
 import com.rgr.fosdem.app.state.MainTracksNowState
@@ -9,8 +10,7 @@ import com.rgr.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.rgr.fosdem.domain.useCase.GetScheduleByHourUseCase
 import com.rgr.fosdem.domain.useCase.GetScheduleByTrackUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
@@ -21,31 +21,21 @@ class ListEventsViewModel(
     private val getScheduleByHour: GetScheduleByHourUseCase,
     private val getPreferredTracks: GetPreferredTracksUseCase,
     private val getScheduleByTrack: GetScheduleByTrackUseCase,
+): ViewModel() {
 
-    ): BaseViewModel() {
     private val _stateFavouriteEvents: MutableStateFlow<FavouriteEventsState> = MutableStateFlow(
         FavouriteEventsState.Loading)
-    val stateFavouriteEvents = _stateFavouriteEvents.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = FavouriteEventsState.Loading
-    ).toCommonStateFlow()
+    val stateFavouriteEvents = _stateFavouriteEvents.asStateFlow()
+
     private val _stateCurrentTracks: MutableStateFlow<MainTracksNowState> = MutableStateFlow(
         MainTracksNowState.Loading)
-    val stateCurrentTracks = _stateCurrentTracks.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = MainTracksNowState.Loading
-    ).toCommonStateFlow()
+    val stateCurrentTracks = _stateCurrentTracks.asStateFlow()
+
     private val _statePreferredTracks: MutableStateFlow<MainPreferredTracksState> = MutableStateFlow(MainPreferredTracksState.Loading)
-    val statePreferredTracks = _statePreferredTracks.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = MainPreferredTracksState.Loading
-    ).toCommonStateFlow()
+    val statePreferredTracks = _statePreferredTracks.asStateFlow()
 
     fun getFavouritesEvents() {
-        scope.launch {
+        viewModelScope.launch {
             getFavouritesEvents.invoke()
                 .onSuccess { events ->
                     if(events.isEmpty()) {
@@ -63,7 +53,7 @@ class ListEventsViewModel(
     }
 
     fun getScheduleByMoment(instant: Instant = Clock.System.now()) {
-        scope.launch {
+        viewModelScope.launch {
             getScheduleByHour.invoke(instant)
                 .onSuccess { events ->
                     _stateCurrentTracks.update {
@@ -81,7 +71,7 @@ class ListEventsViewModel(
     }
 
     fun getPreferredTracks() {
-        scope.launch {
+        viewModelScope.launch {
             val tracks = getPreferredTracks.invoke()
             val schedules = tracks.mapNotNull { track ->
                 getScheduleByTrack.invoke(track.name).getOrNull()

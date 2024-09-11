@@ -1,5 +1,7 @@
 package com.rgr.fosdem.app.viewModel
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.rgr.fosdem.app.navigation.Routes
 import com.rgr.fosdem.app.state.ScaffoldState
 import com.rgr.fosdem.app.state.SendNotificationState
@@ -11,12 +13,14 @@ import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
     private val getEventsForNotification: GetEventsForNotificationUseCase
-): BaseViewModel() {
+): ViewModel() {
 
     private val _state: MutableStateFlow<ScaffoldState> = MutableStateFlow(ScaffoldState.Initialized(visible = false, route = Routes.Splash))
     val state = _state.asStateFlow()
+
     private val _sendNotificationState: MutableStateFlow<SendNotificationState> = MutableStateFlow(SendNotificationState.Initialized)
     val sendNotificationState = _sendNotificationState.asStateFlow()
+
     fun getRouteInformation(name: String?) {
         val route = getRouteByName(name)
         val visibility = shouldShowTopBar(route)
@@ -64,7 +68,7 @@ class MainActivityViewModel(
     }
 
     fun getEventsForNotification() {
-        scope.launch {
+        viewModelScope.launch {
             getEventsForNotification.invoke()
                 .onSuccess { notification ->
                     _sendNotificationState.update {

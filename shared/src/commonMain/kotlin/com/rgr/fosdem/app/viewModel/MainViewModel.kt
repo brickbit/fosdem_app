@@ -1,6 +1,7 @@
 package com.rgr.fosdem.app.viewModel
 
-import com.rgr.fosdem.app.flow.toCommonStateFlow
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.rgr.fosdem.app.state.FavouriteEventsState
 import com.rgr.fosdem.app.state.MainPreferredTracksState
 import com.rgr.fosdem.app.state.MainTracksNowState
@@ -15,8 +16,7 @@ import com.rgr.fosdem.domain.useCase.GetSpeakersUseCase
 import com.rgr.fosdem.domain.useCase.GetStandsUseCase
 import com.rgr.fosdem.domain.useCase.IsUpdateNeeded
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
@@ -31,51 +31,28 @@ class MainViewModel(
     private val getSpeakers: GetSpeakersUseCase,
     private val getStands: GetStandsUseCase,
     private val needUpdate: IsUpdateNeeded,
-): BaseViewModel() {
+): ViewModel() {
 
     private val _statePreferredTracks: MutableStateFlow<MainPreferredTracksState> = MutableStateFlow(MainPreferredTracksState.Loading)
-    val statePreferredTracks = _statePreferredTracks.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = MainPreferredTracksState.Loading
-    ).toCommonStateFlow()
+    val statePreferredTracks = _statePreferredTracks.asStateFlow()
+
     private val _stateCurrentTracks: MutableStateFlow<MainTracksNowState> = MutableStateFlow(MainTracksNowState.Loading)
-    val stateCurrentTracks = _stateCurrentTracks.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = MainTracksNowState.Loading
-    ).toCommonStateFlow()
+    val stateCurrentTracks = _stateCurrentTracks.asStateFlow()
 
     private val _stateFavouriteEvents: MutableStateFlow<FavouriteEventsState> = MutableStateFlow(FavouriteEventsState.Loading)
-    val stateFavouriteEvents = _stateFavouriteEvents.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = FavouriteEventsState.Loading
-    ).toCommonStateFlow()
+    val stateFavouriteEvents = _stateFavouriteEvents.asStateFlow()
 
     private val _stateSpeaker: MutableStateFlow<SpeakersState> = MutableStateFlow(SpeakersState.Loading)
-    val stateSpeaker = _stateSpeaker.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = SpeakersState.Loading
-    ).toCommonStateFlow()
+    val stateSpeaker = _stateSpeaker.asStateFlow()
 
     private val _stateStand: MutableStateFlow<StandsState> = MutableStateFlow(StandsState.Loading)
-    val stateStand = _stateStand.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = StandsState.Loading
-    ).toCommonStateFlow()
+    val stateStand = _stateStand.asStateFlow()
 
     private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing = _isRefreshing.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = false
-    ).toCommonStateFlow()
+    val isRefreshing = _isRefreshing.asStateFlow()
 
     fun getPreferredTracks() {
-        scope.launch {
+        viewModelScope.launch {
             val tracks = getPreferredTracks.invoke()
             val schedules = tracks.mapNotNull { track ->
                 getScheduleByTrack.invoke(track.name).getOrNull()
@@ -93,7 +70,7 @@ class MainViewModel(
     }
 
     fun getScheduleByMoment(instant: Instant = Clock.System.now()) {
-        scope.launch {
+        viewModelScope.launch {
             _stateCurrentTracks.update {
                 MainTracksNowState.Loading
             }
@@ -116,7 +93,7 @@ class MainViewModel(
     }
 
     fun getFavouritesEvents() {
-        scope.launch {
+        viewModelScope.launch {
             _stateFavouriteEvents.update {
                 FavouriteEventsState.Loading
             }
@@ -135,7 +112,7 @@ class MainViewModel(
     }
 
     fun getSpeakerList() {
-        scope.launch {
+        viewModelScope.launch {
             _stateSpeaker.update {
                 SpeakersState.Loading
             }
@@ -156,7 +133,7 @@ class MainViewModel(
     }
 
     fun getStandList() {
-        scope.launch {
+        viewModelScope.launch {
             getStands.invoke()
                 .onSuccess { stands ->
                     if(stands.isEmpty()) {

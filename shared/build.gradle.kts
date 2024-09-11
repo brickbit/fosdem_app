@@ -48,6 +48,9 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             //realm
             implementation(libs.library.base)
+            //viewModel
+            implementation(libs.lifecycle.viewmodel.compose)
+
 
         }
         commonTest.dependencies {
@@ -60,7 +63,7 @@ kotlin {
         }
         androidMain.dependencies {
             //viewModel
-            implementation(libs.androidx.lifecycle.viewmodel.compose)
+            //implementation(libs.androidx.lifecycle.viewmodel.compose)
         }
         iosMain.dependencies {
             //ktor

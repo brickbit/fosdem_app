@@ -1,28 +1,23 @@
 package com.rgr.fosdem.app.viewModel
 
-import com.rgr.fosdem.app.flow.toCommonStateFlow
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.rgr.fosdem.app.state.OnBoardingState
-import com.rgr.fosdem.app.state.PreferencesState
 import com.rgr.fosdem.domain.useCase.SaveOnBoardingUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class OnBoardingViewModel(
     private val useCase: SaveOnBoardingUseCase
-): BaseViewModel() {
+): ViewModel() {
 
     private val _state: MutableStateFlow<OnBoardingState> = MutableStateFlow(OnBoardingState.Init)
-    val state = _state.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = OnBoardingState.Init
-    ).toCommonStateFlow()
+    val state = _state.asStateFlow()
 
     fun saveOnBoarding() {
-        scope.launch {
+        viewModelScope.launch {
             useCase.invoke().onSuccess {
                 _state.update {
                     OnBoardingState.Finished

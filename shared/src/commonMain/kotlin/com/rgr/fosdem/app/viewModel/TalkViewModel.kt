@@ -1,14 +1,14 @@
 package com.rgr.fosdem.app.viewModel
 
-import com.rgr.fosdem.app.flow.toCommonStateFlow
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.rgr.fosdem.app.state.TalkState
 import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.domain.useCase.GetEventByIdUseCase
 import com.rgr.fosdem.domain.useCase.IsEventNotifiedUseCase
 import com.rgr.fosdem.domain.useCase.ManageEventNotificationUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -16,22 +16,15 @@ class TalkViewModel(
     private val getEventById: GetEventByIdUseCase,
     private val manageEventNotification: ManageEventNotificationUseCase,
     private val isEventNotified: IsEventNotifiedUseCase
-): BaseViewModel() {
+): ViewModel() {
     private val _state: MutableStateFlow<TalkState> = MutableStateFlow(TalkState.Loading)
-    val state = _state.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = TalkState.Loading
-    ).toCommonStateFlow()
+    val state = _state.asStateFlow()
+
     private val _stateNotified: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val stateNotified = _stateNotified.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = false
-    ).toCommonStateFlow()
+    val stateNotified = _stateNotified.asStateFlow()
 
     fun getEvent(id: String) {
-        scope.launch {
+        viewModelScope.launch {
             getEventById.invoke(id)
                 .onSuccess { event ->
                     _state.update {
@@ -43,7 +36,7 @@ class TalkViewModel(
     }
 
     fun activateEventNotification(event: EventBo) {
-        scope.launch {
+        viewModelScope.launch {
             manageEventNotification.invoke(event = event, enable = false)
             _stateNotified.update {
                 isEventNotified.invoke(event)
@@ -52,7 +45,7 @@ class TalkViewModel(
     }
 
     fun disableEventNotification(event: EventBo) {
-        scope.launch {
+        viewModelScope.launch {
             manageEventNotification.invoke(event = event, enable = true)
             _stateNotified.update {
                 isEventNotified.invoke(event)
@@ -61,7 +54,7 @@ class TalkViewModel(
     }
 
     fun isEventNotified(event: EventBo) {
-        scope.launch {
+        viewModelScope.launch {
             _stateNotified.update {
                 isEventNotified.invoke(event)
             }

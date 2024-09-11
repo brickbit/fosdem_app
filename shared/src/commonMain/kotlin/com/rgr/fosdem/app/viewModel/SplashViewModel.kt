@@ -1,19 +1,16 @@
 package com.rgr.fosdem.app.viewModel
 
-import com.rgr.fosdem.app.flow.toCommonStateFlow
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.rgr.fosdem.app.navigation.Routes
 import com.rgr.fosdem.app.state.SplashState
 import com.rgr.fosdem.domain.useCase.GetOnBoardingStatusUseCase
 import com.rgr.fosdem.domain.useCase.GetPreferredTracksShownUseCase
 import com.rgr.fosdem.domain.useCase.GetScheduleDataUseCase
-import com.rgr.fosdem.domain.useCase.IsUpdateNeeded
 import com.rgr.fosdem.domain.useCase.ManageNotificationPermissionUseCase
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -23,17 +20,13 @@ class SplashViewModel(
     private val getOnBoardingStatus: GetOnBoardingStatusUseCase,
     private val isFavouriteTracksShown: GetPreferredTracksShownUseCase,
     private val manageNotificationPermission: ManageNotificationPermissionUseCase
-): BaseViewModel() {
+): ViewModel() {
 
     private val _state: MutableStateFlow<SplashState> = MutableStateFlow(SplashState.Init)
-    val state = _state.stateIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = SplashState.Init
-    ).toCommonStateFlow()
+    val state = _state.asStateFlow()
 
     fun initializeSplash() {
-        scope.launch(dispatcher) {
+        viewModelScope.launch(dispatcher) {
             getSchedule.invoke()
                 .onSuccess {
                     _state.update {
@@ -57,7 +50,7 @@ class SplashViewModel(
     }
 
     fun saveNotificationPermissionState(granted: Boolean) {
-        scope.launch {
+        viewModelScope.launch {
             manageNotificationPermission.invoke(granted)
         }
     }

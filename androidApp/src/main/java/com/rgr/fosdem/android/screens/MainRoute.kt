@@ -451,6 +451,8 @@ fun LazyListScope.rightNowItems(
                 description = stringResource(R.string.main_talks_right_now)
             )
         }
+
+        MainTracksNowState.Error -> {}
     }
 }
 
@@ -577,6 +579,8 @@ fun LazyListScope.speakerItems(
         SpeakersState.Loading -> item {
             LoadingItem()
         }
+
+        SpeakersState.Empty -> TODO()
     }
 }
 
@@ -611,6 +615,8 @@ fun LazyListScope.standItems(
         StandsState.Loading -> item {
             LoadingItem()
         }
+
+        StandsState.Empty -> TODO()
     }
 }
 
