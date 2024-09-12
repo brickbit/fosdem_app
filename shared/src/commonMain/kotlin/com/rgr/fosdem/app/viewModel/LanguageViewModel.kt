@@ -2,7 +2,6 @@ package com.rgr.fosdem.app.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rgr.fosdem.app.state.LanguageState
 import com.rgr.fosdem.domain.useCase.ChangeLanguageUseCase
 import com.rgr.fosdem.domain.useCase.GetLanguageUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,13 +14,13 @@ class LanguageViewModel(
     private val changeLanguageUseCase: ChangeLanguageUseCase
 ): ViewModel() {
 
-    private val _state: MutableStateFlow<LanguageState> = MutableStateFlow(LanguageState.NoLanguages)
+    private val _state = MutableStateFlow(LanguageState())
     val state = _state.asStateFlow()
 
     fun getLanguages(){
         viewModelScope.launch {
             _state.update {
-                LanguageState.LanguageLoaded(languageUseCase.invoke())
+                it.copy(languages = languageUseCase.invoke())
             }
         }
     }
@@ -30,3 +29,7 @@ class LanguageViewModel(
         changeLanguageUseCase(language)
     }
 }
+
+data class LanguageState (
+    val languages: List<String> = emptyList()
+)

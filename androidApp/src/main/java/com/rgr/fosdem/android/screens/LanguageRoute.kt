@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.rgr.fosdem.android.R
-import com.rgr.fosdem.app.state.LanguageState
 import com.rgr.fosdem.app.viewModel.LanguageViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -36,27 +35,24 @@ fun LanguageRoute(
     LaunchedEffect(Unit) {
         viewModel.getLanguages()
     }
-    when(state) {
-        is LanguageState.LanguageLoaded -> {
-            LanguageScreen(
-                languages = state.list,
-                onClickAction = {
-                    viewModel.onChangeLanguage(it)
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-                        (context as Activity).recreate()
-                    }
-                    navigateBack()
+    if(state.languages.isEmpty()) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = stringResource(R.string.languages_no_languages))
+        }
+    } else {
+        LanguageScreen(
+            languages = state.languages,
+            onClickAction = {
+                viewModel.onChangeLanguage(it)
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                    (context as Activity).recreate()
                 }
-            )
-        }
-        LanguageState.NoLanguages -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = stringResource(R.string.languages_no_languages))
+                navigateBack()
             }
-        }
+        )
     }
 }
 
