@@ -68,7 +68,6 @@ import com.rgr.fosdem.android.screens.common.SpeakerItem
 import com.rgr.fosdem.android.screens.common.StandBottomSheet
 import com.rgr.fosdem.android.screens.common.StandItem
 import com.rgr.fosdem.android.screens.common.shimmerEffect
-import com.rgr.fosdem.app.state.MainTracksNowState
 import com.rgr.fosdem.app.state.SpeakersState
 import com.rgr.fosdem.app.state.StandsState
 import com.rgr.fosdem.app.viewModel.MainViewModel
@@ -85,7 +84,6 @@ fun MainRoute(
     navigateToWebSchedule: (String) -> Unit,
     onSeeAllClicked: (String, String) -> Unit
 ) {
-    val tracksNowState = viewModel.stateCurrentTracks.collectAsState().value
     val state = viewModel.state.collectAsState().value
     val speakerState = viewModel.stateSpeaker.collectAsState().value
     val standState = viewModel.stateStand.collectAsState().value
@@ -117,7 +115,7 @@ fun MainRoute(
             modifier = Modifier
                 .pullRefresh(pullRefreshState),
             preferredTracks = state.tracks,
-            tracksNow = tracksNowState,
+            tracksNow = state.tracksNow,
             isLoading = state.isLoading,
             favourites = state.favouriteEvents,
             speakers = speakerState,
@@ -135,7 +133,7 @@ fun MainRoute(
 fun MainScreen(
     modifier: Modifier = Modifier,
     preferredTracks: List<TrackBo>,
-    tracksNow: MainTracksNowState,
+    tracksNow: List<EventBo>,
     isLoading: Boolean,
     favourites: List<EventBo>,
     speakers: SpeakersState,
@@ -176,6 +174,7 @@ fun MainScreen(
             ScheduleCard(navigateToSchedule = navigateToSchedule)
         }
         rightNowItems(
+            isLoading = isLoading,
             tracksNow = tracksNow,
             favourites = favourites,
             onNavigate = onNavigate,
@@ -397,13 +396,23 @@ fun ScheduleCard(
 }
 
 fun LazyListScope.rightNowItems(
-    tracksNow: MainTracksNowState,
+    isLoading: Boolean,
+    tracksNow: List<EventBo>,
     favourites: List<EventBo>,
     onNavigate: (String) -> Unit,
     onSeeAllClicked: (String) -> Unit
 ) {
-    when(tracksNow) {
-        is MainTracksNowState.Loaded -> {
+    if (isLoading) {
+        item { LoadingItem() }
+    } else {
+        if (tracksNow.isEmpty()) {
+            item {
+                EmptySection(
+                    title = stringResource(R.string.main_right_now),
+                    description = stringResource(R.string.main_talks_right_now)
+                )
+            }
+        } else {
             item {
                 val context = LocalContext.current
 
@@ -429,7 +438,7 @@ fun LazyListScope.rightNowItems(
                 LazyRow(
                     modifier = Modifier.padding(vertical = 8.dp),
                 ) {
-                    items(tracksNow.events) { event ->
+                    items(tracksNow) { event ->
                         EventItem(
                             modifier = Modifier
                                 .fillParentMaxWidth(0.8f)
@@ -442,17 +451,6 @@ fun LazyListScope.rightNowItems(
                 }
             }
         }
-        MainTracksNowState.Loading -> item {
-            LoadingItem()
-        }
-        MainTracksNowState.Empty -> item {
-            EmptySection(
-                title = stringResource(R.string.main_right_now),
-                description = stringResource(R.string.main_talks_right_now)
-            )
-        }
-
-        MainTracksNowState.Error -> {}
     }
 }
 

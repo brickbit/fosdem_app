@@ -2,7 +2,6 @@ package com.rgr.fosdem.app.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rgr.fosdem.app.state.MainTracksNowState
 import com.rgr.fosdem.app.state.SpeakersState
 import com.rgr.fosdem.app.state.StandsState
 import com.rgr.fosdem.domain.model.EventBo
@@ -33,9 +32,6 @@ class MainViewModel(
     private val needUpdate: IsUpdateNeeded,
 ): ViewModel() {
 
-    private val _stateCurrentTracks: MutableStateFlow<MainTracksNowState> = MutableStateFlow(MainTracksNowState.Loading)
-    val stateCurrentTracks = _stateCurrentTracks.asStateFlow()
-
     private val _state = MutableStateFlow(MainState())
     val state = _state.asStateFlow()
 
@@ -61,23 +57,13 @@ class MainViewModel(
 
     fun getScheduleByMoment(instant: Instant = Clock.System.now()) {
         viewModelScope.launch {
-            _stateCurrentTracks.update {
-                MainTracksNowState.Loading
-            }
+            _state.update { it.copy(isLoading = true) }
             getScheduleByHour.invoke(instant)
                 .onSuccess { events ->
-                    _stateCurrentTracks.update {
-                        if (events.isEmpty()) {
-                            MainTracksNowState.Empty
-                        } else {
-                            MainTracksNowState.Loaded(events)
-                        }
-                    }
+                    _state.update { it.copy(isLoading = false, tracksNow = events) }
                 }
                 .onFailure {
-                    _stateCurrentTracks.update {
-                        MainTracksNowState.Error
-                    }
+                    _state.update { it.copy(isLoading = false, tracksNow = emptyList()) }
                 }
         }
     }
@@ -165,5 +151,6 @@ class MainViewModel(
 data class MainState (
     val isLoading: Boolean = false,
     val favouriteEvents: List<EventBo> = emptyList(),
-    val tracks: List<TrackBo> = emptyList()
+    val tracks: List<TrackBo> = emptyList(),
+    val tracksNow: List<EventBo> = emptyList()
 )

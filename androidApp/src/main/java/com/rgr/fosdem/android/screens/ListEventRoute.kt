@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.rgr.fosdem.android.screens.common.EventItem
 import com.rgr.fosdem.android.screens.common.TitleTopBar
-import com.rgr.fosdem.app.state.MainTracksNowState
 import com.rgr.fosdem.app.viewModel.EventType
 import com.rgr.fosdem.app.viewModel.ListEventsViewModel
 import com.rgr.fosdem.domain.model.EventBo
@@ -25,7 +24,6 @@ fun ListEventsRoute(
     onEventClicked: (String) -> Unit
 ) {
     val state = viewModel.state.collectAsState().value
-    val tracksNowState = viewModel.stateCurrentTracks.collectAsState().value
 
     LaunchedEffect(Unit) {
         viewModel.getScheduleByMoment()
@@ -37,7 +35,7 @@ fun ListEventsRoute(
         title = title,
         eventType = eventType,
         favourites = state.favouriteEvents,
-        tracksNow = tracksNowState,
+        tracksNow = state.tracksNow,
         preferredTracks = state.tracks,
         onEventClicked = onEventClicked
     )
@@ -48,7 +46,7 @@ fun ListEventScreen(
     title: String,
     eventType: EventType,
     favourites: List<EventBo>,
-    tracksNow: MainTracksNowState,
+    tracksNow: List<EventBo>,
     preferredTracks: List<TrackBo>,
     onEventClicked: (String) -> Unit
 ) {
@@ -58,15 +56,13 @@ fun ListEventScreen(
         }
         when(eventType) {
             EventType.CurrentEvents -> {
-                if(tracksNow is MainTracksNowState.Loaded) {
-                    items(tracksNow.events) {
-                        EventItem(
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                            event = it,
-                            favourites = favourites,
-                            onClickAction = onEventClicked
-                        )
-                    }
+                items(tracksNow) {
+                    EventItem(
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                        event = it,
+                        favourites = favourites,
+                        onClickAction = onEventClicked
+                    )
                 }
             }
             EventType.FavoriteEvents -> {

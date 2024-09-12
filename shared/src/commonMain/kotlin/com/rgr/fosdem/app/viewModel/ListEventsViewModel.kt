@@ -2,7 +2,6 @@ package com.rgr.fosdem.app.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rgr.fosdem.app.state.MainTracksNowState
 import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.domain.model.TrackBo
 import com.rgr.fosdem.domain.useCase.GetFavouritesEventsUseCase
@@ -26,10 +25,6 @@ class ListEventsViewModel(
     private val _state = MutableStateFlow(ListEventsState())
     val state = _state.asStateFlow()
 
-    private val _stateCurrentTracks: MutableStateFlow<MainTracksNowState> = MutableStateFlow(
-        MainTracksNowState.Loading)
-    val stateCurrentTracks = _stateCurrentTracks.asStateFlow()
-
     fun getFavouritesEvents() {
         _state.update {
             it.copy(isLoading = true)
@@ -50,16 +45,11 @@ class ListEventsViewModel(
     }
 
     fun getScheduleByMoment(instant: Instant = Clock.System.now()) {
+        _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             getScheduleByHour.invoke(instant)
                 .onSuccess { events ->
-                    _stateCurrentTracks.update {
-                        if (events.isEmpty()) {
-                            MainTracksNowState.Empty
-                        } else {
-                            MainTracksNowState.Loaded(events)
-                        }
-                    }
+                    _state.update { it.copy(isLoading = false, tracksNow = events) }
                 }
                 .onFailure {
 
@@ -88,5 +78,6 @@ sealed class EventType {
 data class ListEventsState(
     val isLoading: Boolean = false,
     val favouriteEvents: List<EventBo> = emptyList(),
-    val tracks: List<TrackBo> = emptyList()
+    val tracks: List<TrackBo> = emptyList(),
+    val tracksNow: List<EventBo> = emptyList()
 )
