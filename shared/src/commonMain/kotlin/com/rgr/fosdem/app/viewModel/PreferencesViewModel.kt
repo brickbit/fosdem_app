@@ -2,7 +2,6 @@ package com.rgr.fosdem.app.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rgr.fosdem.app.state.PreferencesState
 import com.rgr.fosdem.domain.model.TrackBo
 import com.rgr.fosdem.domain.useCase.GetSavedTracksUseCase
 import com.rgr.fosdem.domain.useCase.GetTracksUseCase
@@ -20,10 +19,11 @@ class PreferencesViewModel(
     private val getSavedTracks: GetSavedTracksUseCase
 ): ViewModel() {
 
-    private val _state: MutableStateFlow<PreferencesState> = MutableStateFlow(PreferencesState.Loading)
+    private val _state = MutableStateFlow(PreferencesState())
     val state = _state.asStateFlow()
 
     fun getPreferences() {
+        _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             getTracks.invoke()
                 .onSuccess { tracks ->
@@ -31,41 +31,33 @@ class PreferencesViewModel(
                     val checkedTracks = tracks.map { track ->
                         track.copy(checked = savedTracks.count { track.name == it.name } > 0)
                     }
-                    _state.update {
-                        PreferencesState.Loaded(checkedTracks)
-                    }
+                    _state.update { it.copy(isLoading = false, tracks = checkedTracks) }
                 }
                 .onFailure {
-                    _state.update {
-                        PreferencesState.Error
-                    }
+                    _state.update { it.copy(isLoading = false, tracks = emptyList(), isError = true) }
                 }
         }
     }
 
     fun onTrackChecked(track: TrackBo, checked: Boolean) {
-        val newTrackList = (state.value as PreferencesState.Loaded).tracks.map {
+        val newTrackList = state.value.tracks.map {
             if(it == track) {
                 TrackBo(id = track.id, name = track.name, events = track.events, checked = checked, stands = track.stands)
             } else {
                 it
             }
         }
-        _state.update {
-            PreferencesState.Loaded(newTrackList)
-        }
+        _state.update { it.copy(tracks = newTrackList) }
     }
 
     fun savePreferredTracks(tracks: List<TrackBo>) {
-        _state.update {
-            PreferencesState.Loading
-        }
+        _state.update { it.copy(isLoading = true) }
+
         viewModelScope.launch {
             checkShownTracks.invoke()
             saveTracks.invoke(tracks.filter { it.checked })
-            _state.update {
-                PreferencesState.Saved
-            }
+            _state.update { it.copy(isSaved = true) }
+
         }
     }
 
@@ -80,3 +72,10 @@ class PreferencesViewModel(
     }
 
 }
+
+data class PreferencesState (
+    val isLoading: Boolean = false,
+    val tracks: List<TrackBo> = emptyList(),
+    val isSaved: Boolean = false,
+    val isError: Boolean = false
+)

@@ -68,7 +68,6 @@ import com.rgr.fosdem.android.screens.common.SpeakerItem
 import com.rgr.fosdem.android.screens.common.StandBottomSheet
 import com.rgr.fosdem.android.screens.common.StandItem
 import com.rgr.fosdem.android.screens.common.shimmerEffect
-import com.rgr.fosdem.app.state.FavouriteEventsState
 import com.rgr.fosdem.app.state.MainPreferredTracksState
 import com.rgr.fosdem.app.state.MainTracksNowState
 import com.rgr.fosdem.app.state.SpeakersState
@@ -90,7 +89,7 @@ fun MainRoute(
 ) {
     val preferredTracksState = viewModel.statePreferredTracks.collectAsState().value
     val tracksNowState = viewModel.stateCurrentTracks.collectAsState().value
-    val favouriteEventsState = viewModel.stateFavouriteEvents.collectAsState().value
+    val state = viewModel.state.collectAsState().value
     val speakerState = viewModel.stateSpeaker.collectAsState().value
     val standState = viewModel.stateStand.collectAsState().value
     val refreshing = viewModel.isRefreshing.collectAsState().value
@@ -122,7 +121,8 @@ fun MainRoute(
                 .pullRefresh(pullRefreshState),
             preferredTracks = preferredTracksState,
             tracksNow = tracksNowState,
-            favourites = favouriteEventsState,
+            isLoading = state.isLoading,
+            favourites = state.favouriteEvents,
             speakers = speakerState,
             stands = standState,
             onNavigate = onNavigate,
@@ -139,7 +139,8 @@ fun MainScreen(
     modifier: Modifier = Modifier,
     preferredTracks: MainPreferredTracksState,
     tracksNow: MainTracksNowState,
-    favourites: FavouriteEventsState,
+    isLoading: Boolean,
+    favourites: List<EventBo>,
     speakers: SpeakersState,
     stands: StandsState,
     onNavigate: (String) -> Unit,
@@ -185,6 +186,7 @@ fun MainScreen(
         )
 
         favouriteEvents(
+            isLoading = isLoading,
             favourites = favourites,
             onNavigate = onNavigate,
             onSeeAllClicked = { title -> onSeeAllClicked(title, "FavoriteEvents") }
@@ -296,7 +298,7 @@ fun PlaceComposable() {
 @Composable
 fun TrackRow(
     track: TrackBo,
-    favourites: FavouriteEventsState,
+    favourites: List<EventBo>,
     onNavigate: (String) -> Unit,
     onSeeAllClicked: (String, String) -> Unit
 ) {
@@ -398,7 +400,7 @@ fun ScheduleCard(
 
 fun LazyListScope.rightNowItems(
     tracksNow: MainTracksNowState,
-    favourites: FavouriteEventsState,
+    favourites: List<EventBo>,
     onNavigate: (String) -> Unit,
     onSeeAllClicked: (String) -> Unit
 ) {
@@ -457,13 +459,17 @@ fun LazyListScope.rightNowItems(
 }
 
 fun LazyListScope.favouriteEvents(
-    favourites: FavouriteEventsState,
+    isLoading: Boolean,
+    favourites: List<EventBo>,
     onNavigate: (String) -> Unit,
     onSeeAllClicked: (String) -> Unit
 ) {
-
-    when(favourites) {
-        is FavouriteEventsState.Loaded -> {
+    if(isLoading) {
+        item {
+            LoadingItem()
+        }
+    } else {
+        if(favourites.isEmpty()) {
             item {
                 val context = LocalContext.current
 
@@ -489,7 +495,7 @@ fun LazyListScope.favouriteEvents(
                 LazyRow(
                     modifier = Modifier.padding(vertical = 8.dp),
                 ) {
-                    items(favourites.events) { event ->
+                    items(favourites) { event ->
                         EventItem(
                             modifier = Modifier
                                 .fillParentMaxWidth(0.8f)
@@ -501,17 +507,16 @@ fun LazyListScope.favouriteEvents(
                     }
                 }
             }
-        }
-        FavouriteEventsState.Loading -> item {
-            LoadingItem()
-        }
-        FavouriteEventsState.Empty -> item {
-            EmptySection(
-                title = stringResource(R.string.main_your_favourites_talks),
-                description = stringResource(R.string.main_favourite_events),
-            )
+        } else {
+            item {
+                EmptySection(
+                    title = stringResource(R.string.main_your_favourites_talks),
+                    description = stringResource(R.string.main_favourite_events),
+                )
+            }
         }
     }
+
 }
 
 @Composable
@@ -623,7 +628,7 @@ fun LazyListScope.standItems(
 
 fun LazyListScope.preferredTracks(
     preferredTracks: MainPreferredTracksState,
-    favourites: FavouriteEventsState,
+    favourites: List<EventBo>,
     onNavigate: (String) -> Unit,
     onSeeAllClicked: (String, String) -> Unit
 ) {

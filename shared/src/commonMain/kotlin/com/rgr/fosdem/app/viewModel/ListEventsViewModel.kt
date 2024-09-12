@@ -2,9 +2,9 @@ package com.rgr.fosdem.app.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rgr.fosdem.app.state.FavouriteEventsState
 import com.rgr.fosdem.app.state.MainPreferredTracksState
 import com.rgr.fosdem.app.state.MainTracksNowState
+import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.domain.useCase.GetFavouritesEventsUseCase
 import com.rgr.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.rgr.fosdem.domain.useCase.GetScheduleByHourUseCase
@@ -23,9 +23,8 @@ class ListEventsViewModel(
     private val getScheduleByTrack: GetScheduleByTrackUseCase,
 ): ViewModel() {
 
-    private val _stateFavouriteEvents: MutableStateFlow<FavouriteEventsState> = MutableStateFlow(
-        FavouriteEventsState.Loading)
-    val stateFavouriteEvents = _stateFavouriteEvents.asStateFlow()
+    private val _state = MutableStateFlow(ListEventsState())
+    val state = _state.asStateFlow()
 
     private val _stateCurrentTracks: MutableStateFlow<MainTracksNowState> = MutableStateFlow(
         MainTracksNowState.Loading)
@@ -35,20 +34,21 @@ class ListEventsViewModel(
     val statePreferredTracks = _statePreferredTracks.asStateFlow()
 
     fun getFavouritesEvents() {
+        _state.update {
+            it.copy(isLoading = true)
+        }
         viewModelScope.launch {
             getFavouritesEvents.invoke()
                 .onSuccess { events ->
-                    if(events.isEmpty()) {
-                        _stateFavouriteEvents.update {
-                            FavouriteEventsState.Empty
-                        }
-                    } else {
-                        _stateFavouriteEvents.update {
-                            FavouriteEventsState.Loaded(events)
-                        }
+                    _state.update {
+                        it.copy(isLoading = false, favouriteEvents = events)
                     }
                 }
-                .onFailure {  }
+                .onFailure {
+                    _state.update {
+                        it.copy(isLoading = false, favouriteEvents = emptyList())
+                    }
+                }
         }
     }
 
@@ -94,3 +94,8 @@ sealed class EventType {
     data class FavoriteTracks(val trackId: String): EventType()
     data object CurrentEvents: EventType()
 }
+
+data class ListEventsState(
+    val isLoading: Boolean = false,
+    val favouriteEvents: List<EventBo> = emptyList()
+)

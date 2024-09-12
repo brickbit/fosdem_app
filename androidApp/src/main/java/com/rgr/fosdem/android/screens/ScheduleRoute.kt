@@ -43,7 +43,6 @@ import androidx.compose.ui.unit.dp
 import com.rgr.fosdem.android.R
 import com.rgr.fosdem.android.mainBrushColor
 import com.rgr.fosdem.android.transparentBrushColorReversed
-import com.rgr.fosdem.app.state.FavouriteEventsState
 import com.rgr.fosdem.app.state.ScheduleFilter
 import com.rgr.fosdem.app.state.ScheduleState
 import com.rgr.fosdem.app.viewModel.ScheduleViewModel
@@ -54,6 +53,7 @@ import com.rgr.fosdem.android.screens.common.EventItem
 import com.rgr.fosdem.android.screens.common.FilterDropDownMenu
 import com.rgr.fosdem.android.screens.common.LoadingScreen
 import com.rgr.fosdem.android.screens.common.SelectableChip
+import com.rgr.fosdem.domain.model.EventBo
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -65,7 +65,7 @@ fun ScheduleRoute(
     val stateHour = viewModel.stateHour.collectAsState().value
     val stateTrack = viewModel.stateTracks.collectAsState().value
     val stateRooms = viewModel.stateRooms.collectAsState().value
-    val favouriteEventsState = viewModel.stateFavouriteEvents.collectAsState().value
+    val newState = viewModel.newState.collectAsState().value
     val state = viewModel.state.collectAsState().value
 
     LaunchedEffect(Unit) {
@@ -88,7 +88,7 @@ fun ScheduleRoute(
                 tracks = stateTrack,
                 rooms = stateRooms,
                 scheduledLoaded = if(state is ScheduleState.Loaded) state.filter else if(state is ScheduleState.Empty) state.filter else null,
-                favourites = favouriteEventsState,
+                favourites = newState.favouriteEvents,
                 onFilter = { filter ->
                     viewModel.getScheduleBy(
                         day = filter.day,
@@ -153,7 +153,7 @@ fun ScheduleScreen(
     tracks: List<String>,
     rooms: List<String>,
     scheduledLoaded: ScheduleFilter?,
-    favourites: FavouriteEventsState,
+    favourites: List<EventBo>,
     onFilter: (ScheduleFilter) -> Unit,
     onEventClicked: (String) -> Unit,
     updateHour: (ScheduleFilter) -> Unit,

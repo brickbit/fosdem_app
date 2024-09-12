@@ -40,7 +40,6 @@ import com.rgr.fosdem.android.screens.common.LoadingScreen
 import com.rgr.fosdem.android.transparentBrushColor
 import com.rgr.fosdem.android.transparentBrushColorReversed
 import com.rgr.fosdem.app.navigation.Routes
-import com.rgr.fosdem.app.state.PreferencesState
 import com.rgr.fosdem.app.viewModel.PreferencesViewModel
 import com.rgr.fosdem.domain.model.TrackBo
 import org.koin.androidx.compose.koinViewModel
@@ -55,10 +54,15 @@ fun PreferencesRoute(
     LaunchedEffect(Unit) {
         viewModel.getPreferences()
     }
-
-    when(state) {
-        PreferencesState.Error -> Text(stringResource(R.string.favourite_error))
-        is PreferencesState.Loaded -> {
+    /*LaunchedEffect(state.isSaved == true) {
+        onNavigate(previousRoute)
+    }*/
+    if (state.isLoading) {
+        //LoadingScreen()
+    } else {
+        if (state.isError) {
+            Text(stringResource(R.string.favourite_error))
+        } else {
             PreferenceScreen(
                 previousRoute = previousRoute,
                 tracks = state.tracks,
@@ -72,14 +76,6 @@ fun PreferencesRoute(
                     onNavigate(previousRoute)
                 }
             )
-        }
-        PreferencesState.Loading -> {
-            LoadingScreen()
-        }
-        PreferencesState.Saved -> {
-            LaunchedEffect(Unit) {
-                onNavigate(previousRoute)
-            }
         }
     }
 

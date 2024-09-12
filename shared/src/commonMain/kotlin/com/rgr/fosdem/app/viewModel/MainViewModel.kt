@@ -2,11 +2,11 @@ package com.rgr.fosdem.app.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rgr.fosdem.app.state.FavouriteEventsState
 import com.rgr.fosdem.app.state.MainPreferredTracksState
 import com.rgr.fosdem.app.state.MainTracksNowState
 import com.rgr.fosdem.app.state.SpeakersState
 import com.rgr.fosdem.app.state.StandsState
+import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.domain.useCase.GetFavouritesEventsUseCase
 import com.rgr.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.rgr.fosdem.domain.useCase.GetScheduleByHourUseCase
@@ -39,8 +39,8 @@ class MainViewModel(
     private val _stateCurrentTracks: MutableStateFlow<MainTracksNowState> = MutableStateFlow(MainTracksNowState.Loading)
     val stateCurrentTracks = _stateCurrentTracks.asStateFlow()
 
-    private val _stateFavouriteEvents: MutableStateFlow<FavouriteEventsState> = MutableStateFlow(FavouriteEventsState.Loading)
-    val stateFavouriteEvents = _stateFavouriteEvents.asStateFlow()
+    private val _state = MutableStateFlow(MainState())
+    val state = _state.asStateFlow()
 
     private val _stateSpeaker: MutableStateFlow<SpeakersState> = MutableStateFlow(SpeakersState.Loading)
     val stateSpeaker = _stateSpeaker.asStateFlow()
@@ -94,20 +94,20 @@ class MainViewModel(
 
     fun getFavouritesEvents() {
         viewModelScope.launch {
-            _stateFavouriteEvents.update {
-                FavouriteEventsState.Loading
+            _state.update {
+                it.copy(isLoading = true)
             }
             getFavouritesEvents.invoke()
                 .onSuccess { events ->
-                    _stateFavouriteEvents.update {
-                        if (events.isEmpty()) {
-                            FavouriteEventsState.Empty
-                        } else {
-                            FavouriteEventsState.Loaded(events)
-                        }
+                    _state.update {
+                        it.copy(isLoading = false, favouriteEvents = events)
                     }
                 }
-                .onFailure {  }
+                .onFailure {
+                    _state.update {
+                        it.copy(isLoading = false, favouriteEvents = emptyList())
+                    }
+                }
         }
     }
 
@@ -171,3 +171,8 @@ class MainViewModel(
         }*/
     }
 }
+
+data class MainState (
+    val isLoading: Boolean = false,
+    val favouriteEvents: List<EventBo> = emptyList()
+)

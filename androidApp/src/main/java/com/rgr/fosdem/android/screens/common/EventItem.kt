@@ -31,14 +31,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.rgr.fosdem.android.R
 import com.rgr.fosdem.android.extension.dayMiniToTranslatable
-import com.rgr.fosdem.app.state.FavouriteEventsState
 import com.rgr.fosdem.domain.model.EventBo
 
 @Composable
 fun EventItem(
     modifier: Modifier = Modifier,
     event: EventBo,
-    favourites: FavouriteEventsState,
+    favourites: List<EventBo>,
     onClickAction: (String) -> Unit
 ) {
     val context = LocalContext.current
@@ -63,7 +62,7 @@ fun EventItem(
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if(favourites is FavouriteEventsState.Loaded && favourites.events.contains(event)) {
+            if(favourites.contains(event)) {
                 Image(
                     modifier = Modifier
                         .size(16.dp),

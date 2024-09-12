@@ -2,9 +2,9 @@ package com.rgr.fosdem.app.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rgr.fosdem.app.state.FavouriteEventsState
 import com.rgr.fosdem.app.state.ScheduleFilter
 import com.rgr.fosdem.app.state.ScheduleState
+import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.domain.useCase.GetFavouritesEventsUseCase
 import com.rgr.fosdem.domain.useCase.GetHoursUseCase
 import com.rgr.fosdem.domain.useCase.GetRoomsUseCase
@@ -35,8 +35,8 @@ class ScheduleViewModel(
     private val _state: MutableStateFlow<ScheduleState> = MutableStateFlow(ScheduleState.Loading)
     val state = _state.asStateFlow()
 
-    private val _stateFavouriteEvents: MutableStateFlow<FavouriteEventsState> = MutableStateFlow(FavouriteEventsState.Loading)
-    val stateFavouriteEvents = _stateFavouriteEvents.asStateFlow()
+    private val _newState = MutableStateFlow(NewScheduleState())
+    val newState = _newState.asStateFlow()
 
     fun getHours(day: String) {
         viewModelScope.launch {
@@ -126,14 +126,15 @@ class ScheduleViewModel(
     }
 
     fun getFavouritesEvents() {
+        _newState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             getFavouritesEvents.invoke()
                 .onSuccess { events ->
-                    _stateFavouriteEvents.update {
-                        FavouriteEventsState.Loaded(events)
-                    }
+                    _newState.update { it.copy(isLoading = false, favouriteEvents = events) }
                 }
-                .onFailure {  }
+                .onFailure {
+                    _newState.update { it.copy(isLoading = false, favouriteEvents = emptyList()) }
+                }
         }
     }
 
@@ -181,3 +182,8 @@ class ScheduleViewModel(
         )
     }
 }
+
+data class NewScheduleState(
+    val isLoading: Boolean = false,
+    val favouriteEvents: List<EventBo> = emptyList()
+)
