@@ -2,11 +2,11 @@ package com.rgr.fosdem.app.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rgr.fosdem.app.state.MainPreferredTracksState
 import com.rgr.fosdem.app.state.MainTracksNowState
 import com.rgr.fosdem.app.state.SpeakersState
 import com.rgr.fosdem.app.state.StandsState
 import com.rgr.fosdem.domain.model.EventBo
+import com.rgr.fosdem.domain.model.TrackBo
 import com.rgr.fosdem.domain.useCase.GetFavouritesEventsUseCase
 import com.rgr.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.rgr.fosdem.domain.useCase.GetScheduleByHourUseCase
@@ -33,9 +33,6 @@ class MainViewModel(
     private val needUpdate: IsUpdateNeeded,
 ): ViewModel() {
 
-    private val _statePreferredTracks: MutableStateFlow<MainPreferredTracksState> = MutableStateFlow(MainPreferredTracksState.Loading)
-    val statePreferredTracks = _statePreferredTracks.asStateFlow()
-
     private val _stateCurrentTracks: MutableStateFlow<MainTracksNowState> = MutableStateFlow(MainTracksNowState.Loading)
     val stateCurrentTracks = _stateCurrentTracks.asStateFlow()
 
@@ -52,20 +49,13 @@ class MainViewModel(
     val isRefreshing = _isRefreshing.asStateFlow()
 
     fun getPreferredTracks() {
+        _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             val tracks = getPreferredTracks.invoke()
             val schedules = tracks.mapNotNull { track ->
                 getScheduleByTrack.invoke(track.name).getOrNull()
             }
-            if(schedules.isEmpty()) {
-                _statePreferredTracks.update {
-                    MainPreferredTracksState.Empty
-                }
-            } else {
-                _statePreferredTracks.update {
-                    MainPreferredTracksState.Loaded(schedules)
-                }
-            }
+            _state.update { it.copy(isLoading = false, tracks = schedules) }
         }
     }
 
@@ -174,5 +164,6 @@ class MainViewModel(
 
 data class MainState (
     val isLoading: Boolean = false,
-    val favouriteEvents: List<EventBo> = emptyList()
+    val favouriteEvents: List<EventBo> = emptyList(),
+    val tracks: List<TrackBo> = emptyList()
 )

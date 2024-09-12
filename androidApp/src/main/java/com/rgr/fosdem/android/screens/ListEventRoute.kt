@@ -10,11 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.rgr.fosdem.android.screens.common.EventItem
 import com.rgr.fosdem.android.screens.common.TitleTopBar
-import com.rgr.fosdem.app.state.MainPreferredTracksState
 import com.rgr.fosdem.app.state.MainTracksNowState
 import com.rgr.fosdem.app.viewModel.EventType
 import com.rgr.fosdem.app.viewModel.ListEventsViewModel
 import com.rgr.fosdem.domain.model.EventBo
+import com.rgr.fosdem.domain.model.TrackBo
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -25,7 +25,6 @@ fun ListEventsRoute(
     onEventClicked: (String) -> Unit
 ) {
     val state = viewModel.state.collectAsState().value
-    val preferredTracksState = viewModel.statePreferredTracks.collectAsState().value
     val tracksNowState = viewModel.stateCurrentTracks.collectAsState().value
 
     LaunchedEffect(Unit) {
@@ -39,7 +38,7 @@ fun ListEventsRoute(
         eventType = eventType,
         favourites = state.favouriteEvents,
         tracksNow = tracksNowState,
-        preferredTracks = preferredTracksState,
+        preferredTracks = state.tracks,
         onEventClicked = onEventClicked
     )
 
@@ -50,7 +49,7 @@ fun ListEventScreen(
     eventType: EventType,
     favourites: List<EventBo>,
     tracksNow: MainTracksNowState,
-    preferredTracks: MainPreferredTracksState,
+    preferredTracks: List<TrackBo>,
     onEventClicked: (String) -> Unit
 ) {
     LazyColumn {
@@ -81,8 +80,7 @@ fun ListEventScreen(
                 }
             }
             is EventType.FavoriteTracks -> {
-                if(preferredTracks is MainPreferredTracksState.Loaded) {
-                    val selectedTrack = preferredTracks.tracks.first { it.id == eventType.trackId }
+                    val selectedTrack = preferredTracks.first { it.id == eventType.trackId }
                     items(selectedTrack.events) {
                         EventItem(
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -91,7 +89,7 @@ fun ListEventScreen(
                             onClickAction = onEventClicked
                         )
                     }
-                }
+
             }
         }
     }

@@ -68,11 +68,9 @@ import com.rgr.fosdem.android.screens.common.SpeakerItem
 import com.rgr.fosdem.android.screens.common.StandBottomSheet
 import com.rgr.fosdem.android.screens.common.StandItem
 import com.rgr.fosdem.android.screens.common.shimmerEffect
-import com.rgr.fosdem.app.state.MainPreferredTracksState
 import com.rgr.fosdem.app.state.MainTracksNowState
 import com.rgr.fosdem.app.state.SpeakersState
 import com.rgr.fosdem.app.state.StandsState
-import com.rgr.fosdem.app.viewModel.EventType
 import com.rgr.fosdem.app.viewModel.MainViewModel
 import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.domain.model.TrackBo
@@ -87,7 +85,6 @@ fun MainRoute(
     navigateToWebSchedule: (String) -> Unit,
     onSeeAllClicked: (String, String) -> Unit
 ) {
-    val preferredTracksState = viewModel.statePreferredTracks.collectAsState().value
     val tracksNowState = viewModel.stateCurrentTracks.collectAsState().value
     val state = viewModel.state.collectAsState().value
     val speakerState = viewModel.stateSpeaker.collectAsState().value
@@ -119,7 +116,7 @@ fun MainRoute(
         MainScreen(
             modifier = Modifier
                 .pullRefresh(pullRefreshState),
-            preferredTracks = preferredTracksState,
+            preferredTracks = state.tracks,
             tracksNow = tracksNowState,
             isLoading = state.isLoading,
             favourites = state.favouriteEvents,
@@ -137,7 +134,7 @@ fun MainRoute(
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    preferredTracks: MainPreferredTracksState,
+    preferredTracks: List<TrackBo>,
     tracksNow: MainTracksNowState,
     isLoading: Boolean,
     favourites: List<EventBo>,
@@ -215,6 +212,7 @@ fun MainScreen(
             onNavigate = { showSpeakerBottomSheet = Pair(it, true) }
         )
         preferredTracks(
+            isLoading = isLoading,
             preferredTracks = preferredTracks,
             favourites = favourites,
             onNavigate = onNavigate,
@@ -627,13 +625,23 @@ fun LazyListScope.standItems(
 
 
 fun LazyListScope.preferredTracks(
-    preferredTracks: MainPreferredTracksState,
+    isLoading: Boolean,
+    preferredTracks: List<TrackBo>,
     favourites: List<EventBo>,
     onNavigate: (String) -> Unit,
     onSeeAllClicked: (String, String) -> Unit
 ) {
-    when(preferredTracks) {
-        is MainPreferredTracksState.Loaded -> {
+    if(isLoading) {
+        item { LoadingItem() }
+    } else {
+        if(preferredTracks.isEmpty()) {
+            item {
+                EmptySection(
+                    title = stringResource(R.string.main_your_favourite_tracks),
+                    description = stringResource(R.string.main_select_favourite_tracks),
+                )
+            }
+        } else {
             item {
                 Text(
                     modifier = Modifier.padding(start = 16.dp, top = 16.dp),
@@ -641,7 +649,7 @@ fun LazyListScope.preferredTracks(
                     style = MaterialTheme.typography.titleSmall
                 )
             }
-            items(preferredTracks.tracks) { track ->
+            items(preferredTracks) { track ->
                 TrackRow(
                     track = track,
                     favourites = favourites,
@@ -649,15 +657,6 @@ fun LazyListScope.preferredTracks(
                     onSeeAllClicked = onSeeAllClicked
                 )
             }
-        }
-        MainPreferredTracksState.Loading -> item {
-            LoadingItem()
-        }
-        MainPreferredTracksState.Empty -> item {
-            EmptySection(
-                title = stringResource(R.string.main_your_favourite_tracks),
-                description = stringResource(R.string.main_select_favourite_tracks),
-            )
         }
     }
 }
