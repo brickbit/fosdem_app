@@ -27,7 +27,6 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.rgr.fosdem.android.R
 import com.rgr.fosdem.app.navigation.Routes
 import com.rgr.fosdem.app.viewModel.SplashViewModel
-import com.rgr.fosdem.app.state.SplashState
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -54,19 +53,13 @@ fun SplashRoute(
         )
 
     }
-    when(state) {
-        is SplashState.Finished -> {
-            LaunchedEffect(Unit) {
-                onNavigate(state.route)
-            }
-        }
-        SplashState.Init -> {
-            SplashScreen()
-        }
-        SplashState.Error -> {
-            SplashScreen()
-        }
+    LaunchedEffect(state.route != null) {
+        state.route?.let { onNavigate(it) }
     }
+
+    SplashScreen()
+
+
 }
 
 @Composable

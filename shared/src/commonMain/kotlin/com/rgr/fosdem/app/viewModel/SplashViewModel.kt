@@ -3,7 +3,6 @@ package com.rgr.fosdem.app.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rgr.fosdem.app.navigation.Routes
-import com.rgr.fosdem.app.state.SplashState
 import com.rgr.fosdem.domain.useCase.GetOnBoardingStatusUseCase
 import com.rgr.fosdem.domain.useCase.GetPreferredTracksShownUseCase
 import com.rgr.fosdem.domain.useCase.GetScheduleDataUseCase
@@ -22,28 +21,30 @@ class SplashViewModel(
     private val manageNotificationPermission: ManageNotificationPermissionUseCase
 ): ViewModel() {
 
-    private val _state: MutableStateFlow<SplashState> = MutableStateFlow(SplashState.Init)
+    private val _state = MutableStateFlow(SplashState())
     val state = _state.asStateFlow()
 
     fun initializeSplash() {
         viewModelScope.launch(dispatcher) {
             getSchedule.invoke()
                 .onSuccess {
+                    val onBoardingShown = getOnBoardingStatus.invoke()
+                    val favouriteTracksShown = isFavouriteTracksShown.invoke()
+                    val route = if(onBoardingShown && !favouriteTracksShown) {
+                        Routes.FavouriteTracks
+                    } else if(onBoardingShown && favouriteTracksShown){
+                        Routes.Main
+                    } else {
+                        Routes.OnBoarding
+                    }
                     _state.update {
-                        val onBoardingShown = getOnBoardingStatus.invoke()
-                        val favouriteTracksShown = isFavouriteTracksShown.invoke()
-                        val route = if(onBoardingShown && !favouriteTracksShown) {
-                            Routes.FavouriteTracks
-                        } else if(onBoardingShown && favouriteTracksShown){
-                            Routes.Main
-                        } else {
-                            Routes.OnBoarding
-                        }
-                        SplashState.Finished(route)
+                        it.copy(route = route)
                     }
                 }
                 .onFailure {
-                    SplashState.Error
+                    _state.update {
+                        it.copy(isError = true)
+                    }
                 }
 
         }
@@ -54,7 +55,9 @@ class SplashViewModel(
             manageNotificationPermission.invoke(granted)
         }
     }
-
-
-    
 }
+
+data class SplashState (
+    val route: Routes? = null,
+    val isError: Boolean = false
+)
