@@ -23,7 +23,6 @@ import com.rgr.fosdem.android.provider.ActivityProvider
 import com.rgr.fosdem.android.service.NotificationService
 import com.rgr.fosdem.android.service.NotificationService.Companion.MY_CHANNEL_ID
 import com.rgr.fosdem.android.service.NotificationService.Companion.NOTIFICATION_ID
-import com.rgr.fosdem.app.state.SendNotificationState
 import com.rgr.fosdem.app.viewModel.MainActivityViewModel
 import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.domain.model.calculateTimeInMillis
@@ -94,13 +93,10 @@ class MainActivity : ComponentActivity() {
     private fun searchNotification() {
         viewModel.getEventsForNotification()
         lifecycleScope.launch {
-            viewModel.sendNotificationState.collect { eventState ->
-                when (eventState) {
-                    is SendNotificationState.Ready -> {
-                        scheduleNotification(eventState.notification.events,eventState.notification.time)
-                    }
+            viewModel.state.collect { eventState ->
+                eventState.notification?.let {
+                    scheduleNotification(it.events,it.time)
 
-                    SendNotificationState.Initialized -> {}
                 }
             }
         }
