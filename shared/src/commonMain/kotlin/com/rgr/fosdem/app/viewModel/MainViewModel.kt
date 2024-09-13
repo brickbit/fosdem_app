@@ -2,9 +2,9 @@ package com.rgr.fosdem.app.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rgr.fosdem.app.state.SpeakersState
 import com.rgr.fosdem.app.state.StandsState
 import com.rgr.fosdem.domain.model.EventBo
+import com.rgr.fosdem.domain.model.SpeakerBo
 import com.rgr.fosdem.domain.model.TrackBo
 import com.rgr.fosdem.domain.useCase.GetFavouritesEventsUseCase
 import com.rgr.fosdem.domain.useCase.GetPreferredTracksUseCase
@@ -34,9 +34,6 @@ class MainViewModel(
 
     private val _state = MutableStateFlow(MainState())
     val state = _state.asStateFlow()
-
-    private val _stateSpeaker: MutableStateFlow<SpeakersState> = MutableStateFlow(SpeakersState.Loading)
-    val stateSpeaker = _stateSpeaker.asStateFlow()
 
     private val _stateStand: MutableStateFlow<StandsState> = MutableStateFlow(StandsState.Loading)
     val stateStand = _stateStand.asStateFlow()
@@ -88,21 +85,11 @@ class MainViewModel(
     }
 
     fun getSpeakerList() {
+        _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            _stateSpeaker.update {
-                SpeakersState.Loading
-            }
             getSpeakers.invoke()
                 .onSuccess { speakers ->
-                    if(speakers.isEmpty()) {
-                        _stateSpeaker.update {
-                            SpeakersState.Empty
-                        }
-                    } else {
-                        _stateSpeaker.update {
-                            SpeakersState.Loaded(speakers)
-                        }
-                    }
+                    _state.update { it.copy(isLoading = false, speakers = speakers) }
                 }
                 .onFailure {  }
         }
@@ -152,5 +139,6 @@ data class MainState (
     val isLoading: Boolean = false,
     val favouriteEvents: List<EventBo> = emptyList(),
     val tracks: List<TrackBo> = emptyList(),
-    val tracksNow: List<EventBo> = emptyList()
+    val tracksNow: List<EventBo> = emptyList(),
+    val speakers: List<SpeakerBo> = emptyList()
 )

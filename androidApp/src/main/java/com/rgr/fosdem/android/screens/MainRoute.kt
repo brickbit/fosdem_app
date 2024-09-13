@@ -68,10 +68,10 @@ import com.rgr.fosdem.android.screens.common.SpeakerItem
 import com.rgr.fosdem.android.screens.common.StandBottomSheet
 import com.rgr.fosdem.android.screens.common.StandItem
 import com.rgr.fosdem.android.screens.common.shimmerEffect
-import com.rgr.fosdem.app.state.SpeakersState
 import com.rgr.fosdem.app.state.StandsState
 import com.rgr.fosdem.app.viewModel.MainViewModel
 import com.rgr.fosdem.domain.model.EventBo
+import com.rgr.fosdem.domain.model.SpeakerBo
 import com.rgr.fosdem.domain.model.TrackBo
 import org.koin.androidx.compose.koinViewModel
 
@@ -85,7 +85,6 @@ fun MainRoute(
     onSeeAllClicked: (String, String) -> Unit
 ) {
     val state = viewModel.state.collectAsState().value
-    val speakerState = viewModel.stateSpeaker.collectAsState().value
     val standState = viewModel.stateStand.collectAsState().value
     val refreshing = viewModel.isRefreshing.collectAsState().value
     val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.onRefresh() })
@@ -118,7 +117,7 @@ fun MainRoute(
             tracksNow = state.tracksNow,
             isLoading = state.isLoading,
             favourites = state.favouriteEvents,
-            speakers = speakerState,
+            speakers = state.speakers,
             stands = standState,
             onNavigate = onNavigate,
             navigateToSchedule = navigateToSchedule,
@@ -136,7 +135,7 @@ fun MainScreen(
     tracksNow: List<EventBo>,
     isLoading: Boolean,
     favourites: List<EventBo>,
-    speakers: SpeakersState,
+    speakers: List<SpeakerBo>,
     stands: StandsState,
     onNavigate: (String) -> Unit,
     navigateToSchedule: () -> Unit,
@@ -155,7 +154,7 @@ fun MainScreen(
     if(showSpeakerBottomSheet.second) {
         SpeakerBottomSheet(
             position = showSpeakerBottomSheet.first,
-            speakers = (speakers as? SpeakersState.Loaded)?.speakers ?: emptyList(),
+            speakers = speakers,
             sheetState = speakerSheetState,
             onDismiss = { showSpeakerBottomSheet = Pair(showSpeakerBottomSheet.first,false)},
         )
@@ -207,6 +206,7 @@ fun MainScreen(
             }
         }
         speakerItems(
+            isLoading = isLoading,
             speakers = speakers,
             onNavigate = { showSpeakerBottomSheet = Pair(it, true) }
         )
@@ -550,7 +550,8 @@ fun EmptySection(
 }
 
 fun LazyListScope.speakerItems(
-    speakers: SpeakersState,
+    isLoading: Boolean,
+    speakers: List<SpeakerBo>,
     onNavigate: (Int) -> Unit
 ) {
     item {
@@ -560,28 +561,23 @@ fun LazyListScope.speakerItems(
             style = MaterialTheme.typography.bodyMedium
         )
     }
-    when(speakers) {
-        is SpeakersState.Loaded -> {
-            item {
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier
-                        .padding(vertical = 8.dp),
-                ) {
-                    itemsIndexed(speakers.speakers) { index, speaker ->
-                        SpeakerItem(
-                            modifier = Modifier.clickable { onNavigate(index) },
-                            speaker = speaker
-                        )
-                    }
+    if(isLoading) {
+        item { LoadingItem() }
+    } else {
+        item {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .padding(vertical = 8.dp),
+            ) {
+                itemsIndexed(speakers) { index, speaker ->
+                    SpeakerItem(
+                        modifier = Modifier.clickable { onNavigate(index) },
+                        speaker = speaker
+                    )
                 }
             }
         }
-        SpeakersState.Loading -> item {
-            LoadingItem()
-        }
-
-        SpeakersState.Empty -> TODO()
     }
 }
 
