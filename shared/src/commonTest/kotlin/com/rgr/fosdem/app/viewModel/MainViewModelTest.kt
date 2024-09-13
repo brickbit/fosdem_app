@@ -4,7 +4,6 @@ import app.cash.turbine.test
 import com.rgr.fosdem.app.state.FavouriteEventsState
 import com.rgr.fosdem.app.state.MainPreferredTracksState
 import com.rgr.fosdem.app.state.MainTracksNowState
-import com.rgr.fosdem.app.state.StandsState
 import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.domain.model.SpeakerBo
 import com.rgr.fosdem.domain.model.StandBo

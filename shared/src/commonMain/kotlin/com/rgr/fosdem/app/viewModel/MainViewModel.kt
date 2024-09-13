@@ -2,9 +2,9 @@ package com.rgr.fosdem.app.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rgr.fosdem.app.state.StandsState
 import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.domain.model.SpeakerBo
+import com.rgr.fosdem.domain.model.StandBo
 import com.rgr.fosdem.domain.model.TrackBo
 import com.rgr.fosdem.domain.useCase.GetFavouritesEventsUseCase
 import com.rgr.fosdem.domain.useCase.GetPreferredTracksUseCase
@@ -34,9 +34,6 @@ class MainViewModel(
 
     private val _state = MutableStateFlow(MainState())
     val state = _state.asStateFlow()
-
-    private val _stateStand: MutableStateFlow<StandsState> = MutableStateFlow(StandsState.Loading)
-    val stateStand = _stateStand.asStateFlow()
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
@@ -96,18 +93,11 @@ class MainViewModel(
     }
 
     fun getStandList() {
+        _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             getStands.invoke()
                 .onSuccess { stands ->
-                    if(stands.isEmpty()) {
-                        _stateStand.update {
-                            StandsState.Empty
-                        }
-                    } else {
-                        _stateStand.update {
-                            StandsState.Loaded(stands)
-                        }
-                    }
+                    _state.update { it.copy(isLoading = false, stands = stands) }
                 }
                 .onFailure {  }
         }
@@ -140,5 +130,8 @@ data class MainState (
     val favouriteEvents: List<EventBo> = emptyList(),
     val tracks: List<TrackBo> = emptyList(),
     val tracksNow: List<EventBo> = emptyList(),
-    val speakers: List<SpeakerBo> = emptyList()
+    val speakers: List<SpeakerBo> = emptyList(),
+    val stands: List<StandBo> = emptyList()
 )
+
+
