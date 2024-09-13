@@ -12,7 +12,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.rgr.fosdem.android.MyApplicationTheme
 import com.rgr.fosdem.android.scaffold.FosdemScaffold
-import com.rgr.fosdem.app.state.ScaffoldState
 import com.rgr.fosdem.app.viewModel.MainActivityViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -27,7 +26,7 @@ fun Main(
             color = Color.White
         ) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val state = viewModel.state.collectAsState().value as ScaffoldState.Initialized
+            val state = viewModel.state.collectAsState().value
             val routeName = navBackStackEntry?.destination?.route
 
             LaunchedEffect(routeName) {
