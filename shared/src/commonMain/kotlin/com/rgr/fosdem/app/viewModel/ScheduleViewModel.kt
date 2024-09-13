@@ -2,8 +2,6 @@ package com.rgr.fosdem.app.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rgr.fosdem.app.state.ScheduleFilter
-import com.rgr.fosdem.app.state.ScheduleState
 import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.domain.useCase.GetFavouritesEventsUseCase
 import com.rgr.fosdem.domain.useCase.GetHoursUseCase
@@ -31,9 +29,6 @@ class ScheduleViewModel(
 
     private val _stateRooms: MutableStateFlow<List<String>> = MutableStateFlow(listOf(""))
     val stateRooms = _stateRooms.asStateFlow()
-
-    private val _state: MutableStateFlow<ScheduleState> = MutableStateFlow(ScheduleState.Loading)
-    val state = _state.asStateFlow()
 
     private val _newState = MutableStateFlow(NewScheduleState())
     val newState = _newState.asStateFlow()
@@ -85,9 +80,7 @@ class ScheduleViewModel(
         room: String,
     ) {
         viewModelScope.launch {
-            _state.update{
-                ScheduleState.Loading
-            }
+            _newState.update{ it.copy(isLoading = true) }
             getScheduleByParameter.invoke(
                 day = day,
                 hours = hours,
@@ -95,9 +88,11 @@ class ScheduleViewModel(
                 room = room
             )
                 .onSuccess { events ->
-                    _state.update {
-                        if(events.isNotEmpty()) {
-                            ScheduleState.Loaded(
+                    if(events.isNotEmpty()) {
+                        _newState.update{
+                            it.copy(
+                                isLoading = true,
+                                isEmpty = true,
                                 filter = ScheduleFilter(
                                     day = day,
                                     hours = hours,
@@ -106,8 +101,12 @@ class ScheduleViewModel(
                                     events = events
                                 )
                             )
-                        } else {
-                            ScheduleState.Empty(
+                        }
+                    } else {
+                        _newState.update{
+                            it.copy(
+                                isLoading = true,
+                                isEmpty = false,
                                 filter = ScheduleFilter(
                                     day = day,
                                     hours = hours,
@@ -140,12 +139,7 @@ class ScheduleViewModel(
 
     fun removeSelectedHour(hour: String) {
         viewModelScope.launch {
-            (state.value as? ScheduleState.Loaded)?.let { oldState ->
-                removeHour(hour,oldState.filter)
-            }
-            (state.value as? ScheduleState.Empty)?.let { oldState ->
-                removeHour(hour,oldState.filter)
-            }
+            removeHour(hour,newState.value.filter)
         }
     }
 
@@ -162,12 +156,7 @@ class ScheduleViewModel(
 
     fun addSelectedHour(hour: String) {
         viewModelScope.launch {
-            (state.value as? ScheduleState.Loaded)?.let { oldState ->
-                addHour(hour,oldState.filter)
-            }
-            (state.value as? ScheduleState.Empty)?.let { oldState ->
-                addHour(hour,oldState.filter)
-            }
+            addHour(hour,newState.value.filter)
         }
     }
 
@@ -185,5 +174,15 @@ class ScheduleViewModel(
 
 data class NewScheduleState(
     val isLoading: Boolean = false,
-    val favouriteEvents: List<EventBo> = emptyList()
+    val favouriteEvents: List<EventBo> = emptyList(),
+    val isEmpty: Boolean = true,
+    val filter: ScheduleFilter = ScheduleFilter()
+)
+
+data class ScheduleFilter(
+    val day: String = "Saturday",
+    val hours: List<String> = emptyList(),
+    val room: String = "",
+    val track: String = "",
+    val events: List<EventBo> = emptyList(),
 )

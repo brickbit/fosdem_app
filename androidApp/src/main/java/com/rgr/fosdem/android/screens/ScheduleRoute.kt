@@ -43,8 +43,6 @@ import androidx.compose.ui.unit.dp
 import com.rgr.fosdem.android.R
 import com.rgr.fosdem.android.mainBrushColor
 import com.rgr.fosdem.android.transparentBrushColorReversed
-import com.rgr.fosdem.app.state.ScheduleFilter
-import com.rgr.fosdem.app.state.ScheduleState
 import com.rgr.fosdem.app.viewModel.ScheduleViewModel
 import com.rgr.fosdem.android.extension.dayFromTranslatable
 import com.rgr.fosdem.android.extension.dayToTranslatable
@@ -53,6 +51,7 @@ import com.rgr.fosdem.android.screens.common.EventItem
 import com.rgr.fosdem.android.screens.common.FilterDropDownMenu
 import com.rgr.fosdem.android.screens.common.LoadingScreen
 import com.rgr.fosdem.android.screens.common.SelectableChip
+import com.rgr.fosdem.app.viewModel.ScheduleFilter
 import com.rgr.fosdem.domain.model.EventBo
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -66,7 +65,6 @@ fun ScheduleRoute(
     val stateTrack = viewModel.stateTracks.collectAsState().value
     val stateRooms = viewModel.stateRooms.collectAsState().value
     val newState = viewModel.newState.collectAsState().value
-    val state = viewModel.state.collectAsState().value
 
     LaunchedEffect(Unit) {
         viewModel.getHours(day = "Saturday")
@@ -80,49 +78,46 @@ fun ScheduleRoute(
             room = ""
         )
     }
-    when(state) {
-        is ScheduleState.Loaded, is ScheduleState.Empty -> {
-            ScheduleScreen(
-                empty = state is ScheduleState.Empty,
-                hours = stateHour,
-                tracks = stateTrack,
-                rooms = stateRooms,
-                scheduledLoaded = if(state is ScheduleState.Loaded) state.filter else if(state is ScheduleState.Empty) state.filter else null,
-                favourites = newState.favouriteEvents,
-                onFilter = { filter ->
-                    viewModel.getScheduleBy(
-                        day = filter.day,
-                        hours = filter.hours,
-                        track = filter.track,
-                        room = filter.room
-                    )
-                },
-                onEventClicked = onEventClicked,
-                updateHour = { filter ->
-                    viewModel.getHours(filter.day)
-                    viewModel.getScheduleBy(
-                        day = filter.day,
-                        hours = filter.hours,
-                        track = filter.track,
-                        room = filter.room
-                    )
-                },
-                updateRoom = { filter ->
-                    viewModel.getRooms(filter.track)
-                    viewModel.getScheduleBy(
-                        day = filter.day,
-                        hours = filter.hours,
-                        track = filter.track,
-                        room = filter.room
-                    )
-                },
-                removeSelectedHourFilter = { viewModel.removeSelectedHour(it) },
-                addSelectedHourFilter = { viewModel.addSelectedHour(it) }
-            )
-        }
-        ScheduleState.Loading -> {
-            LoadingScreen()
-        }
+    if(newState.isLoading) {
+        LoadingScreen()
+    } else {
+        ScheduleScreen(
+            empty = newState.isEmpty,
+            hours = stateHour,
+            tracks = stateTrack,
+            rooms = stateRooms,
+            scheduledLoaded = newState.filter,
+            favourites = newState.favouriteEvents,
+            onFilter = { filter ->
+                viewModel.getScheduleBy(
+                    day = filter.day,
+                    hours = filter.hours,
+                    track = filter.track,
+                    room = filter.room
+                )
+            },
+            onEventClicked = onEventClicked,
+            updateHour = { filter ->
+                viewModel.getHours(filter.day)
+                viewModel.getScheduleBy(
+                    day = filter.day,
+                    hours = filter.hours,
+                    track = filter.track,
+                    room = filter.room
+                )
+            },
+            updateRoom = { filter ->
+                viewModel.getRooms(filter.track)
+                viewModel.getScheduleBy(
+                    day = filter.day,
+                    hours = filter.hours,
+                    track = filter.track,
+                    room = filter.room
+                )
+            },
+            removeSelectedHourFilter = { viewModel.removeSelectedHour(it) },
+            addSelectedHourFilter = { viewModel.addSelectedHour(it) }
+        )
     }
 }
 
@@ -152,7 +147,7 @@ fun ScheduleScreen(
     hours: List<String>,
     tracks: List<String>,
     rooms: List<String>,
-    scheduledLoaded: ScheduleFilter?,
+    scheduledLoaded: ScheduleFilter,
     favourites: List<EventBo>,
     onFilter: (ScheduleFilter) -> Unit,
     onEventClicked: (String) -> Unit,
@@ -177,7 +172,7 @@ fun ScheduleScreen(
             )
         }
         if(!empty) {
-            items(scheduledLoaded!!.events) { event ->
+            items(scheduledLoaded.events) { event ->
                 EventItem(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                     event = event,
