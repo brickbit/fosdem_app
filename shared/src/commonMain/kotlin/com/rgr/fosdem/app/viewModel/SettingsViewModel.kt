@@ -2,7 +2,6 @@ package com.rgr.fosdem.app.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rgr.fosdem.app.state.NotificationState
 import com.rgr.fosdem.domain.useCase.GetNotificationTimeUseCase
 import com.rgr.fosdem.domain.useCase.GetNotificationsEnabledUseCase
 import com.rgr.fosdem.domain.useCase.ManageNotificationPermissionUseCase
@@ -19,7 +18,7 @@ class SettingsViewModel(
     private val getNotificationTime: GetNotificationTimeUseCase
 ): ViewModel() {
 
-    private val _state: MutableStateFlow<NotificationState> = MutableStateFlow(NotificationState())
+    private val _state = MutableStateFlow(SettingsState())
     val state = _state.asStateFlow()
 
     private fun checkNotifications() {
@@ -58,3 +57,8 @@ class SettingsViewModel(
         }
     }
 }
+
+data class SettingsState(
+    val enabled: Boolean = false,
+    val time: Int = 10
+)

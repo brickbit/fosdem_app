@@ -43,7 +43,6 @@ import coil.compose.AsyncImage
 import com.rgr.fosdem.android.MyApplicationTheme
 import com.rgr.fosdem.android.R
 import com.rgr.fosdem.android.mainBrushColor
-import com.rgr.fosdem.app.state.TalkState
 import com.rgr.fosdem.app.viewModel.TalkViewModel
 import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.android.screens.common.LoadingScreen
@@ -62,7 +61,8 @@ fun TalkRoute(
         viewModel.getEvent(id)
     }
     TalkScreen(
-        state = state,
+        isLoading = state.isLoading,
+        talkEvent = state.talkEvent,
         stateNotified = stateNotified,
         notify = { viewModel.isEventNotified(it) },
         notifyEvent = { viewModel.activateEventNotification(it) },
@@ -72,26 +72,28 @@ fun TalkRoute(
 
 @Composable
 fun TalkScreen(
-    state: TalkState,
+    isLoading: Boolean,
+    talkEvent: EventBo?,
     stateNotified: Boolean,
     notify: (EventBo) -> Unit,
     notifyEvent: (EventBo) -> Unit,
     removeNotifyEvent: (EventBo) -> Unit
 ) {
-    when(state) {
-        is TalkState.Loaded -> {
+    if(isLoading) {
+        LoadingScreen()
+    } else {
+        talkEvent?.let {
             LaunchedEffect(Unit) {
-                notify(state.event)
+                notify(talkEvent)
             }
 
             TalkContent(
-                event = state.event,
+                event = talkEvent,
                 notify = stateNotified,
                 notifyEvent = notifyEvent,
                 removeNotifyEvent = removeNotifyEvent
             )
         }
-        TalkState.Loading -> { LoadingScreen()}
     }
 }
 
