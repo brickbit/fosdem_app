@@ -1,10 +1,10 @@
 package com.rgr.fosdem.domain.useCase
 
 import com.rgr.fosdem.domain.repository.LocalRepository
-import com.rgr.fosdem.domain.repository.ScheduleRepository
+import com.rgr.fosdem.domain.repository.NetworkRepository
 
 class IsUpdateNeeded(
-    private val repository: ScheduleRepository,
+    private val repository: NetworkRepository,
     private val localRepository: LocalRepository,
 ) {
     suspend operator fun invoke(): Result<Boolean> {

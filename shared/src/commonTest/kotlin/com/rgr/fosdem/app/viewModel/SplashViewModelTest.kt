@@ -2,7 +2,6 @@ package com.rgr.fosdem.app.viewModel
 
 import app.cash.turbine.test
 import com.rgr.fosdem.app.navigation.Routes
-import com.rgr.fosdem.app.state.SplashState
 import com.rgr.fosdem.domain.model.TrackBo
 import com.rgr.fosdem.domain.model.fakeTrackBo
 import com.rgr.fosdem.domain.repository.JsonProvider
@@ -12,7 +11,7 @@ import com.rgr.fosdem.domain.repository.MockLocalRepository
 import com.rgr.fosdem.domain.repository.MockRealmRepository
 import com.rgr.fosdem.domain.repository.MockScheduleRepository
 import com.rgr.fosdem.domain.repository.RealmRepository
-import com.rgr.fosdem.domain.repository.ScheduleRepository
+import com.rgr.fosdem.domain.repository.NetworkRepository
 import com.rgr.fosdem.domain.useCase.GetOnBoardingStatusUseCase
 import com.rgr.fosdem.domain.useCase.GetPreferredTracksShownUseCase
 import com.rgr.fosdem.domain.useCase.GetScheduleDataUseCase
@@ -34,7 +33,7 @@ import kotlin.test.assertEquals
 @UsesFakes(TrackBo::class)
 @UsesMocks(
     JsonProvider::class,
-    ScheduleRepository::class,
+    NetworkRepository::class,
     RealmRepository::class,
     LocalRepository::class
 )

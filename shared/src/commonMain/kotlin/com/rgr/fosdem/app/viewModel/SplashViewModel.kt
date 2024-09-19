@@ -6,6 +6,7 @@ import com.rgr.fosdem.app.navigation.Routes
 import com.rgr.fosdem.domain.useCase.GetOnBoardingStatusUseCase
 import com.rgr.fosdem.domain.useCase.GetPreferredTracksShownUseCase
 import com.rgr.fosdem.domain.useCase.GetScheduleDataUseCase
+import com.rgr.fosdem.domain.useCase.LoadDataUseCase
 import com.rgr.fosdem.domain.useCase.ManageNotificationPermissionUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 
 class SplashViewModel(
     private val dispatcher: CoroutineDispatcher,
+    private val loadData: LoadDataUseCase,
     private val getSchedule: GetScheduleDataUseCase,
     private val getOnBoardingStatus: GetOnBoardingStatusUseCase,
     private val isFavouriteTracksShown: GetPreferredTracksShownUseCase,
@@ -26,6 +28,7 @@ class SplashViewModel(
 
     fun initializeSplash() {
         viewModelScope.launch(dispatcher) {
+            loadData.invoke()
             getSchedule.invoke()
                 .onSuccess {
                     val onBoardingShown = getOnBoardingStatus.invoke()

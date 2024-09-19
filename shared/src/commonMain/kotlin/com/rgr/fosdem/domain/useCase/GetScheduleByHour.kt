@@ -1,11 +1,10 @@
 package com.rgr.fosdem.domain.useCase
 
-import com.rgr.fosdem.domain.model.BuildingBo
 import com.rgr.fosdem.domain.model.TrackBo
-import com.rgr.fosdem.domain.repository.ScheduleRepository
+import com.rgr.fosdem.domain.repository.NetworkRepository
 
 class GetScheduleByHour(
-    private val repository: ScheduleRepository
+    private val repository: NetworkRepository
 ) {
     suspend operator fun invoke(hour: String): Result<List<TrackBo>> {
         val track = repository.getSchedule().getOrNull()?.let { schedules ->

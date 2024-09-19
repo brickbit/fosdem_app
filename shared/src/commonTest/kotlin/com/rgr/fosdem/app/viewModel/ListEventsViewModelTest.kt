@@ -5,8 +5,6 @@ import com.rgr.fosdem.app.state.FavouriteEventsState
 import com.rgr.fosdem.app.state.MainPreferredTracksState
 import com.rgr.fosdem.app.state.MainTracksNowState
 import com.rgr.fosdem.domain.model.EventBo
-import com.rgr.fosdem.domain.model.SpeakerBo
-import com.rgr.fosdem.domain.model.StandBo
 import com.rgr.fosdem.domain.model.TalkBo
 import com.rgr.fosdem.domain.model.TrackBo
 import com.rgr.fosdem.domain.model.fakeEventBo
@@ -19,7 +17,7 @@ import com.rgr.fosdem.domain.repository.MockLocalRepository
 import com.rgr.fosdem.domain.repository.MockRealmRepository
 import com.rgr.fosdem.domain.repository.MockScheduleRepository
 import com.rgr.fosdem.domain.repository.RealmRepository
-import com.rgr.fosdem.domain.repository.ScheduleRepository
+import com.rgr.fosdem.domain.repository.NetworkRepository
 import com.rgr.fosdem.domain.useCase.GetFavouritesEventsUseCase
 import com.rgr.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.rgr.fosdem.domain.useCase.GetScheduleByHourUseCase
@@ -48,7 +46,7 @@ import kotlin.test.assertEquals
 )
 @UsesMocks(
     JsonProvider::class,
-    ScheduleRepository::class,
+    NetworkRepository::class,
     RealmRepository::class,
     LocalRepository::class
 )

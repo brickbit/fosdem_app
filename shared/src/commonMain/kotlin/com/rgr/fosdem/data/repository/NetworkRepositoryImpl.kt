@@ -6,34 +6,21 @@ import com.rgr.fosdem.data.dataSource.transform
 import com.rgr.fosdem.data.model.dto.TrackDto
 import com.rgr.fosdem.data.model.dto.VersionDto
 import com.rgr.fosdem.data.model.dto.toBo
-import com.rgr.fosdem.domain.error.ErrorType
 import com.rgr.fosdem.domain.model.TrackBo
 import com.rgr.fosdem.domain.model.VersionBo
-import com.rgr.fosdem.domain.repository.ScheduleRepository
+import com.rgr.fosdem.domain.repository.NetworkRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.ClientRequestException
-import io.ktor.client.plugins.HttpResponseValidator
-import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.RedirectResponseException
-import io.ktor.client.plugins.ResponseException
-import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.plugins.observer.ResponseObserver
-import io.ktor.client.plugins.timeout
-import io.ktor.client.request.HttpRequest
 import io.ktor.client.request.get
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-class ScheduleRepositoryImpl: ScheduleRepository {
+class NetworkRepositoryImpl: NetworkRepository {
 
     private val client = HttpClient(CIO) {
         engine {
@@ -74,5 +61,15 @@ class ScheduleRepositoryImpl: ScheduleRepository {
         return transform(apiResponse.getOrNull()?.body<VersionDto>()) { response ->
             response?.toBo()
         }
+    }
+
+    override suspend fun loadData(): Result<String> {
+        val apiResponse = makeRequest { client.get(Constant.PRETAL_SCHEDULE_URL) }
+        apiResponse.onFailure {
+            return Result.failure(it)
+        }
+        return apiResponse.getOrNull()?.let {
+            Result.success(it.body())
+        } ?: Result.failure(Error())
     }
 }

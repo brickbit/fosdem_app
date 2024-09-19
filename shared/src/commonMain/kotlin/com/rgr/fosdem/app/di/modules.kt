@@ -2,10 +2,10 @@ package com.rgr.fosdem.app.di
 
 import com.rgr.fosdem.data.local.LocalRepositoryImpl
 import com.rgr.fosdem.data.repository.RealmRepositoryImpl
-import com.rgr.fosdem.data.repository.ScheduleRepositoryImpl
+import com.rgr.fosdem.data.repository.NetworkRepositoryImpl
 import com.rgr.fosdem.domain.repository.LocalRepository
 import com.rgr.fosdem.domain.repository.RealmRepository
-import com.rgr.fosdem.domain.repository.ScheduleRepository
+import com.rgr.fosdem.domain.repository.NetworkRepository
 import com.rgr.fosdem.domain.useCase.ChangeLanguageUseCase
 import com.rgr.fosdem.domain.useCase.GetEventByIdUseCase
 import com.rgr.fosdem.domain.useCase.GetEventsForNotificationUseCase
@@ -28,6 +28,7 @@ import com.rgr.fosdem.domain.useCase.GetStandsUseCase
 import com.rgr.fosdem.domain.useCase.GetTracksUseCase
 import com.rgr.fosdem.domain.useCase.IsUpdateNeeded
 import com.rgr.fosdem.domain.useCase.IsEventNotifiedUseCase
+import com.rgr.fosdem.domain.useCase.LoadDataUseCase
 import com.rgr.fosdem.domain.useCase.ManageEventNotificationUseCase
 import com.rgr.fosdem.domain.useCase.ManageNotificationPermissionUseCase
 import com.rgr.fosdem.domain.useCase.ManageNotificationTimeUseCase
@@ -37,7 +38,7 @@ import com.rgr.fosdem.domain.useCase.SavePreferredTracksUseCase
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    factory<ScheduleRepository> { ScheduleRepositoryImpl() }
+    factory<NetworkRepository> { NetworkRepositoryImpl() }
     factory<LocalRepository> { LocalRepositoryImpl(get()) }
     factory<RealmRepository> { RealmRepositoryImpl() }
 }
@@ -70,4 +71,6 @@ val useCaseModule = module {
     single { GetSpeakersUseCase(get(), get(), get()) }
     single { GetStandsUseCase(get(), get(), get()) }
     single { IsUpdateNeeded(get(), get()) }
+
+    single { LoadDataUseCase(get()) }
 }

@@ -2,10 +2,10 @@ package com.rgr.fosdem.domain.useCase
 
 import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.domain.repository.RealmRepository
-import com.rgr.fosdem.domain.repository.ScheduleRepository
+import com.rgr.fosdem.domain.repository.NetworkRepository
 
 class GetScheduleByBuildingUseCase(
-    private val repository: ScheduleRepository,
+    private val repository: NetworkRepository,
     private var realmRepository: RealmRepository
 ) {
     suspend operator fun invoke(building: String): Result<List<EventBo>> {

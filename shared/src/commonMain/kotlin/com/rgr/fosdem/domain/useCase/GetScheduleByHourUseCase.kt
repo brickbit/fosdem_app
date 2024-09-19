@@ -4,8 +4,7 @@ import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.domain.model.TrackBo
 import com.rgr.fosdem.domain.repository.JsonProvider
 import com.rgr.fosdem.domain.repository.RealmRepository
-import com.rgr.fosdem.domain.repository.ScheduleRepository
-import kotlinx.datetime.Clock
+import com.rgr.fosdem.domain.repository.NetworkRepository
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
@@ -13,7 +12,7 @@ import kotlinx.datetime.toLocalDateTime
 
 class GetScheduleByHourUseCase(
     private val jsonProvider: JsonProvider,
-    private val repository: ScheduleRepository,
+    private val repository: NetworkRepository,
     private var realmRepository: RealmRepository
 ) {
     suspend operator fun invoke(instant: Instant): Result<List<EventBo>> {

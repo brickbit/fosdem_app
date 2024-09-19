@@ -21,7 +21,7 @@ import com.rgr.fosdem.domain.repository.MockLocalRepository
 import com.rgr.fosdem.domain.repository.MockRealmRepository
 import com.rgr.fosdem.domain.repository.MockScheduleRepository
 import com.rgr.fosdem.domain.repository.RealmRepository
-import com.rgr.fosdem.domain.repository.ScheduleRepository
+import com.rgr.fosdem.domain.repository.NetworkRepository
 import com.rgr.fosdem.domain.useCase.GetFavouritesEventsUseCase
 import com.rgr.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.rgr.fosdem.domain.useCase.GetScheduleByHourUseCase
@@ -56,7 +56,7 @@ import kotlin.test.assertEquals
 )
 @UsesMocks(
     JsonProvider::class,
-    ScheduleRepository::class,
+    NetworkRepository::class,
     RealmRepository::class,
     LocalRepository::class
 )

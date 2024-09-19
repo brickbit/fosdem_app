@@ -8,6 +8,7 @@ class Constant {
         const val GET_TRACKS = "tracks/"
         const val GET_VERSION = "version/"
 
+        const val PRETAL_SCHEDULE_URL = "https://fosdem.org/2024/schedule/xml"
     }
 
 }

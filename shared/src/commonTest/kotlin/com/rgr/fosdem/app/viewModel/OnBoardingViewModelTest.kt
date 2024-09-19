@@ -1,13 +1,12 @@
 package com.rgr.fosdem.app.viewModel
 
 import app.cash.turbine.test
-import com.rgr.fosdem.app.state.OnBoardingState
 import com.rgr.fosdem.domain.model.TrackBo
 import com.rgr.fosdem.domain.repository.JsonProvider
 import com.rgr.fosdem.domain.repository.LocalRepository
 import com.rgr.fosdem.domain.repository.MockLocalRepository
 import com.rgr.fosdem.domain.repository.RealmRepository
-import com.rgr.fosdem.domain.repository.ScheduleRepository
+import com.rgr.fosdem.domain.repository.NetworkRepository
 import com.rgr.fosdem.domain.useCase.SaveOnBoardingUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,7 +25,7 @@ import kotlin.test.assertEquals
 @UsesFakes(TrackBo::class)
 @UsesMocks(
     JsonProvider::class,
-    ScheduleRepository::class,
+    NetworkRepository::class,
     RealmRepository::class,
     LocalRepository::class
 )
