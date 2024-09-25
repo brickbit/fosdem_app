@@ -3,6 +3,7 @@ package com.rgr.fosdem.app.di
 import com.rgr.fosdem.data.local.LocalRepositoryImpl
 import com.rgr.fosdem.data.repository.RealmRepositoryImpl
 import com.rgr.fosdem.data.repository.NetworkRepositoryImpl
+import com.rgr.fosdem.domain.repository.DatabaseRepository
 import com.rgr.fosdem.domain.repository.LocalRepository
 import com.rgr.fosdem.domain.repository.RealmRepository
 import com.rgr.fosdem.domain.repository.NetworkRepository
@@ -72,5 +73,5 @@ val useCaseModule = module {
     single { GetStandsUseCase(get(), get(), get()) }
     single { IsUpdateNeeded(get(), get()) }
 
-    single { LoadDataUseCase(get()) }
+    single { LoadDataUseCase(get(), get()) }
 }
