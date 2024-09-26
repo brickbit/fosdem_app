@@ -18,15 +18,15 @@ struct iOSApp: App {
                         case .splash:
                             SplashView()
                         case .onBoarding:
-                            OnBoardingView()
+                            SplashView()//OnBoardingView()
                         case .preferences:
-                            PreferencesView()
+                            SplashView()//PreferencesView()
                         case .main:
                             MainView()
                         case .talk:
-                            TalkView()
+                            SplashView()//TalkView()
                         case .speaker:
-                            SpeakerView()
+                            SplashView()//SpeakerView()
                         }
                     }
             }

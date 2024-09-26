@@ -10,24 +10,6 @@ import Foundation
 
 import shared
 
-/*enum SplashStateSwift {
-    case initialized
-    case finished
-}
-
-extension RouteSwift {
-    init?(_ value: Route) {
-        switch value {
-        case is SplashState.Init:
-            self = .initialized
-        case is SplashState.Finished:
-            self = .finished
-        default:
-            return nil
-        }
-        self = SplashStateSwift.finished
-    }
-}*/
 enum RouteSwift: Hashable {
     case splash
     case onBoarding

@@ -47,11 +47,7 @@ fun SplashRoute(
 
     LaunchedEffect(Unit) {
         viewModel.initializeSplash()
-        notificationPermissionState.launchPermissionRequest()
-        viewModel.saveNotificationPermissionState(
-            NotificationManagerCompat.from(context).areNotificationsEnabled()
-        )
-
+        //notificationPermissionState.launchPermissionRequest()
     }
     LaunchedEffect(state.route != null) {
         state.route?.let { onNavigate(it) }

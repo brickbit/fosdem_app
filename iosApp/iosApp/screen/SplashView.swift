@@ -2,35 +2,29 @@ import SwiftUI
 import shared
 
 struct SplashView: View {
-    @ObservedObject var viewModel: IOSSplashViewModel
     @EnvironmentObject var navigator: Navigator
-
-    init() {
-        self.viewModel = IOSSplashViewModel()
-    }
+    @ObservedObject private var viewModel = SplashViewModelWrapper()
     
     var body: some View {
         VStack {
-            splashContent()
-        }
-        .onAppear {
-            viewModel.startObserving()
-        }
-        .onDisappear {
-            viewModel.dispose()
+            SplashView()
+        }.task {
+            viewModel.initialize()
         }
     }
     
-    func splashContent() -> AnyView {
-        switch viewModel.state {
-        case .initialized: return AnyView(SplashScreen())
-        case .finished(let route):
-            Task{
-                navigator.navigate(to: route)
+    func SplashView() -> AnyView {
+        guard let route = viewModel.state.route else {
+            return AnyView(SplashScreen())
+        }
+        switch RouteSwift(route) {
+        case .main:
+            Task {
+                navigator.navigate(to: RouteSwift.main)
             }
-            return AnyView(EmptyView())
-        case .error:
-            return AnyView(Text("Error"))
+            return AnyView(SplashScreen())
+        default:
+            return AnyView(SplashScreen())
         }
     }
 }
@@ -42,38 +36,26 @@ struct SplashScreen: View {
                 .resizable()
                 .frame(width: 240.0, height: 240.0)
             Text("FOSDEM")
-                .font(.custom("Signika-Bold",size: 48))
+                //.font(.custom("Signika-Bold",size: 48))
         }
     }
 }
 
-extension SplashView {
-    @MainActor class IOSSplashViewModel: ObservableObject {
-        private let viewModel: SplashViewModel
-                
-        @Published var state: SplashStateSwift = SplashStateSwift.initialized
-        
-        private var handle: DisposableHandle?
 
-        init() {
-            self.viewModel = GetViewModels().getSplashViewModel()
-            self.viewModel.initializeSplash()
+class SplashViewModelWrapper: ObservableObject {
+    private let viewModel: SplashViewModel = GetViewModels().getSplashViewModel()
+    
+    @Published var state: SplashState = SplashState(route: nil, isError: false)
+    
+    
+    func initialize() {
+        FlowWrapper<SplashState>(stateFlow: viewModel.state).observe { states in
+            self.state = states ?? SplashState(route: nil, isError: false)
         }
-        
-        // Observes to state changes
-        func startObserving() {
-            handle = viewModel.state.subscribe(onCollect: { state in
-                if let state = state {
-                    self.state = SplashStateSwift(state) ?? .initialized
-                }
-            })
-        }
-        
-        // Removes the listener
-        func dispose() {
-            handle?.dispose()
-        }
+        viewModel.initializeSplash()
     }
+    
+    
 }
 
 struct SplashView_Previews: PreviewProvider {
@@ -81,5 +63,3 @@ struct SplashView_Previews: PreviewProvider {
         SplashView()
     }
 }
-
-

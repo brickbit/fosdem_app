@@ -17,10 +17,6 @@ import kotlinx.coroutines.launch
 class SplashViewModel(
     private val dispatcher: CoroutineDispatcher,
     private val loadData: LoadDataUseCase,
-    private val getSchedule: GetScheduleDataUseCase,
-    private val getOnBoardingStatus: GetOnBoardingStatusUseCase,
-    private val isFavouriteTracksShown: GetPreferredTracksShownUseCase,
-    private val manageNotificationPermission: ManageNotificationPermissionUseCase
 ): ViewModel() {
 
     private val _state = MutableStateFlow(SplashState())
@@ -29,7 +25,13 @@ class SplashViewModel(
     fun initializeSplash() {
         viewModelScope.launch(dispatcher) {
             loadData.invoke()
-            getSchedule.invoke()
+                .onSuccess {
+                    _state.update { it.copy(route = Routes.Main, isError = false) }
+                }
+                .onFailure {
+                    _state.update { it.copy(isError = true) }
+                }
+            /*getSchedule.invoke()
                 .onSuccess {
                     val onBoardingShown = getOnBoardingStatus.invoke()
                     val favouriteTracksShown = isFavouriteTracksShown.invoke()
@@ -48,14 +50,8 @@ class SplashViewModel(
                     _state.update {
                         it.copy(isError = true)
                     }
-                }
+                }*/
 
-        }
-    }
-
-    fun saveNotificationPermissionState(granted: Boolean) {
-        viewModelScope.launch {
-            manageNotificationPermission.invoke(granted)
         }
     }
 }

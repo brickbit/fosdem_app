@@ -22,9 +22,9 @@ import kotlinx.serialization.json.Json
 
 class NetworkRepositoryImpl: NetworkRepository {
 
-    private val client = HttpClient(CIO) {
+    private val client = HttpClient() {
         engine {
-            requestTimeout = 0 // 0 to disable, or a millisecond value to fit your needs
+            //requestTimeout = 0 // 0 to disable, or a millisecond value to fit your needs
         }
         install(ContentNegotiation) {
             json(Json {

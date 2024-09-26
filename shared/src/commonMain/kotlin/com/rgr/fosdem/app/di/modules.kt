@@ -73,5 +73,5 @@ val useCaseModule = module {
     single { GetStandsUseCase(get(), get(), get()) }
     single { IsUpdateNeeded(get(), get()) }
 
-    single { LoadDataUseCase(get(), get()) }
+    single { LoadDataUseCase(get()) }
 }

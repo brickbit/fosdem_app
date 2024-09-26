@@ -20,14 +20,6 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Signika-Bold.ttf</string>
-		<string>Signika-Light.ttf</string>
-		<string>Signika-Medium.ttf</string>
-		<string>Signika-Regular.ttf</string>
-		<string>Signika-SemiBold.ttf</string>
-	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
