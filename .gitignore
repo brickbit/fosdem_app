@@ -9,3 +9,5 @@ captures
 local.properties
 xcuserdata
 androidApp/release/
+
+*.klib

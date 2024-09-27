@@ -16,7 +16,6 @@ import com.rgr.fosdem.domain.repository.MockJsonProvider
 import com.rgr.fosdem.domain.repository.MockLocalRepository
 import com.rgr.fosdem.domain.repository.MockRealmRepository
 import com.rgr.fosdem.domain.repository.MockScheduleRepository
-import com.rgr.fosdem.domain.repository.RealmRepository
 import com.rgr.fosdem.domain.repository.NetworkRepository
 import com.rgr.fosdem.domain.useCase.GetFavouritesEventsUseCase
 import com.rgr.fosdem.domain.useCase.GetPreferredTracksUseCase

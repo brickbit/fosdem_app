@@ -1,11 +1,9 @@
 package com.rgr.fosdem.app.di
 
 import com.rgr.fosdem.data.local.LocalRepositoryImpl
-import com.rgr.fosdem.data.repository.RealmRepositoryImpl
 import com.rgr.fosdem.data.repository.NetworkRepositoryImpl
 import com.rgr.fosdem.domain.repository.DatabaseRepository
 import com.rgr.fosdem.domain.repository.LocalRepository
-import com.rgr.fosdem.domain.repository.RealmRepository
 import com.rgr.fosdem.domain.repository.NetworkRepository
 import com.rgr.fosdem.domain.useCase.ChangeLanguageUseCase
 import com.rgr.fosdem.domain.useCase.GetEventByIdUseCase
@@ -41,25 +39,24 @@ import org.koin.dsl.module
 val repositoryModule = module {
     factory<NetworkRepository> { NetworkRepositoryImpl() }
     factory<LocalRepository> { LocalRepositoryImpl(get()) }
-    factory<RealmRepository> { RealmRepositoryImpl() }
 }
 val useCaseModule = module {
-    single { GetScheduleDataUseCase(get(),get(), get()) }
-    single { GetTracksUseCase(get(), get(), get()) }
+    single { GetScheduleDataUseCase(get(),get()) }
+    single { GetTracksUseCase(get(), get()) }
     single { SaveOnBoardingUseCase(get()) }
     single { SaveFavouriteTracksShownUseCase(get()) }
     single { GetPreferredTracksShownUseCase(get()) }
     single { GetOnBoardingStatusUseCase(get()) }
     single { SavePreferredTracksUseCase(get()) }
     single { GetPreferredTracksUseCase(get()) }
-    single { GetScheduleByTrackUseCase(get(), get(), get()) }
-    single { GetScheduleByHourUseCase(get(), get(), get()) }
-    single { GetScheduleByParameterUseCase(get(), get(), get()) }
-    single { GetHoursUseCase(get(), get(), get()) }
-    single { GetRoomsUseCase(get(), get(), get()) }
+    single { GetScheduleByTrackUseCase(get(), get()) }
+    single { GetScheduleByHourUseCase(get(), get()) }
+    single { GetScheduleByParameterUseCase(get(), get()) }
+    single { GetHoursUseCase(get(), get()) }
+    single { GetRoomsUseCase(get(), get()) }
     single { GetSavedTracksUseCase(get()) }
     single { GetFavouritesEventsUseCase(get()) }
-    single { GetEventByIdUseCase(get(), get(), get()) }
+    single { GetEventByIdUseCase(get(), get()) }
     single { GetLanguageUseCase(get()) }
     single { ChangeLanguageUseCase(get()) }
     single { ManageNotificationPermissionUseCase(get()) }
@@ -69,8 +66,8 @@ val useCaseModule = module {
     single { GetEventsForNotificationUseCase(get()) }
     single { GetNotificationTimeUseCase(get()) }
     single { ManageNotificationTimeUseCase(get()) }
-    single { GetSpeakersUseCase(get(), get(), get()) }
-    single { GetStandsUseCase(get(), get(), get()) }
+    single { GetSpeakersUseCase(get(), get()) }
+    single { GetStandsUseCase(get(), get()) }
     single { IsUpdateNeeded(get(), get()) }
 
 }

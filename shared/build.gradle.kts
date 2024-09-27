@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.androidxRoom)
     kotlin("plugin.serialization") version "1.9.0"
-    id("io.realm.kotlin") version "1.11.0"
     id("org.kodein.mock.mockmp") version "1.17.0"
 }
 
@@ -49,8 +48,6 @@ kotlin {
             implementation(libs.koin.core.v320)
             //datetime
             implementation(libs.kotlinx.datetime)
-            //realm
-            implementation(libs.library.base)
             //viewModel
             implementation(libs.lifecycle.viewmodel.compose)
             //xml

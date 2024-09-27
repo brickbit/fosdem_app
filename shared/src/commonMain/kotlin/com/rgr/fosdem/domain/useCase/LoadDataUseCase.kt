@@ -19,7 +19,6 @@ class LoadDataUseCase(
     private val xml: XML by lazy {
         XML {
             xmlVersion = XmlVersion.XML10
-            xmlDeclMode = XmlDeclMode.Auto
             indentString = "  "
             repairNamespaces = true
             autoPolymorphic = true
