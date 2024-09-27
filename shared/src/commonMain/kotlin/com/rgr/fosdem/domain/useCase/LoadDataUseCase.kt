@@ -1,11 +1,11 @@
 package com.rgr.fosdem.domain.useCase
 
+import com.rgr.fosdem.data.model.entity.toEntity
 import com.rgr.fosdem.domain.error.ErrorType
 import com.rgr.fosdem.domain.model.bo.AttachmentBo
 import com.rgr.fosdem.domain.model.bo.ScheduleBo
 import com.rgr.fosdem.domain.model.bo.VideoBo
 import com.rgr.fosdem.domain.model.xml.ScheduleDtoXml
-import com.rgr.fosdem.domain.repository.DatabaseRepository
 import com.rgr.fosdem.domain.repository.NetworkRepository
 import nl.adaptivity.xmlutil.XmlDeclMode
 import nl.adaptivity.xmlutil.core.XmlVersion
@@ -32,6 +32,7 @@ class LoadDataUseCase(
                 parseXml(it).onSuccess { xmlData ->
                     val videos = getVideos(xmlData)
                     val schedules = getSchedule(xmlData)
+                    val schedulesEntities = schedules.map { schedule -> schedule.toEntity() }
                 }
             }
             .onFailure {

@@ -102,5 +102,9 @@ dependencies {
     implementation(libs.androidx.material)
     //datetime
     implementation(libs.kotlinx.datetime)
+    //room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.sqlite.bundled)
+
 
 }

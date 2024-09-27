@@ -2,6 +2,7 @@ package com.rgr.fosdem.app.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.rgr.fosdem.app.db.getDatabaseBuilder
 import com.rgr.fosdem.app.viewModel.MainViewModel
 import com.rgr.fosdem.app.viewModel.OnBoardingViewModel
 import com.rgr.fosdem.app.viewModel.PreferencesViewModel
@@ -24,6 +25,7 @@ val providerModule = module {
             calculatedPath = ""
         )
     }
+    single { getDatabaseBuilder() }
 }
 val viewModelModules = module {
     single { SplashViewModel(Dispatchers.Main, get(), /*get(), get(), get(), get()*/) }

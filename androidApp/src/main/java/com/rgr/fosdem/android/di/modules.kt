@@ -3,6 +3,7 @@ package com.rgr.fosdem.android.di
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.rgr.fosdem.android.db.getScheduleDao
 import com.rgr.fosdem.android.provider.ActivityProvider
 import com.rgr.fosdem.android.provider.JsonProviderImpl
 import com.rgr.fosdem.app.viewModel.LanguageViewModel
@@ -21,7 +22,9 @@ import com.rgr.fosdem.domain.provider.LanguageProvider
 import com.rgr.fosdem.android.provider.LanguageProviderImpl
 import com.rgr.fosdem.android.provider.NetworkConnectivityProvider
 import com.rgr.fosdem.app.viewModel.ListEventsViewModel
+import com.rgr.fosdem.data.dataSource.db.dao.SchedulesDao
 import com.rgr.fosdem.domain.repository.JsonProvider
+import com.rgr.fosdem.domain.useCase.LoadDataUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -42,6 +45,7 @@ fun providerModule(context: Context) = module {
     factory<LanguageProvider> { LanguageProviderImpl(get()) }
     factory<ConnectivityProvider> { NetworkConnectivityProvider(context) }
     single { ActivityProvider() }
+    single<SchedulesDao> { getScheduleDao(context) }
 }
 
 val viewModelModules = module {
@@ -55,4 +59,8 @@ val viewModelModules = module {
     viewModel { ScheduleViewModel(get(), get(), get(), get(), get()) }
     viewModel { SettingsViewModel(get(), get(), get(), get()) }
     viewModel { ListEventsViewModel(get(), get(), get(), get()) }
+}
+
+val androidUseCases = module {
+    single { LoadDataUseCase(get()) }
 }

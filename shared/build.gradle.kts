@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.androidxRoom)
     kotlin("plugin.serialization") version "1.9.0"
     id("io.realm.kotlin") version "1.11.0"
     id("org.kodein.mock.mockmp") version "1.17.0"
@@ -30,6 +32,7 @@ kotlin {
         commonMain.dependencies {
             //coroutines
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.coroutines.core.v180)
             //serialization
             implementation(libs.kotlinx.serialization.json)
             //ktor
@@ -50,9 +53,12 @@ kotlin {
             implementation(libs.library.base)
             //viewModel
             implementation(libs.lifecycle.viewmodel.compose)
-
+            //xml
             implementation(libs.xmlutil.core)
             implementation(libs.xmlutil.serialization)
+            //room
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.sqlite.bundled)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -71,6 +77,10 @@ kotlin {
             implementation(libs.ktor.client.darwin)
         }
     }
+
+    sourceSets.commonMain {
+        kotlin.srcDir("build/generated/ksp/metadata")
+    }
 }
 
 mockmp {
@@ -84,4 +94,14 @@ android {
     defaultConfig {
         minSdk = 27
     }
+}
+
+dependencies {
+    add("kspCommonMainMetadata", libs.androidx.room.compiler)
+}
+
+
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }

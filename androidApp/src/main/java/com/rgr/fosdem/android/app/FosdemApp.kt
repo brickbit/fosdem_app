@@ -1,6 +1,7 @@
 package com.rgr.fosdem.android.app
 
 import android.app.Application
+import com.rgr.fosdem.android.di.androidUseCases
 import com.rgr.fosdem.android.di.providerModule
 import com.rgr.fosdem.android.di.viewModelModules
 import com.rgr.fosdem.app.di.repositoryModule
@@ -15,6 +16,7 @@ class FosdemApp: Application() {
                 providerModule(this@FosdemApp),
                 repositoryModule,
                 useCaseModule,
+                androidUseCases,
                 viewModelModules
             )
         }
