@@ -27,7 +27,14 @@ struct iOSApp: App {
                             SplashView()//TalkView()
                         case .speaker:
                             SplashView()//SpeakerView()
+                        case .language:
+                            LanguageView()
+                        case .thirdLicense:
+                            ThirdLicenseView()
+                        case .appLicense:
+                            AppLicenseView()
                         }
+                
                     }
             }
             .environmentObject(navigator)

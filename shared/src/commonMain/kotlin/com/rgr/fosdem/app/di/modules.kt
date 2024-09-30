@@ -69,5 +69,5 @@ val useCaseModule = module {
     single { GetSpeakersUseCase(get(), get()) }
     single { GetStandsUseCase(get(), get()) }
     single { IsUpdateNeeded(get(), get()) }
-
+    single { LoadDataUseCase(get()) }
 }

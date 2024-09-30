@@ -61,6 +61,3 @@ val viewModelModules = module {
     viewModel { ListEventsViewModel(get(), get(), get(), get()) }
 }
 
-val androidUseCases = module {
-    single { LoadDataUseCase(get()) }
-}

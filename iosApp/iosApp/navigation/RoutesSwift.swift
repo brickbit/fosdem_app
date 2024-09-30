@@ -17,6 +17,9 @@ enum RouteSwift: Hashable {
     case main
     case talk
     case speaker
+    case language
+    case thirdLicense
+    case appLicense
 }
 
 extension RouteSwift {

@@ -13,11 +13,23 @@ struct MainView: View {
    
     
     var body: some View {
-        VStack {
-            Text("Main")
-        }
+        TabView {
+            HomeView().tabItem {
+                Label("Home", systemImage: "house.fill")
+            }
+            ScheduleListView().tabItem {
+                Label("Schedules", systemImage: "calendar")
+            }
+            VideoListView().tabItem {
+                Label("Videos", systemImage: "play.rectangle.fill")
+            }
+            SettingsView().tabItem {
+                Label("Settings", systemImage: "wrench")
+            }
+        }.navigationBarBackButtonHidden()
     }
 }
+
 
 #Preview {
     MainView()

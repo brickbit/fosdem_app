@@ -7,8 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		057AC4F72CAA025D001D18A9 /* LanguageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057AC4F62CAA025D001D18A9 /* LanguageView.swift */; };
+		057AC4F92CAA0432001D18A9 /* ThirdLicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057AC4F82CAA0432001D18A9 /* ThirdLicenseView.swift */; };
+		057AC4FB2CAA0442001D18A9 /* AppLicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057AC4FA2CAA0442001D18A9 /* AppLicenseView.swift */; };
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
+		05C8C8682CA9FBC70061D0F8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C8C8672CA9FBC70061D0F8 /* SettingsView.swift */; };
+		05C8C86A2CA9FC130061D0F8 /* VideoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C8C8692CA9FC130061D0F8 /* VideoListView.swift */; };
+		05C8C86C2CA9FC290061D0F8 /* ScheduleListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C8C86B2CA9FC290061D0F8 /* ScheduleListView.swift */; };
+		05C8C86E2CA9FC5A0061D0F8 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C8C86D2CA9FC5A0061D0F8 /* HomeView.swift */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		7555FF83242A565900829871 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* SplashView.swift */; };
 		CEA302A42B4CB6610067F734 /* shared in Resources */ = {isa = PBXBuildFile; fileRef = CEA302A32B4CB6610067F734 /* shared */; };
@@ -31,8 +38,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		057AC4F62CAA025D001D18A9 /* LanguageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageView.swift; sourceTree = "<group>"; };
+		057AC4F82CAA0432001D18A9 /* ThirdLicenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdLicenseView.swift; sourceTree = "<group>"; };
+		057AC4FA2CAA0442001D18A9 /* AppLicenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLicenseView.swift; sourceTree = "<group>"; };
 		058557BA273AAA24004C7B11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		05C8C8672CA9FBC70061D0F8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		05C8C8692CA9FC130061D0F8 /* VideoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListView.swift; sourceTree = "<group>"; };
+		05C8C86B2CA9FC290061D0F8 /* ScheduleListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleListView.swift; sourceTree = "<group>"; };
+		05C8C86D2CA9FC5A0061D0F8 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		2152FB032600AC8F00CF470E /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF82242A565900829871 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
@@ -105,7 +119,14 @@
 			isa = PBXGroup;
 			children = (
 				7555FF82242A565900829871 /* SplashView.swift */,
+				05C8C86D2CA9FC5A0061D0F8 /* HomeView.swift */,
 				CEA302A92B4D3B6C0067F734 /* MainView.swift */,
+				05C8C86B2CA9FC290061D0F8 /* ScheduleListView.swift */,
+				05C8C8692CA9FC130061D0F8 /* VideoListView.swift */,
+				05C8C8672CA9FBC70061D0F8 /* SettingsView.swift */,
+				057AC4F62CAA025D001D18A9 /* LanguageView.swift */,
+				057AC4F82CAA0432001D18A9 /* ThirdLicenseView.swift */,
+				057AC4FA2CAA0442001D18A9 /* AppLicenseView.swift */,
 			);
 			path = screen;
 			sourceTree = "<group>";
@@ -239,9 +260,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05C8C86E2CA9FC5A0061D0F8 /* HomeView.swift in Sources */,
 				CEA302AA2B4D3B6C0067F734 /* MainView.swift in Sources */,
+				057AC4FB2CAA0442001D18A9 /* AppLicenseView.swift in Sources */,
 				CEAD3F332B4CAE2800C3E1F4 /* RoutesSwift.swift in Sources */,
+				05C8C86A2CA9FC130061D0F8 /* VideoListView.swift in Sources */,
+				057AC4F72CAA025D001D18A9 /* LanguageView.swift in Sources */,
 				CEAD3F302B4CAE0200C3E1F4 /* Navigator.swift in Sources */,
+				05C8C8682CA9FBC70061D0F8 /* SettingsView.swift in Sources */,
+				057AC4F92CAA0432001D18A9 /* ThirdLicenseView.swift in Sources */,
+				05C8C86C2CA9FC290061D0F8 /* ScheduleListView.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				7555FF83242A565900829871 /* SplashView.swift in Sources */,
 			);
