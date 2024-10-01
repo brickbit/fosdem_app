@@ -8,6 +8,9 @@ sealed class ErrorType: Throwable() {
     data object TimeOutError: ErrorType()
     data object UnknownHostException: ErrorType()
     data object UnknownNetworkError: ErrorType()
+    data object EmptyScheduleListError: ErrorType()
+    data object EmptyVideoListError: ErrorType()
+
 }
 
 fun ErrorType.getString(): String {
@@ -19,5 +22,7 @@ fun ErrorType.getString(): String {
         is ErrorType.UnknownError -> "Error desconocido"
         ErrorType.UnknownHostException -> "Host desconocido"
         ErrorType.UnknownNetworkError -> "Error de red desconocido"
+        ErrorType.EmptyScheduleListError -> "No se encontraron eventos"
+        ErrorType.EmptyVideoListError -> "No se encontraron videos"
     }
 }

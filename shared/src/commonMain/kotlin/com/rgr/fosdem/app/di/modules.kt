@@ -1,8 +1,11 @@
 package com.rgr.fosdem.app.di
 
+import com.rgr.fosdem.app.viewModel.NewScheduleState
 import com.rgr.fosdem.data.local.LocalRepositoryImpl
+import com.rgr.fosdem.data.repository.InMemoryRepositoryImpl
 import com.rgr.fosdem.data.repository.NetworkRepositoryImpl
 import com.rgr.fosdem.domain.repository.DatabaseRepository
+import com.rgr.fosdem.domain.repository.InMemoryRepository
 import com.rgr.fosdem.domain.repository.LocalRepository
 import com.rgr.fosdem.domain.repository.NetworkRepository
 import com.rgr.fosdem.domain.useCase.ChangeLanguageUseCase
@@ -22,6 +25,7 @@ import com.rgr.fosdem.domain.useCase.GetScheduleByHourUseCase
 import com.rgr.fosdem.domain.useCase.GetScheduleByParameterUseCase
 import com.rgr.fosdem.domain.useCase.GetScheduleByTrackUseCase
 import com.rgr.fosdem.domain.useCase.GetScheduleDataUseCase
+import com.rgr.fosdem.domain.useCase.GetSchedulesUseCase
 import com.rgr.fosdem.domain.useCase.GetSpeakersUseCase
 import com.rgr.fosdem.domain.useCase.GetStandsUseCase
 import com.rgr.fosdem.domain.useCase.GetTracksUseCase
@@ -37,6 +41,7 @@ import com.rgr.fosdem.domain.useCase.SavePreferredTracksUseCase
 import org.koin.dsl.module
 
 val repositoryModule = module {
+    single<InMemoryRepository> { InMemoryRepositoryImpl() }
     factory<NetworkRepository> { NetworkRepositoryImpl() }
     factory<LocalRepository> { LocalRepositoryImpl(get()) }
 }
@@ -69,5 +74,6 @@ val useCaseModule = module {
     single { GetSpeakersUseCase(get(), get()) }
     single { GetStandsUseCase(get(), get()) }
     single { IsUpdateNeeded(get(), get()) }
-    single { LoadDataUseCase(get()) }
+    single { LoadDataUseCase(get(), get()) }
+    single { GetSchedulesUseCase(get()) }
 }

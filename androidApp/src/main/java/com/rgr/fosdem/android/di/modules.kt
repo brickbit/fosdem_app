@@ -22,6 +22,7 @@ import com.rgr.fosdem.domain.provider.LanguageProvider
 import com.rgr.fosdem.android.provider.LanguageProviderImpl
 import com.rgr.fosdem.android.provider.NetworkConnectivityProvider
 import com.rgr.fosdem.app.viewModel.ListEventsViewModel
+import com.rgr.fosdem.app.viewModel.NewScheduleViewModel
 import com.rgr.fosdem.data.dataSource.db.dao.SchedulesDao
 import com.rgr.fosdem.domain.repository.JsonProvider
 import com.rgr.fosdem.domain.useCase.LoadDataUseCase
@@ -51,6 +52,7 @@ fun providerModule(context: Context) = module {
 val viewModelModules = module {
     viewModel { MainActivityViewModel(get()) }
     viewModel { SplashViewModel( Dispatchers.IO, get(), /*get(), get(), get(), get()*/) }
+    viewModel { NewScheduleViewModel( Dispatchers.IO, get()) }
     viewModel { OnBoardingViewModel(get()) }
     viewModel { PreferencesViewModel(get(), get(), get(), get()) }
     viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }

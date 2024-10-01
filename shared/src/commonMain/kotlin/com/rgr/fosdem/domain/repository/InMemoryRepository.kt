@@ -1,0 +1,11 @@
+package com.rgr.fosdem.domain.repository
+
+import com.rgr.fosdem.domain.model.bo.ScheduleBo
+import com.rgr.fosdem.domain.model.bo.VideoBo
+
+interface InMemoryRepository {
+    fun fetchSchedules(): List<ScheduleBo>
+    fun saveScheduleList(items: List<ScheduleBo>): Result<Unit>
+    fun fetchVideos(): List<VideoBo>
+    fun saveVideoList(items: List<VideoBo>): Result<Unit>
+}

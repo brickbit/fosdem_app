@@ -9,6 +9,7 @@ import androidx.navigation.navArgument
 import com.rgr.fosdem.android.screens.LanguageRoute
 import com.rgr.fosdem.android.screens.ListEventsRoute
 import com.rgr.fosdem.android.screens.MainRoute
+import com.rgr.fosdem.android.screens.NewScheduleRoute
 import com.rgr.fosdem.android.screens.OnBoardingRoute
 import com.rgr.fosdem.android.screens.PreferencesRoute
 import com.rgr.fosdem.android.screens.ScheduleRoute
@@ -106,11 +107,12 @@ fun Navigator(
             )
         }
         composable(Routes.Schedule.name) {
-            ScheduleRoute(
+            NewScheduleRoute()
+            /*ScheduleRoute(
                 onEventClicked = { id ->
                     navController.navigate(Routes.Talk.goToDetail(id))
                 }
-            )
+            )*/
         }
         composable(Routes.Language.name) {
             LanguageRoute(

@@ -11,7 +11,11 @@ import SwiftUI
 struct VideoListView: View {
     var body: some View {
         VStack {
-            Text("VideoListView")
+            Text("Videos")
+                .font(.title)
+                .padding(
+                    EdgeInsets(
+                        top: 0, leading: 20, bottom: 0, trailing: 0))
         }
     }
 }

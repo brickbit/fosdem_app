@@ -1,19 +1,18 @@
 package com.rgr.fosdem.domain.useCase
 
-import com.rgr.fosdem.data.model.entity.toEntity
 import com.rgr.fosdem.domain.error.ErrorType
 import com.rgr.fosdem.domain.model.bo.AttachmentBo
 import com.rgr.fosdem.domain.model.bo.ScheduleBo
 import com.rgr.fosdem.domain.model.bo.VideoBo
 import com.rgr.fosdem.domain.model.xml.ScheduleDtoXml
+import com.rgr.fosdem.domain.repository.InMemoryRepository
 import com.rgr.fosdem.domain.repository.NetworkRepository
-import nl.adaptivity.xmlutil.XmlDeclMode
 import nl.adaptivity.xmlutil.core.XmlVersion
 import nl.adaptivity.xmlutil.serialization.XML
 
 class LoadDataUseCase(
     private val networkRepository: NetworkRepository,
-    //private val databaseRepository: DatabaseRepository,
+    private val inMemoryRepository: InMemoryRepository,
 ) {
 
     private val xml: XML by lazy {
@@ -25,18 +24,25 @@ class LoadDataUseCase(
         }
     }
 
-    suspend operator fun invoke(): Result<String> {
-        return networkRepository.loadData()
-            .onSuccess {
-                parseXml(it).onSuccess { xmlData ->
+    suspend operator fun invoke(): Result<Unit> {
+        val data = networkRepository.loadData()
+            data.getOrNull()?.let {
+                val parsedData = parseXml(it)
+                parsedData.getOrNull()?.let { xmlData ->
                     val videos = getVideos(xmlData)
                     val schedules = getSchedule(xmlData)
-                    val schedulesEntities = schedules.map { schedule -> schedule.toEntity() }
-                }
-            }
-            .onFailure {
-                return Result.failure(it)
-            }
+                    //val schedulesEntities = schedules.map { schedule -> schedule.toEntity() }
+                    val schedulesSaved = inMemoryRepository.saveScheduleList(schedules)
+                    schedulesSaved.getOrNull()?.let {
+                        val videosSaved = inMemoryRepository.saveVideoList(videos)
+                        videosSaved.getOrNull()?.let {
+                            return Result.success(Unit)
+                        } ?: return Result.failure(data.exceptionOrNull()!!)
+                    } ?: return Result.failure(data.exceptionOrNull()!!)
+                } ?: return Result.failure(data.exceptionOrNull()!!)
+            } ?: return Result.failure(data.exceptionOrNull()!!)
+
+
     }
 
     private fun parseXml(apiData: String): Result<ScheduleDtoXml> {

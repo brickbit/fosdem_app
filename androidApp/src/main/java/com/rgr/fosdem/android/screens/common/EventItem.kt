@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.rgr.fosdem.android.R
 import com.rgr.fosdem.android.extension.dayMiniToTranslatable
 import com.rgr.fosdem.domain.model.EventBo
+import com.rgr.fosdem.domain.model.bo.ScheduleBo
 
 @Composable
 fun EventItem(
@@ -140,6 +141,106 @@ fun EventItem(
                     style = MaterialTheme.typography.bodySmall
                 )
             }
+
+        }
+    }
+}
+
+
+@Composable
+fun NewEventItem(
+    modifier: Modifier = Modifier,
+    event: ScheduleBo,
+    onClickAction: (String) -> Unit
+) {
+    Row(
+        modifier = modifier
+            .height(IntrinsicSize.Min)
+            .clickable { onClickAction(event.id) }
+            .border(
+                border = BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface),
+                shape = RoundedCornerShape(20.dp)
+            )
+    ) {
+        Column(
+            modifier = Modifier
+                .background(
+                    color = MaterialTheme.colorScheme.onSurface,
+                    shape = RoundedCornerShape(topStart = 20.dp, bottomStart = 20.dp)
+                )
+                .padding(4.dp)
+                .height(135.dp)
+                .widthIn(45.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = event.date.substring(IntRange(8,9)),
+                    style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.background)
+                )
+                Text(
+                    text = event.start,
+                    style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.background)
+                )
+            }
+            Spacer(modifier = Modifier.size(16.dp))
+
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp)
+                .heightIn(80.dp)
+        ) {
+            Text(
+                modifier = Modifier.height(80.dp),
+                text = event.title,
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis
+            )
+            Column(
+                modifier = Modifier
+                    .height(35.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                event.speaker.forEach {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Image(
+                            modifier = Modifier
+                                .size(16.dp),
+                            painter = painterResource(id = R.drawable.ic_account),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
+                        )
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                }
+            }
+            /*Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(16.dp),
+                    painter = painterResource(id = R.drawable.ic_location),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
+                )
+                Text(
+                    text = event.talk.room.name,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }*/
 
         }
     }
