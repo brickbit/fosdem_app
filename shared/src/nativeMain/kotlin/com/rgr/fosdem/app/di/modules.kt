@@ -9,6 +9,7 @@ import com.rgr.fosdem.app.viewModel.OnBoardingViewModel
 import com.rgr.fosdem.app.viewModel.PreferencesViewModel
 import com.rgr.fosdem.app.viewModel.SplashViewModel
 import com.rgr.fosdem.app.viewModel.TalkViewModel
+import com.rgr.fosdem.app.viewModel.VideoViewModel
 import com.rgr.fosdem.data.local.dataStorePreferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +32,7 @@ val providerModule = module {
 val viewModelModules = module {
     single { SplashViewModel(Dispatchers.Main, get(), /*get(), get(), get(), get()*/) }
     single { NewScheduleViewModel(Dispatchers.Main, get(), /*get(), get(), get(), get()*/) }
+    single { VideoViewModel(Dispatchers.Main, get(), /*get(), get(), get(), get()*/) }
     single { OnBoardingViewModel(get()) }
     single { PreferencesViewModel(get(), get(), get(), get()) }
     single { MainViewModel(get(),get(), get(), get(), get(), get(), get(), get()) }
@@ -40,6 +42,7 @@ val viewModelModules = module {
 object GetViewModels: KoinComponent {
     fun getSplashViewModel() = get<SplashViewModel>()
     fun getSchedulesViewModel() = get<NewScheduleViewModel>()
+    fun getVideosViewModel() = get<VideoViewModel>()
     fun getOnBoardingViewModel() = get<OnBoardingViewModel>()
     fun getPreferencesViewModel() = get<PreferencesViewModel>()
     fun getMainViewModel() = get<MainViewModel>()

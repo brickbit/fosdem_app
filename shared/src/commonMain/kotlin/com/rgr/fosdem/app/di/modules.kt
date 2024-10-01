@@ -29,6 +29,7 @@ import com.rgr.fosdem.domain.useCase.GetSchedulesUseCase
 import com.rgr.fosdem.domain.useCase.GetSpeakersUseCase
 import com.rgr.fosdem.domain.useCase.GetStandsUseCase
 import com.rgr.fosdem.domain.useCase.GetTracksUseCase
+import com.rgr.fosdem.domain.useCase.GetVideoUseCase
 import com.rgr.fosdem.domain.useCase.IsUpdateNeeded
 import com.rgr.fosdem.domain.useCase.IsEventNotifiedUseCase
 import com.rgr.fosdem.domain.useCase.LoadDataUseCase
@@ -76,4 +77,5 @@ val useCaseModule = module {
     single { IsUpdateNeeded(get(), get()) }
     single { LoadDataUseCase(get(), get()) }
     single { GetSchedulesUseCase(get()) }
+    single { GetVideoUseCase(get()) }
 }

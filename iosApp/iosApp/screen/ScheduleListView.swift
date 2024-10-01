@@ -8,6 +8,7 @@
 
 import SwiftUI
 import shared
+import LinkPresentation
 
 struct ScheduleListView: View {
     @EnvironmentObject var navigator: Navigator

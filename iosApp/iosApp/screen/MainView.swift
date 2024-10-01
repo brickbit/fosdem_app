@@ -20,13 +20,20 @@ struct MainView: View {
             ScheduleListView().tabItem {
                 Label("Schedules", systemImage: "calendar")
             }
+            .toolbarBackground(.visible, for: .tabBar)
+            .toolbarBackground(Color.black, for: .tabBar)
             VideoListView().tabItem {
                 Label("Videos", systemImage: "play.rectangle.fill")
             }
+            .toolbarBackground(.visible, for: .tabBar)
+            .toolbarBackground(Color.black, for: .tabBar)
             SettingsView().tabItem {
                 Label("Settings", systemImage: "wrench")
             }
-        }.navigationBarBackButtonHidden()
+        }
+        .tint(Color("AccentColor"))
+        .navigationBarBackButtonHidden()
+            
     }
 }
 
