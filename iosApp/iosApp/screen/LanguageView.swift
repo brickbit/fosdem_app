@@ -10,7 +10,30 @@ import SwiftUI
 
 struct LanguageView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(alignment: .leading) {
+            Text("Language")
+                .font(.title)
+                .padding(
+                    EdgeInsets(
+                        top: 0, leading: 20, bottom: 0, trailing: 0))
+            List {
+                HStack{
+                    Text("English")
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                }.onTapGesture {}
+                HStack{
+                    Text("Español")
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                }.onTapGesture {}
+                HStack{
+                    Text("Français")
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                }.onTapGesture {}
+            }.listStyle(.inset)
+        }
     }
 }
 

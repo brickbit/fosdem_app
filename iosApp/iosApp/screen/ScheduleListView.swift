@@ -36,7 +36,7 @@ struct ScheduleView: View {
     
     var body: some View {
         if(isLoading) {
-            ProgressView()
+            LoadingView()
         } else {
             VStack(alignment: .leading) {
                 Text("Schedules")

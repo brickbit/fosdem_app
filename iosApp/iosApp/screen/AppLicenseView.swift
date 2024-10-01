@@ -10,7 +10,15 @@ import SwiftUI
 
 struct AppLicenseView: View {
     var body: some View {
-        Text("AppLicenseView")
+        VStack(alignment: .leading) {
+            Text("App license")
+                .font(.title)
+                .padding(
+                    EdgeInsets(
+                        top: 0, leading: 20, bottom: 0, trailing: 0))
+            CustomWebView()
+        }
+       
     }
 }
 

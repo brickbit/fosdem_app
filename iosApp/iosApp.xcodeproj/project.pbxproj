@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		055BF07D2CAC70950095E44B /* CustomWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055BF07C2CAC70950095E44B /* CustomWebView.swift */; };
+		055BF07F2CAC95E60095E44B /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055BF07E2CAC95E60095E44B /* LoadingView.swift */; };
 		057AC4F72CAA025D001D18A9 /* LanguageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057AC4F62CAA025D001D18A9 /* LanguageView.swift */; };
 		057AC4F92CAA0432001D18A9 /* ThirdLicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057AC4F82CAA0432001D18A9 /* ThirdLicenseView.swift */; };
 		057AC4FB2CAA0442001D18A9 /* AppLicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057AC4FA2CAA0442001D18A9 /* AppLicenseView.swift */; };
@@ -38,6 +40,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		055BF07C2CAC70950095E44B /* CustomWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWebView.swift; sourceTree = "<group>"; };
+		055BF07E2CAC95E60095E44B /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		057AC4F62CAA025D001D18A9 /* LanguageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageView.swift; sourceTree = "<group>"; };
 		057AC4F82CAA0432001D18A9 /* ThirdLicenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdLicenseView.swift; sourceTree = "<group>"; };
 		057AC4FA2CAA0442001D18A9 /* AppLicenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLicenseView.swift; sourceTree = "<group>"; };
@@ -68,6 +72,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		055BF07B2CAC707C0095E44B /* views */ = {
+			isa = PBXGroup;
+			children = (
+				055BF07C2CAC70950095E44B /* CustomWebView.swift */,
+				055BF07E2CAC95E60095E44B /* LoadingView.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
 		058557D7273AAEEB004C7B11 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
@@ -101,6 +114,7 @@
 				CE7FA5FA2B4EC04E003EA3C1 /* state */,
 				CE7FA5F92B4EC018003EA3C1 /* screen */,
 				CEAD3F312B4CAE0900C3E1F4 /* navigation */,
+				055BF07B2CAC707C0095E44B /* views */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
 				7555FF8C242A565B00829871 /* Info.plist */,
 				058557D7273AAEEB004C7B11 /* Preview Content */,
@@ -265,11 +279,13 @@
 				057AC4FB2CAA0442001D18A9 /* AppLicenseView.swift in Sources */,
 				CEAD3F332B4CAE2800C3E1F4 /* RoutesSwift.swift in Sources */,
 				05C8C86A2CA9FC130061D0F8 /* VideoListView.swift in Sources */,
+				055BF07F2CAC95E60095E44B /* LoadingView.swift in Sources */,
 				057AC4F72CAA025D001D18A9 /* LanguageView.swift in Sources */,
 				CEAD3F302B4CAE0200C3E1F4 /* Navigator.swift in Sources */,
 				05C8C8682CA9FBC70061D0F8 /* SettingsView.swift in Sources */,
 				057AC4F92CAA0432001D18A9 /* ThirdLicenseView.swift in Sources */,
 				05C8C86C2CA9FC290061D0F8 /* ScheduleListView.swift in Sources */,
+				055BF07D2CAC70950095E44B /* CustomWebView.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				7555FF83242A565900829871 /* SplashView.swift in Sources */,
 			);

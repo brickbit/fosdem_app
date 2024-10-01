@@ -6,6 +6,7 @@ plugins {
     kotlin("plugin.serialization") version "1.9.0"
     id("org.kodein.mock.mockmp") version "1.17.0"
 }
+apply(plugin= "com.mikepenz.aboutlibraries.plugin")
 
 kotlin {
     androidTarget {

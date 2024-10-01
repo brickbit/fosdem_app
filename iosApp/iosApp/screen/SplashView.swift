@@ -30,13 +30,34 @@ struct SplashView: View {
 }
 
 struct SplashScreen: View {
+    @State var degreesRotating = 0.0
+
     var body: some View {
         VStack {
-            Image("logo")
-                .resizable()
-                .frame(width: 240.0, height: 240.0)
-            Text("FOSDEM")
+            Spacer()
+            ZStack {
+                Image("LogoInside")
+                    .resizable()
+                    .frame(width: 200.0, height: 200.0)
+                Image("LogoOutside")
+                    .resizable()
+                    .frame(width: 200.0, height: 200.0)
+                    .rotationEffect(.degrees(360))
+                    .rotationEffect(.degrees(degreesRotating))
+                    .onAppear {
+                        withAnimation(.linear(duration: 1)
+                            .speed(0.3).repeatForever(autoreverses: false)) {
+                                degreesRotating = 360.0
+                            }
+                      }
+
+            }
+            Spacer()
+            VStack {
+                Text("FOSDEM").font(.title).padding()
+                Text("Cargando datos...").font(.headline)
                 //.font(.custom("Signika-Bold",size: 48))
+            }.padding()
         }
     }
 }

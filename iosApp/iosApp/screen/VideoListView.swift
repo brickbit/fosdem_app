@@ -37,7 +37,7 @@ struct VideoView: View {
     
     var body: some View {
         if(isLoading) {
-            ProgressView()
+            LoadingView()
         } else {
             Text("Videos")
                 .font(.title)

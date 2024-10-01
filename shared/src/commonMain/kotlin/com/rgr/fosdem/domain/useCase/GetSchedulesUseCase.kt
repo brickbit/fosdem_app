@@ -3,12 +3,13 @@ package com.rgr.fosdem.domain.useCase
 import com.rgr.fosdem.domain.error.ErrorType
 import com.rgr.fosdem.domain.model.bo.ScheduleBo
 import com.rgr.fosdem.domain.repository.InMemoryRepository
+import kotlinx.coroutines.delay
 
 class GetSchedulesUseCase(
     private val inMemoryRepository: InMemoryRepository
 ) {
 
-    operator fun invoke(
+    suspend operator fun invoke(
         date: String = "",
         start: String = "",
         duration: String = "",
@@ -17,6 +18,7 @@ class GetSchedulesUseCase(
         type: String = "",
         speaker: String = "",
     ): Result<List<ScheduleBo>> {
+        delay(3000)
         var data = inMemoryRepository.fetchSchedules()
         data = filterByDate(data = data, date = date)
         data = filterByStart(data = data, start = start)
