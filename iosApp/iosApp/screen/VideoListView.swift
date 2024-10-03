@@ -94,9 +94,8 @@ class VideoListViewModelWrapper: ObservableObject {
             self.state = states ?? VideoState(isLoading: false, videos: [])
         }
     }
-    
-    
 }
+
 #Preview {
     ScheduleListView()
 }

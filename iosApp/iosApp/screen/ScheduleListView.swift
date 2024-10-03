@@ -29,7 +29,9 @@ struct ScheduleListView: View {
                 },
                 onFilterClicked: { room, track, day, hours in
                     viewModel.filter(room: room, track: track, day: day, hours: hours)
-                }
+                },
+                notifyEvent: { schedule in viewModel.notifyEvent(schedule: schedule)},
+                notNotifyEvent: { schedule in viewModel.notNotifyEvent(schedule: schedule)}
             )
         }.task {
             viewModel.initialize()
@@ -50,7 +52,9 @@ struct ScheduleView: View {
     
     var filterBySpeaker: (String, String) -> Void
     var onFilterClicked: (String, String, String, [String]) -> Void
-
+    var notifyEvent: (ScheduleBo) -> Void
+    var notNotifyEvent: (ScheduleBo) -> Void
+    
     @FocusState private var isFocused: Bool
 
     var body: some View {
@@ -92,7 +96,9 @@ struct ScheduleView: View {
                 List {
                     ForEach(schedules, id: \.self) { schedule in
                         ScheduleItemView(
-                            schedule: schedule
+                            schedule: schedule,
+                            notifyEvent: { schedule in notifyEvent(schedule)},
+                            notNotifyEvent: { schedule in notNotifyEvent(schedule)}
                         )
                     }
                 }
@@ -170,6 +176,13 @@ class ScheduleViewModelWrapper: ObservableObject {
         viewModel.filterByTitleOrSpeaker(title: title, speaker: speaker)
     }
     
+    func notifyEvent(schedule: ScheduleBo) {
+        viewModel.notifyEvent(schedule: schedule)
+    }
+    
+    func notNotifyEvent(schedule: ScheduleBo) {
+        viewModel.notNotifyEvent(schedule: schedule)
+    }
 }
 #Preview {
     ScheduleListView()

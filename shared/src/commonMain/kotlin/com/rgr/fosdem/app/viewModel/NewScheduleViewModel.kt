@@ -8,6 +8,7 @@ import com.rgr.fosdem.domain.useCase.GetNewHoursUseCase
 import com.rgr.fosdem.domain.useCase.GetNewRoomsUseCase
 import com.rgr.fosdem.domain.useCase.GetNewTracksUseCase
 import com.rgr.fosdem.domain.useCase.GetSchedulesUseCase
+import com.rgr.fosdem.domain.useCase.SetFavouriteUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,6 +22,7 @@ class NewScheduleViewModel(
     private val tracksUseCase: GetNewTracksUseCase,
     private val roomsUseCase: GetNewRoomsUseCase,
     private val hoursUseCase: GetNewHoursUseCase,
+    private val setFavouriteUseCase: SetFavouriteUseCase
 ): ViewModel() {
 
     private val _state = MutableStateFlow(ScheduleState())
@@ -125,6 +127,24 @@ class NewScheduleViewModel(
                 schedules = emptyList()
             )
         }
+    }
+
+    fun notifyEvent(schedule: ScheduleBo) {
+        setFavouriteUseCase.invoke(
+            schedule = schedule,
+            list = state.value.schedules,
+            favourite = true
+        )
+        getSchedules()
+    }
+
+    fun notNotifyEvent(schedule: ScheduleBo) {
+        setFavouriteUseCase.invoke(
+            schedule = schedule,
+            list = state.value.schedules,
+            favourite = false
+        )
+        getSchedules()
     }
 }
 

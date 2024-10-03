@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		053F5AE82CAE00170091E19E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053F5AE72CAE00170091E19E /* Constants.swift */; };
+		053F5AEA2CAF3DB50091E19E /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053F5AE92CAF3DB50091E19E /* Extension.swift */; };
 		055BF07D2CAC70950095E44B /* CustomWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055BF07C2CAC70950095E44B /* CustomWebView.swift */; };
 		055BF07F2CAC95E60095E44B /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055BF07E2CAC95E60095E44B /* LoadingView.swift */; };
 		055BF0812CACA05C0095E44B /* ChipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055BF0802CACA05C0095E44B /* ChipView.swift */; };
@@ -45,6 +46,7 @@
 
 /* Begin PBXFileReference section */
 		053F5AE72CAE00170091E19E /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		053F5AE92CAF3DB50091E19E /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		055BF07C2CAC70950095E44B /* CustomWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWebView.swift; sourceTree = "<group>"; };
 		055BF07E2CAC95E60095E44B /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		055BF0802CACA05C0095E44B /* ChipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipView.swift; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				053F5AE72CAE00170091E19E /* Constants.swift */,
+				053F5AE92CAF3DB50091E19E /* Extension.swift */,
 			);
 			path = constans;
 			sourceTree = "<group>";
@@ -307,6 +310,7 @@
 				CEAD3F302B4CAE0200C3E1F4 /* Navigator.swift in Sources */,
 				05C8C8682CA9FBC70061D0F8 /* SettingsView.swift in Sources */,
 				057AC4F92CAA0432001D18A9 /* ThirdLicenseView.swift in Sources */,
+				053F5AEA2CAF3DB50091E19E /* Extension.swift in Sources */,
 				05C8C86C2CA9FC290061D0F8 /* ScheduleListView.swift in Sources */,
 				055BF07D2CAC70950095E44B /* CustomWebView.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,

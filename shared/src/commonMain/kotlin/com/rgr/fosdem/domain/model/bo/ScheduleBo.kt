@@ -16,6 +16,6 @@ data class ScheduleBo(
     val attachment: List<AttachmentBo>,
     val speaker: List<String>,
     val room: String,
-    val favourite: Boolean = false,
+    val favourite: Boolean,
     val year: String,
 )

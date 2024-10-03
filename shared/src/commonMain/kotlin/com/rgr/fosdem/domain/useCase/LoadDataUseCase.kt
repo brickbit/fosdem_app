@@ -87,7 +87,8 @@ class LoadDataUseCase(
                             },
                             speaker = event.persons.person.map { it.content },
                             room = room.name,
-                            year = schedule.conference.start.split("-").getOrNull(0) ?: ""
+                            year = schedule.conference.start.split("-").getOrNull(0) ?: "",
+                            favourite = false
                         )
                     )
                 }

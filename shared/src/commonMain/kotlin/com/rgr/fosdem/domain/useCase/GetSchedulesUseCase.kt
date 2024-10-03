@@ -19,14 +19,14 @@ class GetSchedulesUseCase(
     ): Result<List<ScheduleBo>> {
         delay(3000)
         var data = inMemoryRepository.fetchSchedules()
-        //data = filterByDate(data = data, date = date)
+        data = filterByDate(data = data, date = date)
         data = filterByStart(data = data, start = start)
         data = filterByTrack(data = data, track = track)
         data = filterBySpeaker(data = data, speaker = speaker)
         data = filterByTitle(data = data, title = title)
         data = filterByRoom(data = data, room = room)
         data.ifEmpty { return Result.failure(ErrorType.EmptyScheduleListError) }
-        return Result.success(data)
+        return Result.success(data.toMutableList().sortedBy { it.date })
     }
 
     private fun filterByDate(

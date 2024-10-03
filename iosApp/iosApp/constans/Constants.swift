@@ -31,3 +31,15 @@ let whiteGradient = LinearGradient(
     startPoint: .leading,
     endPoint: .trailing
 )
+
+let blackGradient = LinearGradient(
+    gradient: Gradient(
+        colors: [
+            .black,
+            .black,
+            .black
+        ]
+    ),
+    startPoint: .leading,
+    endPoint: .trailing
+)

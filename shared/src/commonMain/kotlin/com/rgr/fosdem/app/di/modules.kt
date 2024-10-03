@@ -1,10 +1,8 @@
 package com.rgr.fosdem.app.di
 
-import com.rgr.fosdem.app.viewModel.NewScheduleState
 import com.rgr.fosdem.data.local.LocalRepositoryImpl
 import com.rgr.fosdem.data.repository.InMemoryRepositoryImpl
 import com.rgr.fosdem.data.repository.NetworkRepositoryImpl
-import com.rgr.fosdem.domain.repository.DatabaseRepository
 import com.rgr.fosdem.domain.repository.InMemoryRepository
 import com.rgr.fosdem.domain.repository.LocalRepository
 import com.rgr.fosdem.domain.repository.NetworkRepository
@@ -12,6 +10,7 @@ import com.rgr.fosdem.domain.useCase.ChangeLanguageUseCase
 import com.rgr.fosdem.domain.useCase.GetDaysUseCase
 import com.rgr.fosdem.domain.useCase.GetEventByIdUseCase
 import com.rgr.fosdem.domain.useCase.GetEventsForNotificationUseCase
+import com.rgr.fosdem.domain.useCase.GetFavouriteSchedulesUseCase
 import com.rgr.fosdem.domain.useCase.GetFavouritesEventsUseCase
 import com.rgr.fosdem.domain.useCase.GetHoursUseCase
 import com.rgr.fosdem.domain.useCase.GetLanguageUseCase
@@ -23,6 +22,7 @@ import com.rgr.fosdem.domain.useCase.GetNotificationsEnabledUseCase
 import com.rgr.fosdem.domain.useCase.GetOnBoardingStatusUseCase
 import com.rgr.fosdem.domain.useCase.GetPreferredTracksShownUseCase
 import com.rgr.fosdem.domain.useCase.GetPreferredTracksUseCase
+import com.rgr.fosdem.domain.useCase.GetRightNowSchedulesUseCase
 import com.rgr.fosdem.domain.useCase.GetRoomsUseCase
 import com.rgr.fosdem.domain.useCase.GetSavedTracksUseCase
 import com.rgr.fosdem.domain.useCase.GetScheduleByHourUseCase
@@ -43,6 +43,7 @@ import com.rgr.fosdem.domain.useCase.ManageNotificationTimeUseCase
 import com.rgr.fosdem.domain.useCase.SaveFavouriteTracksShownUseCase
 import com.rgr.fosdem.domain.useCase.SaveOnBoardingUseCase
 import com.rgr.fosdem.domain.useCase.SavePreferredTracksUseCase
+import com.rgr.fosdem.domain.useCase.SetFavouriteUseCase
 import org.koin.dsl.module
 
 val repositoryModule = module {
@@ -79,6 +80,7 @@ val useCaseModule = module {
     single { GetSpeakersUseCase(get(), get()) }
     single { GetStandsUseCase(get(), get()) }
     single { IsUpdateNeeded(get(), get()) }
+
     single { LoadDataUseCase(get(), get()) }
     single { GetSchedulesUseCase(get()) }
     single { GetVideoUseCase(get()) }
@@ -86,4 +88,7 @@ val useCaseModule = module {
     single { GetDaysUseCase(get()) }
     single { GetNewTracksUseCase(get()) }
     single { GetNewRoomsUseCase(get()) }
+    single { GetFavouriteSchedulesUseCase(get()) }
+    single { GetRightNowSchedulesUseCase(get()) }
+    single { SetFavouriteUseCase(get()) }
 }

@@ -11,3 +11,5 @@ xcuserdata
 androidApp/release/
 
 *.klib
+
+.kotlin/sessions/
