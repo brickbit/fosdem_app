@@ -85,7 +85,9 @@ class LoadDataUseCase(
                             attachment = event.attachments.attachment.map {
                                 AttachmentBo(name = it.content, link = it.href)
                             },
-                            speaker = event.persons.person.map { it.content }
+                            speaker = event.persons.person.map { it.content },
+                            room = room.name,
+                            year = schedule.conference.start.split("-").getOrNull(0) ?: ""
                         )
                     )
                 }
@@ -106,7 +108,9 @@ class LoadDataUseCase(
                                     idTalk = event.id,
                                     link = link.href.replace("&amp;","&"),
                                     name = event.title,
-                                    speakers = event.persons.person.map { it.content }
+                                    speakers = event.persons.person.map { it.content },
+                                    type = event.type,
+                                    year = schedule.conference.start.split("-").getOrNull(0) ?: ""
                                 )
                             )
                         }

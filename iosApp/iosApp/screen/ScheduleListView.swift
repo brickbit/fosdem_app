@@ -19,7 +19,17 @@ struct ScheduleListView: View {
         VStack {
             ScheduleView(
                 isLoading: viewModel.state.isLoading,
-                schedules: viewModel.state.schedules
+                schedules: viewModel.state.schedules,
+                rooms: viewModel.state.rooms,
+                tracks: viewModel.state.tracks,
+                days: viewModel.state.days,
+                hours: viewModel.state.hours,
+                filterBySpeaker: { title, speaker in
+                    viewModel.filterBySpeaker(title: title, speaker: speaker)
+                },
+                onFilterClicked: { room, track, day, hours in
+                    viewModel.filter(room: room, track: track, day: day, hours: hours)
+                }
             )
         }.task {
             viewModel.initialize()
@@ -29,11 +39,20 @@ struct ScheduleListView: View {
 
 struct ScheduleView: View {
     @State private var searchText = ""
-    @State private var showingCredits = false
+    @State private var showingFilters = false
 
-    var isLoading: Bool
-    var schedules: [ScheduleBo]
+    let isLoading: Bool
+    let schedules: [ScheduleBo]
+    let rooms: [String]
+    let tracks: [String]
+    let days: [String]
+    let hours: [String]
     
+    var filterBySpeaker: (String, String) -> Void
+    var onFilterClicked: (String, String, String, [String]) -> Void
+
+    @FocusState private var isFocused: Bool
+
     var body: some View {
         if(isLoading) {
             LoadingView()
@@ -45,12 +64,23 @@ struct ScheduleView: View {
                         EdgeInsets(
                             top: 0, leading: 20, bottom: 0, trailing: 0))
                 HStack {
-                    Image(systemName: "magnifyingglass")
+                    Image(systemName: "magnifyingglass").onTapGesture {
+                        Task {
+                            filterBySpeaker(searchText, "")
+                        }
+                    }
                     TextField("Search...", text: $searchText)
+                        .onChange(of: searchText) { newValue in
+                            if(searchText.count > 3) {
+                                filterBySpeaker(searchText, "")
+                            }
+                        }
+                        .onSubmit {
+                        filterBySpeaker(searchText, "")
+                        }.focused($isFocused)
                     Image(systemName: "line.horizontal.3.decrease")
                         .onTapGesture {
-                            showingCredits.toggle()
-
+                            showingFilters.toggle()
                         }
                 }
                     .padding(12)
@@ -61,80 +91,84 @@ struct ScheduleView: View {
                     .padding()
                 List {
                     ForEach(schedules, id: \.self) { schedule in
-                        ScheduleItem(
+                        ScheduleItemView(
                             schedule: schedule
                         )
                     }
                 }
                 .listStyle(.inset)
                 .listRowSeparator(.hidden)
-                .sheet(isPresented: $showingCredits) {
-                    Text("TMore filters")
+                .sheet(isPresented: $showingFilters) {
+                    FilterSheetView(
+                        roomList: rooms,
+                        trackList: tracks,
+                        dayList: days,
+                        hours: hours,
+                        room: rooms[0],
+                        track: tracks[0],
+                        day: days[0],
+                        onFilterClicked: { room, track, day, hours in
+                            showingFilters.toggle()
+                            onFilterClicked(room, track, day, hours)
+                        }
+                    )
                         .presentationDetents([.medium, .large])
                 }
+            }.onAppear {
+                isFocused = true
             }
         }
     }
 }
 
-struct ScheduleItem: View {
-    var schedule: ScheduleBo
-    
-    var body: some View {
-        HStack(alignment: .top) {
-            VStack {
-                Text("03").foregroundStyle(.white)
-                Text(schedule.start).foregroundStyle(.white)
-            }
-            .frame(height: 135)
-            .padding(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
-            .background(
-                Color.black,
-                in: RoundedRectangle(
-                    cornerRadius: 20,
-                    style: .continuous
-                )
-            )
-            VStack(alignment: .leading) {
-                Text(schedule.title).padding(EdgeInsets(top: 0, leading: 0, bottom: 16, trailing: 0))
-                ForEach(schedule.speaker, id: \.self) { speaker in
-                    Text(speaker)
-                        .font(.system(size: 12))
-                }
 
-            }.padding(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
-            Spacer()
-        }
-        .frame(height: 135)
-        .cornerRadius(20)
-        .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(.black, lineWidth: 2)
-        )
-    }
-}
 
 class ScheduleViewModelWrapper: ObservableObject {
     private let viewModel: NewScheduleViewModel = GetViewModels().getSchedulesViewModel()
     
-    @Published var state: ScheduleState = ScheduleState(isLoading: false, schedules: [])
+    @Published var state: ScheduleState = ScheduleState(
+        isLoading: false,
+        schedules: [],
+        days: [],
+        tracks: [],
+        hours: [],
+        rooms: [],
+        selectedTitle: "",
+        selectedDay: "",
+        selectedTrack: "",
+        selectedHours: [],
+        selectedSpeaker: "",
+        selectedRoom: ""
+    )
     
     
     func initialize() {
-        viewModel.getSchedules(
-            date: "",
-            start: "",
-            duration: "",
-            title: "",
-            track: "",
-            type: "",
-            speaker: ""
-        )
+        viewModel.getSchedules()
         FlowWrapper<ScheduleState>(stateFlow: viewModel.state).observe { states in
-            self.state = states ?? ScheduleState(isLoading: false, schedules: [])
+            self.state = states ?? ScheduleState(
+                isLoading: false,
+                schedules: [],
+                days: [],
+                tracks: [],
+                hours: [],
+                rooms: [],
+                selectedTitle: "",
+                selectedDay: "",
+                selectedTrack: "",
+                selectedHours: [],
+                selectedSpeaker: "",
+                selectedRoom: ""
+            )
         }
     }
     
+    func filter(room: String, track: String, day: String, hours: [String]) {
+        viewModel.filter(selectedDay: day, selectedTrack: track, selectedHours: hours, selectedRoom: room)
+    }
+    
+    func filterBySpeaker(title: String, speaker: String) {
+        viewModel.filterByTitleOrSpeaker(title: title, speaker: speaker)
+    }
     
 }
 #Preview {

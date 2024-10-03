@@ -31,7 +31,7 @@ val providerModule = module {
 }
 val viewModelModules = module {
     single { SplashViewModel(Dispatchers.Main, get(), /*get(), get(), get(), get()*/) }
-    single { NewScheduleViewModel(Dispatchers.Main, get(), /*get(), get(), get(), get()*/) }
+    single { NewScheduleViewModel(Dispatchers.Main, get(), get(), get(), get(), get()) }
     single { VideoViewModel(Dispatchers.Main, get(), /*get(), get(), get(), get()*/) }
     single { OnBoardingViewModel(get()) }
     single { PreferencesViewModel(get(), get(), get(), get()) }

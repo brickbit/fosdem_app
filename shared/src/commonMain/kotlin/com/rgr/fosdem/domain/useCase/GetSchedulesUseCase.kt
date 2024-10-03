@@ -11,22 +11,20 @@ class GetSchedulesUseCase(
 
     suspend operator fun invoke(
         date: String = "",
-        start: String = "",
-        duration: String = "",
+        start: List<String> = emptyList(),
         title: String = "",
         track: String = "",
-        type: String = "",
         speaker: String = "",
+        room: String = "",
     ): Result<List<ScheduleBo>> {
         delay(3000)
         var data = inMemoryRepository.fetchSchedules()
-        data = filterByDate(data = data, date = date)
+        //data = filterByDate(data = data, date = date)
         data = filterByStart(data = data, start = start)
-        data = filterByDuration(data = data, duration = duration)
         data = filterByTrack(data = data, track = track)
-        data = filterByType(data = data, type = type)
         data = filterBySpeaker(data = data, speaker = speaker)
         data = filterByTitle(data = data, title = title)
+        data = filterByRoom(data = data, room = room)
         data.ifEmpty { return Result.failure(ErrorType.EmptyScheduleListError) }
         return Result.success(data)
     }
@@ -41,18 +39,16 @@ class GetSchedulesUseCase(
 
     private fun filterByStart(
         data: List<ScheduleBo>,
-        start: String
+        start: List<String>
     ): List<ScheduleBo> {
         start.ifEmpty { return data }
-        return data.filter { it.date.substring(IntRange(0,9)) == start.substring(IntRange(0,9)) }
-    }
-
-    private fun filterByDuration(
-        data: List<ScheduleBo>,
-        duration: String
-    ): List<ScheduleBo> {
-        duration.ifEmpty { return data }
-        return data.filter { it.date.substring(IntRange(0,9)) == duration.substring(IntRange(0,9)) }
+        val listStart = mutableListOf<ScheduleBo>()
+        data.map { schedule ->
+            if (schedule.speaker.any { item -> start.contains(item) }) {
+                listStart.add(schedule)
+            }
+        }
+        return listStart
     }
 
     private fun filterByTrack(
@@ -60,15 +56,15 @@ class GetSchedulesUseCase(
         track: String
     ): List<ScheduleBo> {
         track.ifEmpty { return data }
-        return data.filter { it.date.substring(IntRange(0,9)) == track.substring(IntRange(0,9)) }
+        return data.filter { it.track == track }
     }
 
-    private fun filterByType(
+    private fun filterByRoom(
         data: List<ScheduleBo>,
-        type: String
+        room: String
     ): List<ScheduleBo> {
-        type.ifEmpty { return data }
-        return data.filter { it.date.substring(IntRange(0,9)) == type.substring(IntRange(0,9)) }
+        room.ifEmpty { return data }
+        return data.filter { it.room == room }
     }
 
     private fun filterBySpeaker(
@@ -76,7 +72,12 @@ class GetSchedulesUseCase(
         speaker: String
     ): List<ScheduleBo> {
         speaker.ifEmpty { return data }
-        return data.filter { it.speaker.contains(speaker) }
+        return data.filter { match(it.speaker, speaker) }
+
+    }
+
+    private fun match(speakerList: List<String>, speaker: String): Boolean {
+        return speaker.all { person -> speakerList.any { item -> item.contains(person) } }
     }
 
     private fun filterByTitle(

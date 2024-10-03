@@ -7,8 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		053F5AE82CAE00170091E19E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053F5AE72CAE00170091E19E /* Constants.swift */; };
 		055BF07D2CAC70950095E44B /* CustomWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055BF07C2CAC70950095E44B /* CustomWebView.swift */; };
 		055BF07F2CAC95E60095E44B /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055BF07E2CAC95E60095E44B /* LoadingView.swift */; };
+		055BF0812CACA05C0095E44B /* ChipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055BF0802CACA05C0095E44B /* ChipView.swift */; };
+		055BF0832CACA2770095E44B /* ScheduleItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055BF0822CACA2770095E44B /* ScheduleItemView.swift */; };
+		055BF0852CACA29A0095E44B /* FilterSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055BF0842CACA29A0095E44B /* FilterSheetView.swift */; };
 		057AC4F72CAA025D001D18A9 /* LanguageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057AC4F62CAA025D001D18A9 /* LanguageView.swift */; };
 		057AC4F92CAA0432001D18A9 /* ThirdLicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057AC4F82CAA0432001D18A9 /* ThirdLicenseView.swift */; };
 		057AC4FB2CAA0442001D18A9 /* AppLicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057AC4FA2CAA0442001D18A9 /* AppLicenseView.swift */; };
@@ -40,8 +44,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		053F5AE72CAE00170091E19E /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		055BF07C2CAC70950095E44B /* CustomWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWebView.swift; sourceTree = "<group>"; };
 		055BF07E2CAC95E60095E44B /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		055BF0802CACA05C0095E44B /* ChipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipView.swift; sourceTree = "<group>"; };
+		055BF0822CACA2770095E44B /* ScheduleItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleItemView.swift; sourceTree = "<group>"; };
+		055BF0842CACA29A0095E44B /* FilterSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterSheetView.swift; sourceTree = "<group>"; };
 		057AC4F62CAA025D001D18A9 /* LanguageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageView.swift; sourceTree = "<group>"; };
 		057AC4F82CAA0432001D18A9 /* ThirdLicenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdLicenseView.swift; sourceTree = "<group>"; };
 		057AC4FA2CAA0442001D18A9 /* AppLicenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLicenseView.swift; sourceTree = "<group>"; };
@@ -72,11 +80,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		053F5AE62CAE00060091E19E /* constans */ = {
+			isa = PBXGroup;
+			children = (
+				053F5AE72CAE00170091E19E /* Constants.swift */,
+			);
+			path = constans;
+			sourceTree = "<group>";
+		};
 		055BF07B2CAC707C0095E44B /* views */ = {
 			isa = PBXGroup;
 			children = (
 				055BF07C2CAC70950095E44B /* CustomWebView.swift */,
+				055BF0822CACA2770095E44B /* ScheduleItemView.swift */,
 				055BF07E2CAC95E60095E44B /* LoadingView.swift */,
+				055BF0802CACA05C0095E44B /* ChipView.swift */,
+				055BF0842CACA29A0095E44B /* FilterSheetView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -110,6 +129,7 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				053F5AE62CAE00060091E19E /* constans */,
 				CE7FA5FB2B4EC09D003EA3C1 /* app */,
 				CE7FA5FA2B4EC04E003EA3C1 /* state */,
 				CE7FA5F92B4EC018003EA3C1 /* screen */,
@@ -276,11 +296,14 @@
 			files = (
 				05C8C86E2CA9FC5A0061D0F8 /* HomeView.swift in Sources */,
 				CEA302AA2B4D3B6C0067F734 /* MainView.swift in Sources */,
+				055BF0812CACA05C0095E44B /* ChipView.swift in Sources */,
 				057AC4FB2CAA0442001D18A9 /* AppLicenseView.swift in Sources */,
 				CEAD3F332B4CAE2800C3E1F4 /* RoutesSwift.swift in Sources */,
+				055BF0852CACA29A0095E44B /* FilterSheetView.swift in Sources */,
 				05C8C86A2CA9FC130061D0F8 /* VideoListView.swift in Sources */,
 				055BF07F2CAC95E60095E44B /* LoadingView.swift in Sources */,
 				057AC4F72CAA025D001D18A9 /* LanguageView.swift in Sources */,
+				055BF0832CACA2770095E44B /* ScheduleItemView.swift in Sources */,
 				CEAD3F302B4CAE0200C3E1F4 /* Navigator.swift in Sources */,
 				05C8C8682CA9FBC70061D0F8 /* SettingsView.swift in Sources */,
 				057AC4F92CAA0432001D18A9 /* ThirdLicenseView.swift in Sources */,
@@ -288,6 +311,7 @@
 				055BF07D2CAC70950095E44B /* CustomWebView.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				7555FF83242A565900829871 /* SplashView.swift in Sources */,
+				053F5AE82CAE00170091E19E /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

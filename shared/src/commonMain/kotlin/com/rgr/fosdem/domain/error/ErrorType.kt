@@ -10,7 +10,10 @@ sealed class ErrorType: Throwable() {
     data object UnknownNetworkError: ErrorType()
     data object EmptyScheduleListError: ErrorType()
     data object EmptyVideoListError: ErrorType()
-
+    data object NoHoursFoundError: ErrorType()
+    data object NoDaysFoundError: ErrorType()
+    data object NoTracksFoundError: ErrorType()
+    data object NoRoomsFoundError: ErrorType()
 }
 
 fun ErrorType.getString(): String {
@@ -24,5 +27,9 @@ fun ErrorType.getString(): String {
         ErrorType.UnknownNetworkError -> "Error de red desconocido"
         ErrorType.EmptyScheduleListError -> "No se encontraron eventos"
         ErrorType.EmptyVideoListError -> "No se encontraron videos"
+        ErrorType.NoDaysFoundError -> "No se encontraron días"
+        ErrorType.NoHoursFoundError -> "No se encontraron horas"
+        ErrorType.NoRoomsFoundError -> "No se encontraron salas"
+        ErrorType.NoTracksFoundError -> "No se encontraron tracks"
     }
 }

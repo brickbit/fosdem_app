@@ -9,11 +9,15 @@ import com.rgr.fosdem.domain.repository.InMemoryRepository
 import com.rgr.fosdem.domain.repository.LocalRepository
 import com.rgr.fosdem.domain.repository.NetworkRepository
 import com.rgr.fosdem.domain.useCase.ChangeLanguageUseCase
+import com.rgr.fosdem.domain.useCase.GetDaysUseCase
 import com.rgr.fosdem.domain.useCase.GetEventByIdUseCase
 import com.rgr.fosdem.domain.useCase.GetEventsForNotificationUseCase
 import com.rgr.fosdem.domain.useCase.GetFavouritesEventsUseCase
 import com.rgr.fosdem.domain.useCase.GetHoursUseCase
 import com.rgr.fosdem.domain.useCase.GetLanguageUseCase
+import com.rgr.fosdem.domain.useCase.GetNewHoursUseCase
+import com.rgr.fosdem.domain.useCase.GetNewRoomsUseCase
+import com.rgr.fosdem.domain.useCase.GetNewTracksUseCase
 import com.rgr.fosdem.domain.useCase.GetNotificationTimeUseCase
 import com.rgr.fosdem.domain.useCase.GetNotificationsEnabledUseCase
 import com.rgr.fosdem.domain.useCase.GetOnBoardingStatusUseCase
@@ -78,4 +82,8 @@ val useCaseModule = module {
     single { LoadDataUseCase(get(), get()) }
     single { GetSchedulesUseCase(get()) }
     single { GetVideoUseCase(get()) }
+    single { GetNewHoursUseCase(get()) }
+    single { GetDaysUseCase(get()) }
+    single { GetNewTracksUseCase(get()) }
+    single { GetNewRoomsUseCase(get()) }
 }

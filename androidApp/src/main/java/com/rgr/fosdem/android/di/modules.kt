@@ -53,7 +53,7 @@ fun providerModule(context: Context) = module {
 val viewModelModules = module {
     viewModel { MainActivityViewModel(get()) }
     viewModel { SplashViewModel( Dispatchers.IO, get(), /*get(), get(), get(), get()*/) }
-    viewModel { NewScheduleViewModel( Dispatchers.IO, get()) }
+    viewModel { NewScheduleViewModel( Dispatchers.IO, get(), get(), get(), get(), get()) }
     viewModel { VideoViewModel( Dispatchers.IO, get()) }
     viewModel { OnBoardingViewModel(get()) }
     viewModel { PreferencesViewModel(get(), get(), get(), get()) }
