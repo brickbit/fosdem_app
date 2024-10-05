@@ -3,11 +3,9 @@ package com.rgr.fosdem.app.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rgr.fosdem.app.navigation.Routes
-import com.rgr.fosdem.domain.useCase.GetOnBoardingStatusUseCase
-import com.rgr.fosdem.domain.useCase.GetPreferredTracksShownUseCase
-import com.rgr.fosdem.domain.useCase.GetScheduleDataUseCase
-import com.rgr.fosdem.domain.useCase.LoadDataUseCase
-import com.rgr.fosdem.domain.useCase.ManageNotificationPermissionUseCase
+import com.rgr.fosdem.domain.useCase.LoadSchedulesUseCase
+import com.rgr.fosdem.domain.useCase.LoadSpeakersUseCase
+import com.rgr.fosdem.domain.useCase.LoadStandsUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +14,9 @@ import kotlinx.coroutines.launch
 
 class SplashViewModel(
     private val dispatcher: CoroutineDispatcher,
-    private val loadData: LoadDataUseCase,
+    private val loadScheduleData: LoadSchedulesUseCase,
+    private val loadStandsData: LoadStandsUseCase,
+    private val loadSpeakersData: LoadSpeakersUseCase
 ): ViewModel() {
 
     private val _state = MutableStateFlow(SplashState())
@@ -24,13 +24,15 @@ class SplashViewModel(
 
     fun initializeSplash() {
         viewModelScope.launch(dispatcher) {
-            loadData.invoke()
+            loadScheduleData.invoke()
                 .onSuccess {
-                    _state.update { it.copy(route = Routes.Main, isError = false) }
+                    //_state.update { it.copy(route = Routes.Main, isError = false) }
                 }
                 .onFailure {
                     _state.update { it.copy(isError = true) }
                 }
+            loadStandsData.invoke()
+            loadSpeakersData.invoke()
             /*getSchedule.invoke()
                 .onSuccess {
                     val onBoardingShown = getOnBoardingStatus.invoke()

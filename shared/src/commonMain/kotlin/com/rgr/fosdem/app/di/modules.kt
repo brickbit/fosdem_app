@@ -36,7 +36,9 @@ import com.rgr.fosdem.domain.useCase.GetTracksUseCase
 import com.rgr.fosdem.domain.useCase.GetVideoUseCase
 import com.rgr.fosdem.domain.useCase.IsUpdateNeeded
 import com.rgr.fosdem.domain.useCase.IsEventNotifiedUseCase
-import com.rgr.fosdem.domain.useCase.LoadDataUseCase
+import com.rgr.fosdem.domain.useCase.LoadSchedulesUseCase
+import com.rgr.fosdem.domain.useCase.LoadSpeakersUseCase
+import com.rgr.fosdem.domain.useCase.LoadStandsUseCase
 import com.rgr.fosdem.domain.useCase.ManageEventNotificationUseCase
 import com.rgr.fosdem.domain.useCase.ManageNotificationPermissionUseCase
 import com.rgr.fosdem.domain.useCase.ManageNotificationTimeUseCase
@@ -81,7 +83,7 @@ val useCaseModule = module {
     single { GetStandsUseCase(get(), get()) }
     single { IsUpdateNeeded(get(), get()) }
 
-    single { LoadDataUseCase(get(), get()) }
+    single { LoadSchedulesUseCase(get(), get()) }
     single { GetSchedulesUseCase(get()) }
     single { GetVideoUseCase(get()) }
     single { GetNewHoursUseCase(get()) }
@@ -91,4 +93,6 @@ val useCaseModule = module {
     single { GetFavouriteSchedulesUseCase(get()) }
     single { GetRightNowSchedulesUseCase(get()) }
     single { SetFavouriteUseCase(get()) }
+    single { LoadStandsUseCase(get(), get()) }
+    single { LoadSpeakersUseCase(get(), get()) }
 }

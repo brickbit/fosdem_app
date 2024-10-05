@@ -57,6 +57,9 @@ kotlin {
             //room
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
+            //ksoup
+            implementation("com.fleeksoft.ksoup:ksoup-lite:0.1.9")
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

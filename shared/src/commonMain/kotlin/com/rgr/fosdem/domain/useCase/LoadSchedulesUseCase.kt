@@ -10,7 +10,7 @@ import com.rgr.fosdem.domain.repository.NetworkRepository
 import nl.adaptivity.xmlutil.core.XmlVersion
 import nl.adaptivity.xmlutil.serialization.XML
 
-class LoadDataUseCase(
+class LoadSchedulesUseCase(
     private val networkRepository: NetworkRepository,
     private val inMemoryRepository: InMemoryRepository,
 ) {
@@ -25,7 +25,7 @@ class LoadDataUseCase(
     }
 
     suspend operator fun invoke(): Result<Unit> {
-        val data = networkRepository.loadData()
+        val data = networkRepository.loadScheduleData()
             data.getOrNull()?.let {
                 val parsedData = parseXml(it)
                 parsedData.getOrNull()?.let { xmlData ->

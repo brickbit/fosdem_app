@@ -27,7 +27,6 @@ import com.rgr.fosdem.app.viewModel.NewScheduleViewModel
 import com.rgr.fosdem.app.viewModel.VideoViewModel
 import com.rgr.fosdem.data.dataSource.db.dao.SchedulesDao
 import com.rgr.fosdem.domain.repository.JsonProvider
-import com.rgr.fosdem.domain.useCase.LoadDataUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -53,7 +52,7 @@ fun providerModule(context: Context) = module {
 
 val viewModelModules = module {
     viewModel { MainActivityViewModel(get()) }
-    viewModel { SplashViewModel( Dispatchers.IO, get(), /*get(), get(), get(), get()*/) }
+    viewModel { SplashViewModel( Dispatchers.IO, get(), get(), get()) }
     viewModel { NewScheduleViewModel( Dispatchers.IO, get(), get(), get(), get(), get(), get()) }
     viewModel { VideoViewModel( Dispatchers.IO, get()) }
     viewModel { HomeViewModel( Dispatchers.IO, get(), get()) }

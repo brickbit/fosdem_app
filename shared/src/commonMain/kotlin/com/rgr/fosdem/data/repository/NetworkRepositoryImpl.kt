@@ -11,7 +11,6 @@ import com.rgr.fosdem.domain.model.VersionBo
 import com.rgr.fosdem.domain.repository.NetworkRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
@@ -63,8 +62,38 @@ class NetworkRepositoryImpl: NetworkRepository {
         }
     }
 
-    override suspend fun loadData(): Result<String> {
+    override suspend fun loadScheduleData(): Result<String> {
         val apiResponse = makeRequest { client.get(Constant.PRETAL_SCHEDULE_URL) }
+        apiResponse.onFailure {
+            return Result.failure(it)
+        }
+        return apiResponse.getOrNull()?.let {
+            Result.success(it.body())
+        } ?: Result.failure(Error())
+    }
+
+    override suspend fun loadStandsData(): Result<String> {
+        val apiResponse = makeRequest { client.get(Constant.STANDS_URL) }
+        apiResponse.onFailure {
+            return Result.failure(it)
+        }
+        return apiResponse.getOrNull()?.let {
+            Result.success(it.body())
+        } ?: Result.failure(Error())
+    }
+
+    override suspend fun loadSpeakersData(): Result<String> {
+        val apiResponse = makeRequest { client.get(Constant.SPEAKERS_URL) }
+        apiResponse.onFailure {
+            return Result.failure(it)
+        }
+        return apiResponse.getOrNull()?.let {
+            Result.success(it.body())
+        } ?: Result.failure(Error())
+    }
+
+    override suspend fun loadSpeakerItemData(speakerEndpoint: String): Result<String> {
+        val apiResponse = makeRequest { client.get(Constant.SPEAKER_BASE_URL+speakerEndpoint) }
         apiResponse.onFailure {
             return Result.failure(it)
         }

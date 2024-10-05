@@ -9,6 +9,9 @@ class Constant {
         const val GET_VERSION = "version/"
 
         const val PRETAL_SCHEDULE_URL = "https://fosdem.org/2024/schedule/xml"
+        const val STANDS_URL = "https://fosdem.org/2024/stands/"
+        const val SPEAKERS_URL = "https://archive.fosdem.org/2024/schedule/speakers/"
+        const val SPEAKER_BASE_URL = "https://archive.fosdem.org/"
     }
 
 }

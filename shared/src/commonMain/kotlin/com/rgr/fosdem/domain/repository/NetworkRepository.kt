@@ -8,5 +8,11 @@ interface NetworkRepository {
 
     suspend fun getVersion(): Result<VersionBo>
 
-    suspend fun loadData(): Result<String>
+    suspend fun loadScheduleData(): Result<String>
+
+    suspend fun loadStandsData(): Result<String>
+
+    suspend fun loadSpeakersData(): Result<String>
+
+    suspend fun loadSpeakerItemData(speakerEndpoint: String): Result<String>
 }
