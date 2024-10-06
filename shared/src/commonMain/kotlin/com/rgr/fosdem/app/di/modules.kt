@@ -83,7 +83,7 @@ val useCaseModule = module {
     single { GetStandsUseCase(get(), get()) }
     single { IsUpdateNeeded(get(), get()) }
 
-    single { LoadSchedulesUseCase(get(), get()) }
+    single { LoadSchedulesUseCase(get(), get(), get()) }
     single { GetSchedulesUseCase(get()) }
     single { GetVideoUseCase(get()) }
     single { GetNewHoursUseCase(get()) }

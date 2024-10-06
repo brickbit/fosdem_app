@@ -1,7 +1,6 @@
 package com.rgr.fosdem.android.screens
 
 import android.Manifest
-import android.content.Context
 import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -22,16 +21,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.app.NotificationManagerCompat
-import androidx.room.Room
-import androidx.room.RoomDatabase
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.rgr.fosdem.android.R
 import com.rgr.fosdem.app.navigation.Routes
 import com.rgr.fosdem.app.viewModel.SplashViewModel
-import com.rgr.fosdem.data.dataSource.db.DATABASE_NAME
-import com.rgr.fosdem.data.dataSource.db.ScheduleDatabase
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalPermissionsApi::class)

@@ -2,7 +2,7 @@ package com.rgr.fosdem.app.di
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.rgr.fosdem.app.db.getDatabaseBuilder
+import com.rgr.fosdem.data.dataSource.db.getDatabaseBuilder
 import com.rgr.fosdem.app.viewModel.HomeViewModel
 import com.rgr.fosdem.app.viewModel.MainViewModel
 import com.rgr.fosdem.app.viewModel.NewScheduleViewModel
@@ -11,6 +11,8 @@ import com.rgr.fosdem.app.viewModel.PreferencesViewModel
 import com.rgr.fosdem.app.viewModel.SplashViewModel
 import com.rgr.fosdem.app.viewModel.TalkViewModel
 import com.rgr.fosdem.app.viewModel.VideoViewModel
+import com.rgr.fosdem.data.dataSource.db.AppDatabase
+import com.rgr.fosdem.data.dataSource.db.getRoomDatabase
 import com.rgr.fosdem.data.local.dataStorePreferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +30,7 @@ val providerModule = module {
             calculatedPath = ""
         )
     }
+    single<AppDatabase> { getRoomDatabase(getDatabaseBuilder()) }
     single { getDatabaseBuilder() }
 }
 val viewModelModules = module {

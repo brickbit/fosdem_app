@@ -16,9 +16,9 @@ interface SchedulesDao {
     @Query("SELECT * FROM ScheduleEntity WHERE id = :id")
     fun findScheduleId(id: Int): Flow<ScheduleEntity?>
 
-    @Query("SELECT COUNT(id) FROM Movie")
+    @Query("SELECT COUNT(id) FROM ScheduleEntity")
     suspend fun countSchedules(): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun save(movies: List<ScheduleEntity>)
+    suspend fun save(schedules: List<ScheduleEntity>)
 }

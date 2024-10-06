@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.ksp)
     alias(libs.plugins.androidxRoom)
-    kotlin("plugin.serialization") version "1.9.0"
+    alias(libs.plugins.kotlinxSerialization)
     id("org.kodein.mock.mockmp") version "1.17.0"
 }
 apply(plugin= "com.mikepenz.aboutlibraries.plugin")
@@ -58,7 +58,8 @@ kotlin {
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
             //ksoup
-            implementation("com.fleeksoft.ksoup:ksoup-lite:0.1.9")
+            implementation(libs.ksoup.lite)
+            implementation("co.touchlab:stately-common:2.0.5")
 
         }
         commonTest.dependencies {
@@ -98,10 +99,11 @@ android {
 }
 
 dependencies {
-    add("kspCommonMainMetadata", libs.androidx.room.compiler)
+    add("kspAndroid", libs.androidx.room.compiler)
+    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+    add("kspIosX64", libs.androidx.room.compiler)
+    add("kspIosArm64", libs.androidx.room.compiler)
 }
-
-
 
 room {
     schemaDirectory("$projectDir/schemas")

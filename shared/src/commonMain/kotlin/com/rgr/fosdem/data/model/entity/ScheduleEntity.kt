@@ -20,8 +20,8 @@ data class ScheduleEntity(
     val abstract: String,
     val description: String,
     val feedbackUrl: String,
-    val attachment: List<AttachmentBo>,
-    val speaker: List<String>,
+    //val attachment: List<AttachmentBo>,
+    //val speaker: List<String>,
 )
 
 fun ScheduleBo.toEntity(): ScheduleEntity {
@@ -38,7 +38,7 @@ fun ScheduleBo.toEntity(): ScheduleEntity {
         abstract = abstract,
         description = description,
         feedbackUrl = feedbackUrl,
-        attachment = attachment,
-        speaker = speaker
+        //attachment = attachment,
+        //speaker = speaker
     )
 }

@@ -1,14 +1,10 @@
-package com.rgr.fosdem.app.db
+package com.rgr.fosdem.data.dataSource.db
 
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.sqlite.driver.bundled.BundledSQLiteDriver
-import com.rgr.fosdem.data.dataSource.db.DATABASE_NAME
-import com.rgr.fosdem.data.dataSource.db.ScheduleDatabase
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
-import platform.Foundation.NSHomeDirectory
 import platform.Foundation.NSUserDomainMask
 
 @OptIn(ExperimentalForeignApi::class)
@@ -23,9 +19,9 @@ private fun documentDirectory(): String {
     return requireNotNull(documentDirectory?.path)
 }
 
-fun getDatabaseBuilder(): RoomDatabase.Builder<ScheduleDatabase> {
+fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase> {
     val dbFilePath = documentDirectory() + "/$DATABASE_NAME"
-    return Room.databaseBuilder<ScheduleDatabase>(
+    return Room.databaseBuilder<AppDatabase>(
         name = dbFilePath,  
-    ).setDriver(BundledSQLiteDriver())
+    )
 }

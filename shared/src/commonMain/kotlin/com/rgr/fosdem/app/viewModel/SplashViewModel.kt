@@ -26,7 +26,7 @@ class SplashViewModel(
         viewModelScope.launch(dispatcher) {
             loadScheduleData.invoke()
                 .onSuccess {
-                    //_state.update { it.copy(route = Routes.Main, isError = false) }
+                    _state.update { it.copy(route = Routes.Main, isError = false) }
                 }
                 .onFailure {
                     _state.update { it.copy(isError = true) }
