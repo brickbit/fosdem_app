@@ -24,7 +24,6 @@ import com.rgr.fosdem.android.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainTopBar(
-    navigateToSettings: () -> Unit
 ) {
     TopAppBar(
         title = {
@@ -42,17 +41,6 @@ fun MainTopBar(
                 )
             }
         },
-        actions = {
-            Image(
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .size(30.dp)
-                    .clickable { navigateToSettings() },
-                painter = painterResource(id = R.drawable.ic_settings),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
-            )
-        }
     )
 }
 
@@ -60,6 +48,6 @@ fun MainTopBar(
 @Composable
 fun MainTopBarPreview() {
     MyApplicationTheme {
-        MainTopBar {}
+        MainTopBar()
     }
 }

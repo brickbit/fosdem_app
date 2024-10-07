@@ -17,23 +17,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,22 +39,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
-import androidx.core.content.ContextCompat
 import com.rgr.fosdem.android.BuildConfig
 import com.rgr.fosdem.android.MainActivity
 import com.rgr.fosdem.android.MyApplicationTheme
 import com.rgr.fosdem.android.R
-import com.rgr.fosdem.android.extension.splitImage
 import com.rgr.fosdem.android.mainBrushColor
 import com.rgr.fosdem.android.screens.common.EventItem
 import com.rgr.fosdem.android.screens.common.SpeakerBottomSheet
@@ -68,58 +57,34 @@ import com.rgr.fosdem.android.screens.common.SpeakerItem
 import com.rgr.fosdem.android.screens.common.StandBottomSheet
 import com.rgr.fosdem.android.screens.common.StandItem
 import com.rgr.fosdem.android.screens.common.shimmerEffect
-import com.rgr.fosdem.app.viewModel.MainViewModel
-import com.rgr.fosdem.domain.model.EventBo
+import com.rgr.fosdem.app.viewModel.HomeViewModel
 import com.rgr.fosdem.domain.model.SpeakerBo
-import com.rgr.fosdem.domain.model.StandBo
-import com.rgr.fosdem.domain.model.TrackBo
+import com.rgr.fosdem.domain.model.bo.ScheduleBo
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MainRoute(
-    viewModel: MainViewModel = koinViewModel(),
+fun HomeRoute(
+    viewModel: HomeViewModel = koinViewModel(),
     onNavigate: (String) -> Unit,
-    navigateToSchedule: () -> Unit,
     navigateToWebSchedule: (String) -> Unit,
     onSeeAllClicked: (String, String) -> Unit
 ) {
     val state = viewModel.state.collectAsState().value
-    val refreshing = viewModel.isRefreshing.collectAsState().value
-    val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.onRefresh() })
     val context = LocalContext.current
-
-    LaunchedEffect(Unit) {
-        viewModel.getScheduleByMoment()
-        viewModel.getPreferredTracks()
-        viewModel.getFavouritesEvents()
-        viewModel.getSpeakerList()
-        viewModel.getStandList()
-    }
 
     BackHandler {
         (context as MainActivity).finish()
     }
 
     Box {
-        PullRefreshIndicator(
-            refreshing = refreshing,
-            state = pullRefreshState,
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .zIndex(1f)
-        )
-        MainScreen(
-            modifier = Modifier
-                .pullRefresh(pullRefreshState),
-            preferredTracks = state.tracks,
-            tracksNow = state.tracksNow,
+        HomeScreen(
+            modifier = Modifier,
+            tracksNow = state.rightNowSchedules,
             isLoading = state.isLoading,
-            favourites = state.favouriteEvents,
+            favourites = state.favouriteSchedules,
             speakers = state.speakers,
             stands = state.stands,
             onNavigate = onNavigate,
-            navigateToSchedule = navigateToSchedule,
             navigateToWebSchedule = navigateToWebSchedule,
             onSeeAllClicked = onSeeAllClicked
         )
@@ -128,16 +93,14 @@ fun MainRoute(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(
+fun HomeScreen(
     modifier: Modifier = Modifier,
-    preferredTracks: List<TrackBo>,
-    tracksNow: List<EventBo>,
+    tracksNow: List<ScheduleBo>,
     isLoading: Boolean,
-    favourites: List<EventBo>,
+    favourites: List<ScheduleBo>,
     speakers: List<SpeakerBo>,
-    stands: List<StandBo>,
+    stands: List<com.rgr.fosdem.domain.useCase.StandBo>,
     onNavigate: (String) -> Unit,
-    navigateToSchedule: () -> Unit,
     navigateToWebSchedule: (String) -> Unit,
     onSeeAllClicked: (String, String) -> Unit
 ) {
@@ -168,9 +131,6 @@ fun MainScreen(
     }
 
     LazyColumn(modifier = modifier) {
-        item {
-            ScheduleCard(navigateToSchedule = navigateToSchedule)
-        }
         rightNowItems(
             isLoading = isLoading,
             tracksNow = tracksNow,
@@ -208,13 +168,6 @@ fun MainScreen(
             isLoading = isLoading,
             speakers = speakers,
             onNavigate = { showSpeakerBottomSheet = Pair(it, true) }
-        )
-        preferredTracks(
-            isLoading = isLoading,
-            preferredTracks = preferredTracks,
-            favourites = favourites,
-            onNavigate = onNavigate,
-            onSeeAllClicked = { title, track -> onSeeAllClicked(title,track) }
         )
         item {
             PlaceComposable()
@@ -292,113 +245,10 @@ fun PlaceComposable() {
     }
 }
 
-@Composable
-fun TrackRow(
-    track: TrackBo,
-    favourites: List<EventBo>,
-    onNavigate: (String) -> Unit,
-    onSeeAllClicked: (String, String) -> Unit
-) {
-    Column {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                modifier = Modifier
-                    .width(200.dp)
-                    .padding(start = 16.dp, top = 8.dp),
-                text = track.name,
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .clickable { onSeeAllClicked(track.name, track.id) },
-                text = stringResource(R.string.main_see_all),
-                style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary)
-            )
-        }
-        LazyRow(
-            modifier = Modifier
-                .padding(vertical = 8.dp),
-        ) {
-            items(track.events) { event ->
-                EventItem(
-                    modifier = Modifier
-                        .fillParentMaxWidth(0.8f)
-                        .padding(horizontal = 8.dp, vertical = 8.dp),
-                    favourites = favourites,
-                    event = event,
-                    onClickAction = onNavigate
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun ScheduleCard(
-    navigateToSchedule: () -> Unit
-) {
-    val context = LocalContext.current
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                horizontal = 16.dp,
-                vertical = 24.dp
-            )
-            .background(
-                brush = Brush.linearGradient(colorStops = mainBrushColor),
-                shape = RoundedCornerShape(20.dp)
-            )
-            .clickable { navigateToSchedule() }
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            ContextCompat.getDrawable(context,R.drawable.ic_launcher_foreground).splitImage()?.
-            second?.asImageBitmap()?.let {
-                Image(
-                    modifier = Modifier.height(120.dp),
-                    contentScale = ContentScale.FillHeight,
-                    bitmap = it,
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(Color.White)
-                )
-            }
-            Text(
-                modifier = Modifier
-                    .width(150.dp)
-                    .padding(vertical = 24.dp),
-                text = stringResource(R.string.main_check_schedule),
-                style = MaterialTheme.typography.titleSmall.copy(Color.White),
-                textAlign = TextAlign.Center
-            )
-            ContextCompat.getDrawable(context,R.drawable.ic_launcher_foreground).splitImage()?.
-            first?.asImageBitmap()?.let {
-                Image(
-                    modifier = Modifier.height(120.dp),
-                    contentScale = ContentScale.FillHeight,
-                    bitmap = it,
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(Color.White)
-                )
-            }
-        }
-    }
-}
-
 fun LazyListScope.rightNowItems(
     isLoading: Boolean,
-    tracksNow: List<EventBo>,
-    favourites: List<EventBo>,
+    tracksNow: List<ScheduleBo>,
+    favourites: List<ScheduleBo>,
     onNavigate: (String) -> Unit,
     onSeeAllClicked: (String) -> Unit
 ) {
@@ -456,7 +306,7 @@ fun LazyListScope.rightNowItems(
 
 fun LazyListScope.favouriteEvents(
     isLoading: Boolean,
-    favourites: List<EventBo>,
+    favourites: List<ScheduleBo>,
     onNavigate: (String) -> Unit,
     onSeeAllClicked: (String) -> Unit
 ) {
@@ -583,7 +433,7 @@ fun LazyListScope.speakerItems(
 
 fun LazyListScope.standItems(
     isLoading: Boolean,
-    stands: List<StandBo>,
+    stands: List<com.rgr.fosdem.domain.useCase.StandBo>,
     onNavigate: (Int) -> Unit
 ) {
     item {
@@ -608,44 +458,6 @@ fun LazyListScope.standItems(
                         onClickItem = { onNavigate(index) }
                     )
                 }
-            }
-        }
-    }
-}
-
-
-fun LazyListScope.preferredTracks(
-    isLoading: Boolean,
-    preferredTracks: List<TrackBo>,
-    favourites: List<EventBo>,
-    onNavigate: (String) -> Unit,
-    onSeeAllClicked: (String, String) -> Unit
-) {
-    if(isLoading) {
-        item { LoadingItem() }
-    } else {
-        if(preferredTracks.isEmpty()) {
-            item {
-                EmptySection(
-                    title = stringResource(R.string.main_your_favourite_tracks),
-                    description = stringResource(R.string.main_select_favourite_tracks),
-                )
-            }
-        } else {
-            item {
-                Text(
-                    modifier = Modifier.padding(start = 16.dp, top = 16.dp),
-                    text = stringResource(R.string.main_your_favourite_tracks),
-                    style = MaterialTheme.typography.titleSmall
-                )
-            }
-            items(preferredTracks) { track ->
-                TrackRow(
-                    track = track,
-                    favourites = favourites,
-                    onNavigate = onNavigate,
-                    onSeeAllClicked = onSeeAllClicked
-                )
             }
         }
     }

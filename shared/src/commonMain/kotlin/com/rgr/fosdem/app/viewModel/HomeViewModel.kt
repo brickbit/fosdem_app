@@ -2,9 +2,11 @@ package com.rgr.fosdem.app.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rgr.fosdem.domain.model.SpeakerBo
 import com.rgr.fosdem.domain.model.bo.ScheduleBo
 import com.rgr.fosdem.domain.useCase.GetFavouriteSchedulesUseCase
 import com.rgr.fosdem.domain.useCase.GetRightNowSchedulesUseCase
+import com.rgr.fosdem.domain.useCase.StandBo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -64,5 +66,7 @@ class HomeViewModel(
 data class HomeState(
     val isLoading: Boolean = true,
     val favouriteSchedules: List<ScheduleBo> = emptyList(),
-    val rightNowSchedules: List<ScheduleBo> = emptyList()
+    val rightNowSchedules: List<ScheduleBo> = emptyList(),
+    val speakers: List<SpeakerBo> = emptyList(),
+    val stands: List<StandBo> = emptyList()
 )

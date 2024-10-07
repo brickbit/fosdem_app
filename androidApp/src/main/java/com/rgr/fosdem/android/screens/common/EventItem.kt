@@ -37,8 +37,8 @@ import com.rgr.fosdem.domain.model.bo.ScheduleBo
 @Composable
 fun EventItem(
     modifier: Modifier = Modifier,
-    event: EventBo,
-    favourites: List<EventBo>,
+    event: ScheduleBo,
+    favourites: List<ScheduleBo>,
     onClickAction: (String) -> Unit
 ) {
     val context = LocalContext.current
@@ -79,11 +79,11 @@ fun EventItem(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = event.talk.day.substring(startIndex = 0, endIndex = 3).dayMiniToTranslatable(context),
+                    text = event.date.substring(startIndex = 0, endIndex = 3).dayMiniToTranslatable(context),
                     style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.background)
                 )
                 Text(
-                    text = event.talk.start,
+                    text = event.start,
                     style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.background)
                 )
             }
@@ -98,7 +98,7 @@ fun EventItem(
         ) {
             Text(
                 modifier = Modifier.height(80.dp),
-                text = event.talk.title,
+                text = event.title,
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis
@@ -120,7 +120,7 @@ fun EventItem(
                             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
                         )
                         Text(
-                            text = it.name,
+                            text = it,
                             style = MaterialTheme.typography.bodySmall
                         )
                     }
@@ -137,7 +137,7 @@ fun EventItem(
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
                 )
                 Text(
-                    text = event.talk.room.name,
+                    text = event.room,
                     style = MaterialTheme.typography.bodySmall
                 )
             }

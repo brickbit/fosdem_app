@@ -8,18 +8,19 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.rgr.fosdem.android.screens.LanguageRoute
 import com.rgr.fosdem.android.screens.ListEventsRoute
-import com.rgr.fosdem.android.screens.MainRoute
+import com.rgr.fosdem.android.screens.HomeRoute
 import com.rgr.fosdem.android.screens.NewScheduleRoute
 import com.rgr.fosdem.android.screens.OnBoardingRoute
 import com.rgr.fosdem.android.screens.PreferencesRoute
-import com.rgr.fosdem.android.screens.ScheduleRoute
 import com.rgr.fosdem.android.screens.SettingsRoute
 import com.rgr.fosdem.android.screens.SplashRoute
 import com.rgr.fosdem.android.screens.TalkRoute
 import com.rgr.fosdem.android.screens.ThirdPartyLibrariesRoute
+import com.rgr.fosdem.android.screens.VideoRoute
 import com.rgr.fosdem.android.screens.common.CustomWebView
 import com.rgr.fosdem.app.navigation.Routes
 import com.rgr.fosdem.app.viewModel.EventType
+import okhttp3.Route
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -66,12 +67,9 @@ fun Navigator(
             )
         }
         composable(Routes.Main.name) {
-            MainRoute(
+            HomeRoute(
                 onNavigate = { id ->
                     navController.navigate(Routes.Talk.goToDetail(id))
-                },
-                navigateToSchedule = {
-                    navController.navigate(Routes.Schedule.name)
                 },
                 navigateToWebSchedule = { url ->
                     val encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8.toString())
@@ -90,7 +88,9 @@ fun Navigator(
                 id = backStackEntry.arguments?.getString("id") ?: ""
             )
         }
-
+        composable(Routes.Video.name) {
+            VideoRoute()
+        }
         composable(Routes.Settings.name) {
             SettingsRoute(
                 navigateToLanguage = { navController.navigate(Routes.Language.name) },

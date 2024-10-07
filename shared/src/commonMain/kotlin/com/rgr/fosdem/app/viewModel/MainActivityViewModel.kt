@@ -37,6 +37,7 @@ class MainActivityViewModel(
             Routes.Settings.name -> Routes.Settings
             Routes.Splash.name -> Routes.Splash
             Routes.Talk.name -> Routes.Talk
+            Routes.Video.name -> Routes.Video
             Routes.Schedule.name -> Routes.Schedule
             Routes.Language.name -> Routes.Language
             Routes.WebView.name -> Routes.WebView
@@ -59,6 +60,7 @@ class MainActivityViewModel(
             Routes.WebView -> false
             Routes.ThirdPartyLibraries -> true
             Routes.ListEvents -> false
+            Routes.Video -> true
             else -> false
         }
     }

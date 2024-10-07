@@ -11,6 +11,7 @@ sealed class Routes(val name: String) {
     data object Talk: Routes("TalkRoute/{id}") {
         fun goToDetail(id: String): String = "TalkRoute/$id"
     }
+    data object Video: Routes("Video")
     data object Settings: Routes("Settings")
     data object Schedule: Routes("Schedule")
     data object Language: Routes("Language")

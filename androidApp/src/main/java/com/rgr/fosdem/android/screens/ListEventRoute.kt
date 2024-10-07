@@ -14,6 +14,7 @@ import com.rgr.fosdem.app.viewModel.EventType
 import com.rgr.fosdem.app.viewModel.ListEventsViewModel
 import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.domain.model.TrackBo
+import com.rgr.fosdem.domain.model.bo.ScheduleBo
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -45,8 +46,8 @@ fun ListEventsRoute(
 fun ListEventScreen(
     title: String,
     eventType: EventType,
-    favourites: List<EventBo>,
-    tracksNow: List<EventBo>,
+    favourites: List<ScheduleBo>,
+    tracksNow: List<ScheduleBo>,
     preferredTracks: List<TrackBo>,
     onEventClicked: (String) -> Unit
 ) {
@@ -78,12 +79,12 @@ fun ListEventScreen(
             is EventType.FavoriteTracks -> {
                     val selectedTrack = preferredTracks.first { it.id == eventType.trackId }
                     items(selectedTrack.events) {
-                        EventItem(
+                        /*EventItem(
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                             event = it,
                             favourites = favourites,
                             onClickAction = onEventClicked
-                        )
+                        )*/
                     }
 
             }

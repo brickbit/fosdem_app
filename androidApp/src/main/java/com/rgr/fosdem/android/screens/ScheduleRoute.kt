@@ -173,12 +173,12 @@ fun ScheduleScreen(
         }
         if(!empty) {
             items(scheduledLoaded.events) { event ->
-                EventItem(
+                /*EventItem(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                     event = event,
                     favourites = favourites,
                     onClickAction = onEventClicked
-                )
+                )*/
             }
         } else {
             item {

@@ -81,6 +81,8 @@ dependencies {
     implementation(libs.androidx.data.store.core)
     //coil
     implementation(libs.coil.compose)
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-video:2.4.0")
     //permissions
     implementation(libs.accompanist.permissions)
     //chrome custom tab
@@ -105,5 +107,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.sqlite.bundled)
 
+    implementation("androidx.media3:media3-exoplayer:1.2.0")
+    implementation("androidx.media3:media3-ui:1.2.0")
 
 }

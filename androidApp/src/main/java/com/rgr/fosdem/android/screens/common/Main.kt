@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.rgr.fosdem.android.MyApplicationTheme
-import com.rgr.fosdem.android.scaffold.FosdemScaffold
+import com.rgr.fosdem.android.scaffold.MainRoute
 import com.rgr.fosdem.app.viewModel.MainActivityViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -32,7 +32,7 @@ fun Main(
             LaunchedEffect(routeName) {
                 viewModel.getRouteInformation(routeName)
             }
-            FosdemScaffold(
+            MainRoute(
                 navController = navController,
                 visible = state.visible,
                 route = state.route

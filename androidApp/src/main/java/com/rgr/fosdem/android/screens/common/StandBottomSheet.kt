@@ -1,6 +1,5 @@
 package com.rgr.fosdem.android.screens.common
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -8,9 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -25,14 +22,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.rgr.fosdem.domain.model.StandBo
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StandBottomSheet(
     position: Int,
-    stands: List<StandBo>,
+    stands: List<com.rgr.fosdem.domain.useCase.StandBo>,
     sheetState: SheetState,
     onDismiss: () -> Unit
 ) {

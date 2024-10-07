@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.domain.model.TrackBo
+import com.rgr.fosdem.domain.model.bo.ScheduleBo
 import com.rgr.fosdem.domain.useCase.GetFavouritesEventsUseCase
 import com.rgr.fosdem.domain.useCase.GetPreferredTracksUseCase
 import com.rgr.fosdem.domain.useCase.GetScheduleByHourUseCase
@@ -33,7 +34,7 @@ class ListEventsViewModel(
             getFavouritesEvents.invoke()
                 .onSuccess { events ->
                     _state.update {
-                        it.copy(isLoading = false, favouriteEvents = events)
+                        it.copy(isLoading = false, /*favouriteEvents = events*/)
                     }
                 }
                 .onFailure {
@@ -49,7 +50,7 @@ class ListEventsViewModel(
         viewModelScope.launch {
             getScheduleByHour.invoke(instant)
                 .onSuccess { events ->
-                    _state.update { it.copy(isLoading = false, tracksNow = events) }
+                    _state.update { it.copy(isLoading = false, /*tracksNow = events*/) }
                 }
                 .onFailure {
 
@@ -77,7 +78,7 @@ sealed class EventType {
 
 data class ListEventsState(
     val isLoading: Boolean = false,
-    val favouriteEvents: List<EventBo> = emptyList(),
+    val favouriteEvents: List<ScheduleBo> = emptyList(),
     val tracks: List<TrackBo> = emptyList(),
-    val tracksNow: List<EventBo> = emptyList()
+    val tracksNow: List<ScheduleBo> = emptyList()
 )

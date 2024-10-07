@@ -7,6 +7,7 @@ import com.rgr.fosdem.domain.useCase.LoadSchedulesUseCase
 import com.rgr.fosdem.domain.useCase.LoadSpeakersUseCase
 import com.rgr.fosdem.domain.useCase.LoadStandsUseCase
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -24,36 +25,19 @@ class SplashViewModel(
 
     fun initializeSplash() {
         viewModelScope.launch(dispatcher) {
-            loadScheduleData.invoke()
-                .onSuccess {
-                    _state.update { it.copy(route = Routes.Main, isError = false) }
-                }
-                .onFailure {
-                    _state.update { it.copy(isError = true) }
-                }
-            loadStandsData.invoke()
-            loadSpeakersData.invoke()
-            /*getSchedule.invoke()
-                .onSuccess {
-                    val onBoardingShown = getOnBoardingStatus.invoke()
-                    val favouriteTracksShown = isFavouriteTracksShown.invoke()
-                    val route = if(onBoardingShown && !favouriteTracksShown) {
-                        Routes.FavouriteTracks
-                    } else if(onBoardingShown && favouriteTracksShown){
-                        Routes.Main
-                    } else {
-                        Routes.OnBoarding
-                    }
-                    _state.update {
-                        it.copy(route = route)
-                    }
-                }
-                .onFailure {
-                    _state.update {
-                        it.copy(isError = true)
-                    }
-                }*/
+            val scheduleRequest = async { loadScheduleData.invoke() }
+            val standsRequest = async { loadStandsData.invoke() }
+            //val speakersRequest = async { loadSpeakersData.invoke() }
 
+            val scheduleLoaded = scheduleRequest.await()
+            val standsLoaded = standsRequest.await()
+            //val speakersLoaded = speakersRequest.await()
+
+            if (scheduleLoaded.isSuccess && standsLoaded.isSuccess /*&& speakersLoaded.isSuccess */) {
+                _state.update { it.copy(route = Routes.Main, isError = false) }
+            } else {
+                _state.update { it.copy(isError = true) }
+            }
         }
     }
 }

@@ -34,7 +34,7 @@ import com.rgr.fosdem.domain.model.StandBo
 @Composable
 fun StandItem(
     modifier: Modifier = Modifier,
-    stand: StandBo,
+    stand: com.rgr.fosdem.domain.useCase.StandBo,
     onClickItem: () -> Unit
 ) {
     Column(

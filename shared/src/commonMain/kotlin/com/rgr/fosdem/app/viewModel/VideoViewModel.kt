@@ -27,7 +27,10 @@ class VideoViewModel(
         viewModelScope.launch {
             val videos = videoUseCase.invoke()
             videos.getOrNull()?.let { videoList ->
-                _state.update { it.copy(isLoading = false, videos = videoList) }
+                val itemsByType = videoList.groupBy {
+                    it.type
+                }.toList()
+                _state.update { it.copy(isLoading = false, videosForType = itemsByType, videos = videoList) }
             } ?: handleError()
         }
 
@@ -40,5 +43,6 @@ class VideoViewModel(
 
 data class VideoState(
     val isLoading: Boolean = true,
-    val videos: List<VideoBo> = emptyList()
+    val videos: List<VideoBo> = emptyList(),
+    val videosForType: List<Pair<String, List<VideoBo>>> = emptyList()
 )
