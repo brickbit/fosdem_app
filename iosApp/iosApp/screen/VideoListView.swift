@@ -85,13 +85,13 @@ struct URLPreview : UIViewRepresentable {
 class VideoListViewModelWrapper: ObservableObject {
     private let viewModel: VideoViewModel = GetViewModels().getVideosViewModel()
     
-    @Published var state: VideoState = VideoState(isLoading: false, videos: [])
+    @Published var state: VideoState = VideoState(isLoading: false, videos: [], videosForType: [])
     
     
     func initialize() {
         viewModel.getVideos()
         FlowWrapper<VideoState>(stateFlow: viewModel.state).observe { states in
-            self.state = states ?? VideoState(isLoading: false, videos: [])
+            self.state = states ?? VideoState(isLoading: false, videos: [], videosForType: [])
         }
     }
 }

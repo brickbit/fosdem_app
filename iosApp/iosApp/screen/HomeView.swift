@@ -95,14 +95,23 @@ struct HomeView: View {
 class HomeViewModelWrapper: ObservableObject {
     private let viewModel: HomeViewModel = GetViewModels().getHomeViewModel()
     
-    @Published var state: HomeState = HomeState(isLoading: false, favouriteSchedules: [], rightNowSchedules: [])
+    @Published var state: HomeState = HomeState(
+        isLoading: false,
+        favouriteSchedules: [],
+        rightNowSchedules: [],
+        speakers: [],
+        stands: []
+    )
     
     
     func initialize() {
         viewModel.getFavouriteSchedules()
         viewModel.getRightNowSchedules()
         FlowWrapper<HomeState>(stateFlow: viewModel.state).observe { states in
-            self.state = states ?? HomeState(isLoading: false, favouriteSchedules: [], rightNowSchedules: [])
+            self.state = states ?? HomeState(isLoading: false, favouriteSchedules: [], rightNowSchedules: [],
+                speakers: [],
+                stands: []
+            )
         }
     }
 }
