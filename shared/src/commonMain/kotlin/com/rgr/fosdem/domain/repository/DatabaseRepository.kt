@@ -4,8 +4,8 @@ import com.rgr.fosdem.domain.model.bo.ScheduleBo
 import com.rgr.fosdem.domain.model.bo.VideoBo
 
 interface DatabaseRepository {
-    suspend fun saveSchedule(schedule: ScheduleBo)
-    suspend fun getSchedule(): Result<ScheduleBo>
-    suspend fun saveVideos(video: VideoBo)
-    suspend fun getVideos(): Result<VideoBo>
+    suspend fun saveSchedule(schedule: List<ScheduleBo>)
+    suspend fun getSchedule(): Result<List<ScheduleBo>>
+    suspend fun saveVideos(videos: List<VideoBo>)
+    suspend fun getVideos(): Result<List<VideoBo>>
 }

@@ -5,6 +5,7 @@ import com.rgr.fosdem.domain.model.bo.AttachmentBo
 import com.rgr.fosdem.domain.model.bo.ScheduleBo
 import com.rgr.fosdem.domain.model.bo.VideoBo
 import com.rgr.fosdem.domain.model.xml.ScheduleDtoXml
+import com.rgr.fosdem.domain.repository.DatabaseRepository
 import com.rgr.fosdem.domain.repository.InMemoryRepository
 import com.rgr.fosdem.domain.repository.NetworkRepository
 import nl.adaptivity.xmlutil.core.XmlVersion
@@ -13,6 +14,7 @@ import nl.adaptivity.xmlutil.serialization.XML
 class LoadSchedulesUseCase(
     private val networkRepository: NetworkRepository,
     private val inMemoryRepository: InMemoryRepository,
+    private val databaseRepository: DatabaseRepository
 ) {
 
     private val xml: XML by lazy {
@@ -25,23 +27,47 @@ class LoadSchedulesUseCase(
     }
 
     suspend operator fun invoke(): Result<Unit> {
+        if(getSchedulesFromDB()) {
+            return Result.success(Unit)
+        } else {
             val data = networkRepository.loadScheduleData()
             data.getOrNull()?.let {
-                val parsedData = parseXml(it)
-                parsedData.getOrNull()?.let { xmlData ->
-                    val videos = getVideos(xmlData)
-                    val schedules = getSchedule(xmlData)
-                    val schedulesSaved = inMemoryRepository.saveScheduleList(schedules)
-                    schedulesSaved.getOrNull()?.let {
-                        val videosSaved = inMemoryRepository.saveVideoList(videos)
-                        videosSaved.getOrNull()?.let {
-                            return Result.success(Unit)
+                if(it.isNotEmpty()) {
+                    val parsedData = parseXml(it)
+                    parsedData.getOrNull()?.let { xmlData ->
+                        val schedules = getSchedule(xmlData)
+                        databaseRepository.saveSchedule(schedules)
+                        val schedulesSaved = inMemoryRepository.saveScheduleList(schedules)
+                        schedulesSaved.getOrNull()?.let {
+                            val dataVideo = databaseRepository.getVideos()
+                            if(dataVideo.getOrNull()?.isNotEmpty() == true) {
+                                return Result.success(Unit)
+                            } else {
+                                val videos = getVideos(xmlData)
+                                databaseRepository.saveVideos(videos)
+                                val videosSaved = inMemoryRepository.saveVideoList(videos)
+                                videosSaved.getOrNull()?.let {
+                                    return Result.success(Unit)
+                                } ?: return Result.failure(data.exceptionOrNull()!!)
+                            }
                         } ?: return Result.failure(data.exceptionOrNull()!!)
-                    } ?: return Result.failure(data.exceptionOrNull()!!)
-                } ?: return Result.failure(data.exceptionOrNull()!!)
+                    } ?: return Result.failure(ErrorType.ParseXmlError)
+                } else {
+                    return Result.failure(ErrorType.EmptyScheduleListError)
+                }
             } ?: return Result.failure(data.exceptionOrNull()!!)
-
+        }
     }
+
+    //INPUT: nothing
+    //OUTPUT: true if schedules are saved in db false otherwise
+    //PRE: nothing
+    private suspend fun getSchedulesFromDB(): Boolean {
+        databaseRepository.getSchedule().getOrNull()?.let {
+            return it.isNotEmpty()
+        } ?: return false
+    }
+
 
     private fun parseXml(apiData: String): Result<ScheduleDtoXml> {
         try {

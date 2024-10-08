@@ -3,6 +3,7 @@ package com.rgr.fosdem.android.di
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import com.rgr.fosdem.android.db.DatabaseRepositoryImpl
 import com.rgr.fosdem.android.provider.ActivityProvider
 import com.rgr.fosdem.android.provider.JsonProviderImpl
 import com.rgr.fosdem.app.viewModel.LanguageViewModel
@@ -27,6 +28,7 @@ import com.rgr.fosdem.app.viewModel.VideoViewModel
 import com.rgr.fosdem.data.dataSource.db.AppDatabase
 import com.rgr.fosdem.data.dataSource.db.dao.SchedulesDao
 import com.rgr.fosdem.data.dataSource.db.getRoomDatabase
+import com.rgr.fosdem.domain.repository.DatabaseRepository
 import com.rgr.fosdem.domain.repository.JsonProvider
 import com.snap.fosdem.data.dataSource.db.getDatabaseBuilder
 import kotlinx.coroutines.CoroutineScope
@@ -50,6 +52,7 @@ fun providerModule(context: Context) = module {
     factory<ConnectivityProvider> { NetworkConnectivityProvider(context) }
     single<AppDatabase> { getRoomDatabase(getDatabaseBuilder(context)) }
     single { ActivityProvider() }
+    single<DatabaseRepository> { DatabaseRepositoryImpl(context) }
 }
 
 val viewModelModules = module {

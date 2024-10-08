@@ -5,9 +5,10 @@ plugins {
     kotlin("plugin.serialization") version "1.9.0"
     id("com.google.firebase.crashlytics")
     id("com.google.gms.google-services")
-
+    id("kotlin-kapt")
 }
 apply(plugin= "com.mikepenz.aboutlibraries.plugin")
+
 
 
 android {
@@ -106,8 +107,13 @@ dependencies {
     //room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.sqlite.bundled)
-
+    //video
     implementation("androidx.media3:media3-exoplayer:1.2.0")
     implementation("androidx.media3:media3-ui:1.2.0")
 
+    implementation("androidx.room:room-runtime:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
+
+    // To use Kotlin annotation processing tool (kapt)
+    kapt("androidx.room:room-compiler:2.6.1")
 }
