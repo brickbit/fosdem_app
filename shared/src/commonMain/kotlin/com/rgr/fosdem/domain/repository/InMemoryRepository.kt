@@ -1,9 +1,9 @@
 package com.rgr.fosdem.domain.repository
 
 import com.rgr.fosdem.domain.model.SpeakerBo
+import com.rgr.fosdem.domain.model.StandBo
 import com.rgr.fosdem.domain.model.bo.ScheduleBo
 import com.rgr.fosdem.domain.model.bo.VideoBo
-import com.rgr.fosdem.domain.useCase.StandBo
 
 interface InMemoryRepository {
     fun fetchSchedules(): List<ScheduleBo>

@@ -39,6 +39,7 @@ import com.rgr.fosdem.domain.useCase.IsEventNotifiedUseCase
 import com.rgr.fosdem.domain.useCase.LoadSchedulesUseCase
 import com.rgr.fosdem.domain.useCase.LoadSpeakersUseCase
 import com.rgr.fosdem.domain.useCase.LoadStandsUseCase
+import com.rgr.fosdem.domain.useCase.LoadVideosUseCase
 import com.rgr.fosdem.domain.useCase.ManageEventNotificationUseCase
 import com.rgr.fosdem.domain.useCase.ManageNotificationPermissionUseCase
 import com.rgr.fosdem.domain.useCase.ManageNotificationTimeUseCase
@@ -83,7 +84,8 @@ val useCaseModule = module {
     single { GetStandsUseCase(get(), get()) }
     single { IsUpdateNeeded(get(), get()) }
 
-    single { LoadSchedulesUseCase(get(), get(), get()) }
+    single { LoadSchedulesUseCase(get(), get()) }
+    single { LoadVideosUseCase(get(), get()) }
     single { GetSchedulesUseCase(get()) }
     single { GetVideoUseCase(get()) }
     single { GetNewHoursUseCase(get()) }

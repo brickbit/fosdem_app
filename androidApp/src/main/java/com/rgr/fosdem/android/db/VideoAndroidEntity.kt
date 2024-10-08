@@ -11,6 +11,7 @@ data class VideoAndroidEntity(
     val name: String,
     val type: String,
     val year: String,
+    val speakers: ArrayList<String>
 )
 
 fun VideoBo.toEntity(): VideoAndroidEntity {
@@ -19,7 +20,8 @@ fun VideoBo.toEntity(): VideoAndroidEntity {
         link = link,
         name = name,
         type = type,
-        year = year
+        year = year,
+        speakers = ArrayList(speakers)
     )
 }
 
@@ -30,6 +32,6 @@ fun VideoAndroidEntity.toBo(): VideoBo {
         name = name,
         type = type,
         year = year,
-        speakers = emptyList()
+        speakers = speakers.toList()
     )
 }

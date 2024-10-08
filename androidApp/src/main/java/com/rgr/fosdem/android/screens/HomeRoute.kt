@@ -59,6 +59,7 @@ import com.rgr.fosdem.android.screens.common.StandItem
 import com.rgr.fosdem.android.screens.common.shimmerEffect
 import com.rgr.fosdem.app.viewModel.HomeViewModel
 import com.rgr.fosdem.domain.model.SpeakerBo
+import com.rgr.fosdem.domain.model.StandBo
 import com.rgr.fosdem.domain.model.bo.ScheduleBo
 import org.koin.androidx.compose.koinViewModel
 
@@ -99,7 +100,7 @@ fun HomeScreen(
     isLoading: Boolean,
     favourites: List<ScheduleBo>,
     speakers: List<SpeakerBo>,
-    stands: List<com.rgr.fosdem.domain.useCase.StandBo>,
+    stands: List<StandBo>,
     onNavigate: (String) -> Unit,
     navigateToWebSchedule: (String) -> Unit,
     onSeeAllClicked: (String, String) -> Unit
@@ -433,7 +434,7 @@ fun LazyListScope.speakerItems(
 
 fun LazyListScope.standItems(
     isLoading: Boolean,
-    stands: List<com.rgr.fosdem.domain.useCase.StandBo>,
+    stands: List<StandBo>,
     onNavigate: (Int) -> Unit
 ) {
     item {

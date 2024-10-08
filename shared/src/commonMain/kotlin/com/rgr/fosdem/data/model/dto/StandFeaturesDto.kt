@@ -18,6 +18,6 @@ fun StandFeaturesDto.toBo(): StandFeaturesBo {
     return StandFeaturesBo(
         subtitle = subtitle,
         type = type,
-        companies = companies
+        companies = ArrayList(companies)
     )
 }

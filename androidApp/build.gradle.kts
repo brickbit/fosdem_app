@@ -116,4 +116,7 @@ dependencies {
 
     // To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:2.6.1")
+
+    implementation("com.google.code.gson:gson:2.10.1")
+
 }

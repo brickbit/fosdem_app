@@ -34,7 +34,7 @@ val providerModule = module {
     single { getDatabaseBuilder() }
 }
 val viewModelModules = module {
-    single { SplashViewModel(Dispatchers.Main, get(), get(), get()) }
+    single { SplashViewModel(Dispatchers.Main, get(), get(), get(), get()) }
     single { NewScheduleViewModel(Dispatchers.Main, get(), get(), get(), get(), get(), get()) }
     single { VideoViewModel(Dispatchers.Main, get()) }
     single { HomeViewModel(Dispatchers.Main, get(), get()) }

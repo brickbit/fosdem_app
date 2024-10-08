@@ -26,7 +26,6 @@ import com.rgr.fosdem.app.viewModel.ListEventsViewModel
 import com.rgr.fosdem.app.viewModel.NewScheduleViewModel
 import com.rgr.fosdem.app.viewModel.VideoViewModel
 import com.rgr.fosdem.data.dataSource.db.AppDatabase
-import com.rgr.fosdem.data.dataSource.db.dao.SchedulesDao
 import com.rgr.fosdem.data.dataSource.db.getRoomDatabase
 import com.rgr.fosdem.domain.repository.DatabaseRepository
 import com.rgr.fosdem.domain.repository.JsonProvider
@@ -57,7 +56,7 @@ fun providerModule(context: Context) = module {
 
 val viewModelModules = module {
     viewModel { MainActivityViewModel(get()) }
-    viewModel { SplashViewModel( Dispatchers.IO, get(), get(), get()) }
+    viewModel { SplashViewModel( Dispatchers.IO, get(), get(), get(), get()) }
     viewModel { NewScheduleViewModel( Dispatchers.IO, get(), get(), get(), get(), get(), get()) }
     viewModel { VideoViewModel( Dispatchers.IO, get()) }
     viewModel { HomeViewModel( Dispatchers.IO, get(), get()) }

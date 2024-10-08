@@ -2,6 +2,10 @@ package com.rgr.fosdem.android.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+import com.google.common.reflect.TypeToken
+import com.google.gson.Gson
+import com.rgr.fosdem.domain.model.bo.AttachmentBo
 import com.rgr.fosdem.domain.model.bo.ScheduleBo
 
 @Entity(tableName = "schedule")
@@ -19,6 +23,8 @@ class ScheduleAndroidEntity (
     var description: String = "",
     var feedbackUrl: String = "",
     var room: String = "",
+    var speaker: ArrayList<String> = arrayListOf(),
+    var attachment: ArrayList<AttachmentBo> = arrayListOf(),
     var favourite: Boolean = false,
     var year: String = "",
 )
@@ -39,6 +45,8 @@ fun ScheduleBo.toEntity(): ScheduleAndroidEntity {
         feedbackUrl = feedbackUrl,
         room = room,
         favourite = favourite,
+        speaker = ArrayList(speaker),
+        attachment = ArrayList(attachment),
         year = year
     )
 }
@@ -60,8 +68,10 @@ fun ScheduleAndroidEntity.toBo(): ScheduleBo {
         room = room,
         favourite = favourite,
         year = year,
-        speaker = emptyList(),
-        attachment = emptyList()
+        speaker = speaker.toList(),
+        attachment = attachment.toList()
     )
 }
+
+
 

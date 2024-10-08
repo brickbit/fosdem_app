@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class StandFeaturesBo(
     val subtitle: String,
     val type: String,
-    val companies: MutableList<String>
+    val companies: ArrayList<String>
 )

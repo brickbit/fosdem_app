@@ -22,13 +22,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.rgr.fosdem.domain.model.StandBo
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StandBottomSheet(
     position: Int,
-    stands: List<com.rgr.fosdem.domain.useCase.StandBo>,
+    stands: List<StandBo>,
     sheetState: SheetState,
     onDismiss: () -> Unit
 ) {

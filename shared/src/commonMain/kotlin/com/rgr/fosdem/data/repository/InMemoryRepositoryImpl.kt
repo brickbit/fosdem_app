@@ -2,10 +2,10 @@ package com.rgr.fosdem.data.repository
 
 import com.rgr.fosdem.domain.error.ErrorType
 import com.rgr.fosdem.domain.model.SpeakerBo
+import com.rgr.fosdem.domain.model.StandBo
 import com.rgr.fosdem.domain.model.bo.ScheduleBo
 import com.rgr.fosdem.domain.model.bo.VideoBo
 import com.rgr.fosdem.domain.repository.InMemoryRepository
-import com.rgr.fosdem.domain.useCase.StandBo
 
 class InMemoryRepositoryImpl: InMemoryRepository {
     var schedules = listOf<ScheduleBo>()
