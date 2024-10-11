@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		050F2C2E2CB5EAF500ACD9CB /* DatabaseRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 050F2C2D2CB5EAF500ACD9CB /* DatabaseRepositoryImpl.swift */; };
 		053F5AE82CAE00170091E19E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053F5AE72CAE00170091E19E /* Constants.swift */; };
 		053F5AEA2CAF3DB50091E19E /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053F5AE92CAF3DB50091E19E /* Extension.swift */; };
 		055BF07D2CAC70950095E44B /* CustomWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055BF07C2CAC70950095E44B /* CustomWebView.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		050F2C2D2CB5EAF500ACD9CB /* DatabaseRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseRepositoryImpl.swift; sourceTree = "<group>"; };
 		053F5AE72CAE00170091E19E /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		053F5AE92CAF3DB50091E19E /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		055BF07C2CAC70950095E44B /* CustomWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomWebView.swift; sourceTree = "<group>"; };
@@ -82,6 +84,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		050F2C2C2CB5EAAF00ACD9CB /* db */ = {
+			isa = PBXGroup;
+			children = (
+				050F2C2D2CB5EAF500ACD9CB /* DatabaseRepositoryImpl.swift */,
+			);
+			path = db;
+			sourceTree = "<group>";
+		};
 		053F5AE62CAE00060091E19E /* constans */ = {
 			isa = PBXGroup;
 			children = (
@@ -132,6 +142,7 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				050F2C2C2CB5EAAF00ACD9CB /* db */,
 				053F5AE62CAE00060091E19E /* constans */,
 				CE7FA5FB2B4EC09D003EA3C1 /* app */,
 				CE7FA5FA2B4EC04E003EA3C1 /* state */,
@@ -303,6 +314,7 @@
 				057AC4FB2CAA0442001D18A9 /* AppLicenseView.swift in Sources */,
 				CEAD3F332B4CAE2800C3E1F4 /* RoutesSwift.swift in Sources */,
 				055BF0852CACA29A0095E44B /* FilterSheetView.swift in Sources */,
+				050F2C2E2CB5EAF500ACD9CB /* DatabaseRepositoryImpl.swift in Sources */,
 				05C8C86A2CA9FC130061D0F8 /* VideoListView.swift in Sources */,
 				055BF07F2CAC95E60095E44B /* LoadingView.swift in Sources */,
 				057AC4F72CAA025D001D18A9 /* LanguageView.swift in Sources */,

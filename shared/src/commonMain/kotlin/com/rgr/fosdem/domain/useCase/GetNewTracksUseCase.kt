@@ -1,14 +1,17 @@
 package com.rgr.fosdem.domain.useCase
 
 import com.rgr.fosdem.domain.error.ErrorType
+import com.rgr.fosdem.domain.repository.DatabaseRepository
 import com.rgr.fosdem.domain.repository.InMemoryRepository
 
 class GetNewTracksUseCase(
-    private val inMemoryRepository: InMemoryRepository
+    private val databaseRepository: DatabaseRepository
 ) {
-    operator fun invoke(): Result<List<String>> {
-        val tracks = inMemoryRepository.fetchSchedules().map { it.track }
-        tracks.ifEmpty { return Result.failure(ErrorType.NoTracksFoundError) }
-        return Result.success(tracks.distinct().sorted())
+    suspend operator fun invoke(): Result<List<String>> {
+        databaseRepository.getSchedule().getOrNull()?.let { schedules ->
+            val tracks = schedules.map { it.track }
+            tracks.ifEmpty { return Result.failure(ErrorType.NoTracksFoundError) }
+            return Result.success(tracks.distinct().sorted())
+        } ?: return Result.failure(ErrorType.NoTracksFoundError)
     }
 }

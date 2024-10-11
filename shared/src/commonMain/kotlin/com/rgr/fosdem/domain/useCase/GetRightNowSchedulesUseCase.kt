@@ -2,15 +2,18 @@ package com.rgr.fosdem.domain.useCase
 
 import com.rgr.fosdem.domain.error.ErrorType
 import com.rgr.fosdem.domain.model.bo.ScheduleBo
+import com.rgr.fosdem.domain.repository.DatabaseRepository
 import com.rgr.fosdem.domain.repository.InMemoryRepository
 
 class GetRightNowSchedulesUseCase(
-    private val inMemoryRepository: InMemoryRepository
+    private val databaseRepository: DatabaseRepository
 ) {
 
-    operator fun invoke(): Result<List<ScheduleBo>> {
-        val data = inMemoryRepository.fetchSchedules()
-        data.ifEmpty { return Result.failure(ErrorType.EmptyScheduleListError) }
-        return Result.success(data.toMutableList().filter{ it.start == "0" }.sortedBy { it.date })
+    suspend operator fun invoke(): Result<List<ScheduleBo>> {
+        databaseRepository.getSchedule().getOrNull()?.let { data ->
+            data.ifEmpty { return Result.failure(ErrorType.EmptyScheduleListError) }
+            return Result.success(data.toMutableList().filter { it.start == "0" }
+                .sortedBy { it.date })
+        } ?: return Result.failure(ErrorType.EmptyScheduleListError)
     }
 }

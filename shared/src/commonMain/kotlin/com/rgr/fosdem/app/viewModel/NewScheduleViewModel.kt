@@ -2,6 +2,7 @@ package com.rgr.fosdem.app.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.rgr.fosdem.domain.model.bo.ScheduleBo
 import com.rgr.fosdem.domain.useCase.GetDaysUseCase
 import com.rgr.fosdem.domain.useCase.GetNewHoursUseCase
@@ -130,21 +131,23 @@ class NewScheduleViewModel(
     }
 
     fun notifyEvent(schedule: ScheduleBo) {
-        setFavouriteUseCase.invoke(
-            schedule = schedule,
-            list = state.value.schedules,
-            favourite = true
-        )
-        getSchedules()
+        viewModelScope.launch {
+            setFavouriteUseCase.invoke(
+                schedule = schedule,
+                favourite = true
+            )
+            getSchedules()
+        }
     }
 
     fun notNotifyEvent(schedule: ScheduleBo) {
-        setFavouriteUseCase.invoke(
-            schedule = schedule,
-            list = state.value.schedules,
-            favourite = false
-        )
-        getSchedules()
+        viewModelScope.launch {
+            setFavouriteUseCase.invoke(
+                schedule = schedule,
+                favourite = false
+            )
+            getSchedules()
+        }
     }
 }
 

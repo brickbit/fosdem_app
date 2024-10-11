@@ -1,14 +1,17 @@
 package com.rgr.fosdem.domain.useCase
 
 import com.rgr.fosdem.domain.error.ErrorType
+import com.rgr.fosdem.domain.repository.DatabaseRepository
 import com.rgr.fosdem.domain.repository.InMemoryRepository
 
 class GetNewHoursUseCase(
-    private val inMemoryRepository: InMemoryRepository
+    private val databaseRepository: DatabaseRepository
 ) {
-    operator fun invoke(): Result<List<String>> {
-        val hours = inMemoryRepository.fetchSchedules().map { it.start }
-        hours.ifEmpty { return Result.failure(ErrorType.NoHoursFoundError) }
-        return Result.success(hours.distinct().sorted())
+    suspend operator fun invoke(): Result<List<String>> {
+        databaseRepository.getSchedule().getOrNull()?.let { schedule ->
+            val hours = schedule.map { it.start }
+            hours.ifEmpty { return Result.failure(ErrorType.NoHoursFoundError) }
+            return Result.success(hours.distinct().sorted())
+        } ?: return Result.failure(ErrorType.NoHoursFoundError)
     }
 }

@@ -7,6 +7,7 @@ import com.rgr.fosdem.domain.model.StandBo
 import com.rgr.fosdem.domain.model.bo.ScheduleBo
 import com.rgr.fosdem.domain.useCase.GetFavouriteSchedulesUseCase
 import com.rgr.fosdem.domain.useCase.GetRightNowSchedulesUseCase
+import com.rgr.fosdem.domain.useCase.GetStandsUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +17,8 @@ import kotlinx.coroutines.launch
 class HomeViewModel(
     private val dispatcher: CoroutineDispatcher,
     private val favouriteUseCase: GetFavouriteSchedulesUseCase,
-    private val rightNowUseCase: GetRightNowSchedulesUseCase
+    private val rightNowUseCase: GetRightNowSchedulesUseCase,
+    private val standsUseCase: GetStandsUseCase
 ): ViewModel() {
 
     private val _state = MutableStateFlow(HomeState())
@@ -25,6 +27,7 @@ class HomeViewModel(
     init {
         getFavouriteSchedules()
         getRightNowSchedules()
+        getStands()
     }
 
     fun getFavouriteSchedules() {
@@ -51,6 +54,21 @@ class HomeViewModel(
                     it.copy(
                         isLoading = false,
                         rightNowSchedules = schedulesNow
+                    )
+                }
+            } ?: handleError()
+        }
+    }
+
+    fun getStands() {
+        _state.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            val stands = standsUseCase.invoke()
+            stands.getOrNull()?.let { data ->
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        stands = data
                     )
                 }
             } ?: handleError()

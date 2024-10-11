@@ -27,6 +27,10 @@ class DatabaseRepositoryImpl(
         return Result.success(data)
     }
 
+    override suspend fun updateSchedule(schedule: ScheduleBo) {
+        db.scheduleDao().updateSchedule(schedule.toEntity())
+    }
+
     override suspend fun saveVideos(videos: List<VideoBo>) {
         db.videoDao().save(videos.map {it.toEntity()})
 

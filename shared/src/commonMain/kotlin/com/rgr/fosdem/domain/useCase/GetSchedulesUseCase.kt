@@ -2,11 +2,12 @@ package com.rgr.fosdem.domain.useCase
 
 import com.rgr.fosdem.domain.error.ErrorType
 import com.rgr.fosdem.domain.model.bo.ScheduleBo
+import com.rgr.fosdem.domain.repository.DatabaseRepository
 import com.rgr.fosdem.domain.repository.InMemoryRepository
 import kotlinx.coroutines.delay
 
 class GetSchedulesUseCase(
-    private val inMemoryRepository: InMemoryRepository
+    private val databaseRepository: DatabaseRepository
 ) {
 
     suspend operator fun invoke(
@@ -17,16 +18,17 @@ class GetSchedulesUseCase(
         speaker: String = "",
         room: String = "",
     ): Result<List<ScheduleBo>> {
-        delay(3000)
-        var data = inMemoryRepository.fetchSchedules()
-        data = filterByDate(data = data, date = date)
-        data = filterByStart(data = data, start = start)
-        data = filterByTrack(data = data, track = track)
-        data = filterBySpeaker(data = data, speaker = speaker)
-        data = filterByTitle(data = data, title = title)
-        data = filterByRoom(data = data, room = room)
-        data.ifEmpty { return Result.failure(ErrorType.EmptyScheduleListError) }
-        return Result.success(data.toMutableList().sortedBy { it.date })
+        databaseRepository.getSchedule().getOrNull()?.let { schedule ->
+            var data = schedule
+            data = filterByDate(data = data, date = date)
+            data = filterByStart(data = data, start = start)
+            data = filterByTrack(data = data, track = track)
+            data = filterBySpeaker(data = data, speaker = speaker)
+            data = filterByTitle(data = data, title = title)
+            data = filterByRoom(data = data, room = room)
+            data.ifEmpty { return Result.failure(ErrorType.EmptyScheduleListError) }
+            return Result.success(data.toMutableList().sortedBy { it.date })
+        } ?: return Result.failure(ErrorType.EmptyScheduleListError)
     }
 
     private fun filterByDate(

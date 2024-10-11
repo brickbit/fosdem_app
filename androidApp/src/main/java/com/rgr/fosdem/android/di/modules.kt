@@ -59,7 +59,7 @@ val viewModelModules = module {
     viewModel { SplashViewModel( Dispatchers.IO, get(), get(), get(), get()) }
     viewModel { NewScheduleViewModel( Dispatchers.IO, get(), get(), get(), get(), get(), get()) }
     viewModel { VideoViewModel( Dispatchers.IO, get()) }
-    viewModel { HomeViewModel( Dispatchers.IO, get(), get()) }
+    viewModel { HomeViewModel( Dispatchers.IO, get(), get(), get()) }
 
 
     viewModel { OnBoardingViewModel(get()) }
