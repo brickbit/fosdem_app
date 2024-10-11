@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -101,8 +102,13 @@ fun MainBottomBar(
                     tint = if (route.name == Routes.Main.name) Color(0xFFAB1B93) else { if(backgroundLight) Color.Gray else Color.White }
                 )
             },
-            selectedContentColor = Color(0xFFAB1B93),
-            unselectedContentColor = Color.Blue
+            label = {
+                Text(
+                    text = "Home",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = if (route.name == Routes.Main.name) Color(0xFFAB1B93) else { if(backgroundLight) Color.Gray else Color.White }
+                )
+            },
         )
         BottomNavigationItem(
             selected = route.name == Routes.Schedule.name,
@@ -112,6 +118,13 @@ fun MainBottomBar(
                     Icons.Filled.DateRange,
                     contentDescription = "Localized description",
                     tint = if (route.name == Routes.Schedule.name) Color(0xFFAB1B93) else { if(backgroundLight) Color.Gray else Color.White }
+                )
+            },
+            label = {
+                Text(
+                    text = "Schedules",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = if (route.name == Routes.Schedule.name) Color(0xFFAB1B93) else { if(backgroundLight) Color.Gray else Color.White }
                 )
             },
         )
@@ -125,6 +138,13 @@ fun MainBottomBar(
                     tint = if (route.name == Routes.Video.name) Color(0xFFAB1B93) else { if(backgroundLight) Color.Gray else Color.White }
                 )
             },
+            label = {
+                Text(
+                    text = "Videos",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = if (route.name == Routes.Video.name) Color(0xFFAB1B93) else { if(backgroundLight) Color.Gray else Color.White }
+                )
+            },
         )
         BottomNavigationItem(
             selected = route.name == Routes.Settings.name,
@@ -134,6 +154,13 @@ fun MainBottomBar(
                     Icons.Filled.Settings,
                     contentDescription = "Localized description",
                     tint = if (route.name == Routes.Settings.name) Color(0xFFAB1B93) else { if(backgroundLight) Color.Gray else Color.White }
+                )
+            },
+            label = {
+                Text(
+                    text = "Settings",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = if (route.name == Routes.Settings.name) Color(0xFFAB1B93) else { if(backgroundLight) Color.Gray else Color.White }
                 )
             },
         )

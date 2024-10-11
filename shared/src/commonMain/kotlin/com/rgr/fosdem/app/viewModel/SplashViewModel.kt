@@ -33,8 +33,8 @@ class SplashViewModel(
             //val speakersRequest = async { loadSpeakersData.invoke() }
 
             val scheduleLoaded = scheduleRequest.await()
-            val standsLoaded = standsRequest.await()
             val videosLoaded = videoRequest.await()
+            val standsLoaded = standsRequest.await()
             //val speakersLoaded = speakersRequest.await()
 
             if (scheduleLoaded.isSuccess && videosLoaded.isSuccess && standsLoaded.isSuccess /*&& speakersLoaded.isSuccess */) {

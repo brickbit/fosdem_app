@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.rgr.fosdem.android.screens.common.LoadingScreen
 import com.rgr.fosdem.android.screens.common.shimmerEffect
 import com.rgr.fosdem.app.viewModel.VideoViewModel
 import com.rgr.fosdem.domain.model.bo.VideoBo
@@ -59,11 +60,9 @@ fun VideoScreen(
     videosByType: List<Pair<String,List<VideoBo>>>
 ) {
     if(isLoading) {
-        CircularProgressIndicator()
+        LoadingScreen()
     } else {
-        LazyColumn(
-
-        ) {
+        LazyColumn {
             item {
                 if(videos.isNotEmpty()) {
                     VideoTitleThumbnailLoading(videos[0])

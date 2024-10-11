@@ -2,6 +2,11 @@ package com.rgr.fosdem.android.screens
 
 import android.Manifest
 import android.os.Build
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,8 +18,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -68,11 +75,28 @@ fun SplashScreen() {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(
-                    modifier = Modifier.size(dimensionResource(id = R.dimen.splash_image_size)),
-                    painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                    contentDescription = stringResource(R.string.splash_fosdem_logo_description)
-                )
+                Box {
+                    val infiniteTransition = rememberInfiniteTransition(label = "logo")
+                    val angle by infiniteTransition.animateFloat(
+                        initialValue = 0F,
+                        targetValue = 360F,
+                        animationSpec = infiniteRepeatable(
+                            animation = tween(3000, easing = LinearEasing)
+                        ), label = "logo"
+                    )
+                    Image(
+                        modifier = Modifier.size(dimensionResource(id = R.dimen.splash_image_size)),
+                        painter = painterResource(id = R.drawable.fosdem_logo_inside),
+                        contentDescription = stringResource(R.string.splash_fosdem_logo_description)
+                    )
+                    Image(
+                        modifier = Modifier
+                            .size(dimensionResource(id = R.dimen.splash_image_size))
+                            .rotate(angle),
+                        painter = painterResource(id = R.drawable.fosdem_logo_outside),
+                        contentDescription = stringResource(R.string.splash_fosdem_logo_description)
+                    )
+                }
                 Text(
                     text = stringResource(R.string.splash_fosdem).uppercase(),
                     style = MaterialTheme.typography.titleLarge

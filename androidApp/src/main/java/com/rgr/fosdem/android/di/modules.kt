@@ -3,9 +3,8 @@ package com.rgr.fosdem.android.di
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.rgr.fosdem.android.db.DatabaseRepositoryImpl
+import com.rgr.fosdem.data.dataSource.db.repository.DatabaseRepositoryImpl
 import com.rgr.fosdem.android.provider.ActivityProvider
-import com.rgr.fosdem.android.provider.JsonProviderImpl
 import com.rgr.fosdem.app.viewModel.LanguageViewModel
 import com.rgr.fosdem.app.viewModel.MainActivityViewModel
 import com.rgr.fosdem.app.viewModel.MainViewModel
@@ -25,11 +24,6 @@ import com.rgr.fosdem.app.viewModel.HomeViewModel
 import com.rgr.fosdem.app.viewModel.ListEventsViewModel
 import com.rgr.fosdem.app.viewModel.NewScheduleViewModel
 import com.rgr.fosdem.app.viewModel.VideoViewModel
-import com.rgr.fosdem.data.dataSource.db.AppDatabase
-import com.rgr.fosdem.data.dataSource.db.getRoomDatabase
-import com.rgr.fosdem.domain.repository.DatabaseRepository
-import com.rgr.fosdem.domain.repository.JsonProvider
-import com.snap.fosdem.data.dataSource.db.getDatabaseBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -46,12 +40,10 @@ fun providerModule(context: Context) = module {
             calculatedPath = File(context.filesDir, "datastore/$SETTINGS_PREFERENCES").path
         )
     }
-    factory<JsonProvider> { JsonProviderImpl(context) }
     factory<LanguageProvider> { LanguageProviderImpl(get()) }
     factory<ConnectivityProvider> { NetworkConnectivityProvider(context) }
-    single<AppDatabase> { getRoomDatabase(getDatabaseBuilder(context)) }
+    //single<AppDatabase> { getRoomDatabase(getDatabaseBuilder(context)) }
     single { ActivityProvider() }
-    single<DatabaseRepository> { DatabaseRepositoryImpl(context) }
 }
 
 val viewModelModules = module {

@@ -4,7 +4,6 @@ import app.cash.turbine.test
 import com.rgr.fosdem.app.navigation.Routes
 import com.rgr.fosdem.domain.model.TrackBo
 import com.rgr.fosdem.domain.model.fakeTrackBo
-import com.rgr.fosdem.domain.repository.JsonProvider
 import com.rgr.fosdem.domain.repository.LocalRepository
 import com.rgr.fosdem.domain.repository.MockJsonProvider
 import com.rgr.fosdem.domain.repository.MockLocalRepository

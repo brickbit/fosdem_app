@@ -1,9 +1,10 @@
-package com.rgr.fosdem.android.db
+package com.rgr.fosdem.data.dataSource.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.rgr.fosdem.data.dataSource.db.entity.VideoAndroidEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

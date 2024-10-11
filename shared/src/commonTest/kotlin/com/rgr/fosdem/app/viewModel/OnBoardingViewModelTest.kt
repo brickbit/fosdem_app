@@ -2,7 +2,6 @@ package com.rgr.fosdem.app.viewModel
 
 import app.cash.turbine.test
 import com.rgr.fosdem.domain.model.TrackBo
-import com.rgr.fosdem.domain.repository.JsonProvider
 import com.rgr.fosdem.domain.repository.LocalRepository
 import com.rgr.fosdem.domain.repository.MockLocalRepository
 import com.rgr.fosdem.domain.repository.NetworkRepository

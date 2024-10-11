@@ -1,5 +1,5 @@
 package com.snap.fosdem.data.dataSource.db
-
+/*
 import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -13,4 +13,4 @@ fun getDatabaseBuilder(ctx: Context): RoomDatabase.Builder<AppDatabase> {
         context = appContext,
         name = dbFile.absolutePath
     )
-}
+}*/

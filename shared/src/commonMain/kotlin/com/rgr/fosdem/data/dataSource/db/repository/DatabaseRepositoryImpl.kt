@@ -1,7 +1,8 @@
-package com.rgr.fosdem.android.db
+package com.rgr.fosdem.data.dataSource.db.repository
 
-import android.content.Context
-import androidx.room.Room
+import com.rgr.fosdem.data.dataSource.db.AppDatabase
+import com.rgr.fosdem.data.dataSource.db.entity.toBo
+import com.rgr.fosdem.data.dataSource.db.entity.toEntity
 import com.rgr.fosdem.domain.model.SpeakerBo
 import com.rgr.fosdem.domain.model.StandBo
 import com.rgr.fosdem.domain.model.bo.ScheduleBo
@@ -10,16 +11,11 @@ import com.rgr.fosdem.domain.repository.DatabaseRepository
 import kotlinx.coroutines.flow.first
 
 class DatabaseRepositoryImpl(
-    private val context: Context
+    private val db: AppDatabase
 ): DatabaseRepository {
 
-    val db = Room.databaseBuilder(
-        context,
-        AppDatabase::class.java, "fosdem"
-    ).build()
-
     override suspend fun saveSchedule(schedule: List<ScheduleBo>) {
-        db.scheduleDao().save(schedule.map {it.toEntity()})
+        db.scheduleDao().save(schedule.map { it.toEntity()})
     }
 
     override suspend fun getSchedule(): Result<List<ScheduleBo>> {
@@ -33,7 +29,6 @@ class DatabaseRepositoryImpl(
 
     override suspend fun saveVideos(videos: List<VideoBo>) {
         db.videoDao().save(videos.map {it.toEntity()})
-
     }
 
     override suspend fun getVideos(): Result<List<VideoBo>> {

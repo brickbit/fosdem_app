@@ -1,23 +1,21 @@
-package com.rgr.fosdem.android.db
+package com.rgr.fosdem.data.dataSource.db.converter
 
 import androidx.room.TypeConverter
-import com.google.common.reflect.TypeToken
-import com.google.gson.Gson
 import com.rgr.fosdem.domain.model.bo.AttachmentBo
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class ArrayListAttachmentConverter {
 
-    val gson = Gson()
 
     @TypeConverter
     fun fromAttachmentBoArrayList(value: ArrayList<AttachmentBo>): String {
-        return gson.toJson(value)
+        return Json.encodeToString(value)
     }
 
     @TypeConverter
     fun toAttachmentBoArrayList(value: String): ArrayList<AttachmentBo> {
-        val objectType = object : TypeToken<ArrayList<AttachmentBo>>() {}.type
-        return gson.fromJson(value, objectType)
+        return Json.decodeFromString(value)
     }
 
 }

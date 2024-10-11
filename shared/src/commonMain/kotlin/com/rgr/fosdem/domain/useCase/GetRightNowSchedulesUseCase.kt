@@ -3,7 +3,6 @@ package com.rgr.fosdem.domain.useCase
 import com.rgr.fosdem.domain.error.ErrorType
 import com.rgr.fosdem.domain.model.bo.ScheduleBo
 import com.rgr.fosdem.domain.repository.DatabaseRepository
-import com.rgr.fosdem.domain.repository.InMemoryRepository
 
 class GetRightNowSchedulesUseCase(
     private val databaseRepository: DatabaseRepository

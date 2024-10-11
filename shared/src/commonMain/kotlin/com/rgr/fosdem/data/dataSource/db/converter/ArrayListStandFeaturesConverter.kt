@@ -1,23 +1,20 @@
-package com.rgr.fosdem.android.db
+package com.rgr.fosdem.data.dataSource.db.converter
 
 import androidx.room.TypeConverter
-import com.google.common.reflect.TypeToken
-import com.google.gson.Gson
 import com.rgr.fosdem.domain.model.StandFeaturesBo
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class ArrayListStandFeaturesConverter {
 
-    val gson = Gson()
-
     @TypeConverter
     fun fromStandFeaturesBoArrayList(value: ArrayList<StandFeaturesBo>): String {
-        return gson.toJson(value)
+        return Json.encodeToString(value)
     }
 
     @TypeConverter
     fun toStandFeaturesBoArrayList(value: String): ArrayList<StandFeaturesBo> {
-        val objectType = object : TypeToken<ArrayList<StandFeaturesBo>>() {}.type
-        return gson.fromJson(value, objectType)
+        return Json.decodeFromString(value)
     }
 
 }

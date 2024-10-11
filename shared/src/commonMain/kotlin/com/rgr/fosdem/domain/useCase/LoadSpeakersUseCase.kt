@@ -4,12 +4,10 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Document
 import com.rgr.fosdem.domain.error.ErrorType
 import com.rgr.fosdem.domain.model.SpeakerBo
-import com.rgr.fosdem.domain.repository.InMemoryRepository
 import com.rgr.fosdem.domain.repository.NetworkRepository
 
 class LoadSpeakersUseCase(
     private val networkRepository: NetworkRepository,
-    private val inMemoryRepository: InMemoryRepository,
 ) {
 
     suspend operator fun invoke(): Result<Unit> {

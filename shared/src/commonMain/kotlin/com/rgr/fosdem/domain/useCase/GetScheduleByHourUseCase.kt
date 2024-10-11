@@ -2,7 +2,6 @@ package com.rgr.fosdem.domain.useCase
 
 import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.domain.model.TrackBo
-import com.rgr.fosdem.domain.repository.JsonProvider
 import com.rgr.fosdem.domain.repository.NetworkRepository
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -10,7 +9,6 @@ import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
 class GetScheduleByHourUseCase(
-    private val jsonProvider: JsonProvider,
     private val repository: NetworkRepository,
 ) {
     suspend operator fun invoke(instant: Instant): Result<List<EventBo>> {
@@ -25,8 +23,9 @@ class GetScheduleByHourUseCase(
         } else {
             Result.success(getEventsByHour(
                 instant = instant,
-                schedulesData = jsonProvider.getSchedule().getOrNull())!!,
-                )
+                schedulesData = emptyList()//jsonProvider.getSchedule().getOrNull())!!,
+                )!!
+            )
         }
     }
 

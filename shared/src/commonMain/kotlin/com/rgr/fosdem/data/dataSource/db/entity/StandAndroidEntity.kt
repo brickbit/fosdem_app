@@ -1,4 +1,4 @@
-package com.rgr.fosdem.android.db
+package com.rgr.fosdem.data.dataSource.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

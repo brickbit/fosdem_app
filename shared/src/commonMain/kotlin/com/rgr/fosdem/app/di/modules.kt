@@ -1,9 +1,12 @@
 package com.rgr.fosdem.app.di
 
+import androidx.room.RoomDatabase
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.rgr.fosdem.data.dataSource.db.AppDatabase
+import com.rgr.fosdem.data.dataSource.db.repository.DatabaseRepositoryImpl
 import com.rgr.fosdem.data.local.LocalRepositoryImpl
-import com.rgr.fosdem.data.repository.InMemoryRepositoryImpl
 import com.rgr.fosdem.data.repository.NetworkRepositoryImpl
-import com.rgr.fosdem.domain.repository.InMemoryRepository
+import com.rgr.fosdem.domain.repository.DatabaseRepository
 import com.rgr.fosdem.domain.repository.LocalRepository
 import com.rgr.fosdem.domain.repository.NetworkRepository
 import com.rgr.fosdem.domain.useCase.ChangeLanguageUseCase
@@ -47,30 +50,32 @@ import com.rgr.fosdem.domain.useCase.SaveFavouriteTracksShownUseCase
 import com.rgr.fosdem.domain.useCase.SaveOnBoardingUseCase
 import com.rgr.fosdem.domain.useCase.SavePreferredTracksUseCase
 import com.rgr.fosdem.domain.useCase.SetFavouriteUseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single<InMemoryRepository> { InMemoryRepositoryImpl() }
     factory<NetworkRepository> { NetworkRepositoryImpl() }
     factory<LocalRepository> { LocalRepositoryImpl(get()) }
+    single<DatabaseRepository> { DatabaseRepositoryImpl(getRoomDatabase(get())) }
 }
 val useCaseModule = module {
-    single { GetScheduleDataUseCase(get(),get()) }
-    single { GetTracksUseCase(get(), get()) }
+    single { GetScheduleDataUseCase(get()) }
+    single { GetTracksUseCase(get()) }
     single { SaveOnBoardingUseCase(get()) }
     single { SaveFavouriteTracksShownUseCase(get()) }
     single { GetPreferredTracksShownUseCase(get()) }
     single { GetOnBoardingStatusUseCase(get()) }
     single { SavePreferredTracksUseCase(get()) }
     single { GetPreferredTracksUseCase(get()) }
-    single { GetScheduleByTrackUseCase(get(), get()) }
-    single { GetScheduleByHourUseCase(get(), get()) }
-    single { GetScheduleByParameterUseCase(get(), get()) }
-    single { GetHoursUseCase(get(), get()) }
-    single { GetRoomsUseCase(get(), get()) }
+    single { GetScheduleByTrackUseCase(get()) }
+    single { GetScheduleByHourUseCase(get()) }
+    single { GetScheduleByParameterUseCase(get()) }
+    single { GetHoursUseCase(get()) }
+    single { GetRoomsUseCase(get()) }
     single { GetSavedTracksUseCase(get()) }
     single { GetFavouritesEventsUseCase(get()) }
-    single { GetEventByIdUseCase(get(), get()) }
+    single { GetEventByIdUseCase(get()) }
     single { GetLanguageUseCase(get()) }
     single { ChangeLanguageUseCase(get()) }
     single { ManageNotificationPermissionUseCase(get()) }
@@ -80,8 +85,8 @@ val useCaseModule = module {
     single { GetEventsForNotificationUseCase(get()) }
     single { GetNotificationTimeUseCase(get()) }
     single { ManageNotificationTimeUseCase(get()) }
-    single { GetSpeakersUseCase(get(), get()) }
-    single { GetStandsUseCase(get(), get()) }
+    single { GetSpeakersUseCase(get()) }
+    single { GetStandsUseCase(get()) }
     single { IsUpdateNeeded(get(), get()) }
 
     single { LoadSchedulesUseCase(get(), get()) }
@@ -96,5 +101,14 @@ val useCaseModule = module {
     single { GetRightNowSchedulesUseCase(get()) }
     single { SetFavouriteUseCase(get()) }
     single { LoadStandsUseCase(get(), get()) }
-    single { LoadSpeakersUseCase(get(), get()) }
+    single { LoadSpeakersUseCase(get()) }
+}
+
+fun getRoomDatabase(
+    builder: RoomDatabase.Builder<AppDatabase>
+): AppDatabase {
+    return builder
+        .setDriver(BundledSQLiteDriver())
+        .setQueryCoroutineContext(Dispatchers.IO)
+        .build()
 }

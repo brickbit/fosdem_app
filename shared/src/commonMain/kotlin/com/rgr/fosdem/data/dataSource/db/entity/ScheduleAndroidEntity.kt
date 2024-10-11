@@ -1,10 +1,7 @@
-package com.rgr.fosdem.android.db
+package com.rgr.fosdem.data.dataSource.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverter
-import com.google.common.reflect.TypeToken
-import com.google.gson.Gson
 import com.rgr.fosdem.domain.model.bo.AttachmentBo
 import com.rgr.fosdem.domain.model.bo.ScheduleBo
 

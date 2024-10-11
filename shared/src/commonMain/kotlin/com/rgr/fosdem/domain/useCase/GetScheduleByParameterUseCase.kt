@@ -2,11 +2,10 @@ package com.rgr.fosdem.domain.useCase
 
 import com.rgr.fosdem.domain.model.EventBo
 import com.rgr.fosdem.domain.model.TrackBo
-import com.rgr.fosdem.domain.repository.JsonProvider
 import com.rgr.fosdem.domain.repository.NetworkRepository
 
 class GetScheduleByParameterUseCase(
-    private val jsonProvider: JsonProvider,
+    //private val jsonProvider: JsonProvider,
     private val repository: NetworkRepository,
 ) {
     suspend operator fun invoke(
@@ -24,10 +23,11 @@ class GetScheduleByParameterUseCase(
         return if(events != null) {
             Result.success(events.sortedBy { item -> item.startHour })
         } else {
-            val eventsJson = getEventsByParameter(
+            return Result.failure(Error())
+            /*val eventsJson = getEventsByParameter(
                 jsonProvider.getSchedule().getOrNull(), day, hours, track, room
             )
-            Result.success(eventsJson!!.sortedBy { item -> item.startHour })
+            Result.success(eventsJson!!.sortedBy { item -> item.startHour })*/
         }
     }
 
