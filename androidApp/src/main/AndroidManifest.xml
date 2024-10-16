@@ -13,6 +13,8 @@
         android:theme="@style/AppTheme"
         android:label="@string/splash_fosdem"
         android:icon="@mipmap/ic_launcher">
+        <profileable android:shell="true" />
+
         <receiver
             android:name=".service.NotificationService"
             android:enabled="true" />

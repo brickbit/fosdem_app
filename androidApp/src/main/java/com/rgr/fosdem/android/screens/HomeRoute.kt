@@ -318,6 +318,13 @@ fun LazyListScope.favouriteEvents(
     } else {
         if(favourites.isEmpty()) {
             item {
+                EmptySection(
+                    title = stringResource(R.string.main_your_favourites_talks),
+                    description = stringResource(R.string.main_favourite_events),
+                )
+            }
+        } else {
+            item {
                 val context = LocalContext.current
 
                 Row(
@@ -354,16 +361,8 @@ fun LazyListScope.favouriteEvents(
                     }
                 }
             }
-        } else {
-            item {
-                EmptySection(
-                    title = stringResource(R.string.main_your_favourites_talks),
-                    description = stringResource(R.string.main_favourite_events),
-                )
-            }
         }
     }
-
 }
 
 @Composable

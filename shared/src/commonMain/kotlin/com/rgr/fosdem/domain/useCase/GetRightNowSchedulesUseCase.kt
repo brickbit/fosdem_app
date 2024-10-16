@@ -11,7 +11,7 @@ class GetRightNowSchedulesUseCase(
     suspend operator fun invoke(): Result<List<ScheduleBo>> {
         databaseRepository.getSchedule().getOrNull()?.let { data ->
             data.ifEmpty { return Result.failure(ErrorType.EmptyScheduleListError) }
-            return Result.success(data.toMutableList().filter { it.start == "0" }
+            return Result.success(data.toMutableList().filter { it.start == "10:00" }
                 .sortedBy { it.date })
         } ?: return Result.failure(ErrorType.EmptyScheduleListError)
     }

@@ -19,11 +19,18 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -151,7 +158,8 @@ fun EventItem(
 fun NewEventItem(
     modifier: Modifier = Modifier,
     event: ScheduleBo,
-    onClickAction: (String) -> Unit
+    onClickAction: (String) -> Unit,
+    onPressFavourite: (ScheduleBo) -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -175,6 +183,9 @@ fun NewEventItem(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Column(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .height(135.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -196,13 +207,37 @@ fun NewEventItem(
                 .padding(4.dp)
                 .heightIn(80.dp)
         ) {
-            Text(
-                modifier = Modifier.height(80.dp),
-                text = event.title,
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f)
+                        .height(80.dp),
+                    text = event.title,
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
+                )
+                IconButton(
+                    modifier = Modifier.size(40.dp),
+                    onClick = { onPressFavourite(event) },
+                ) {
+                    if (event.favourite) {
+                        Icon(
+                            imageVector = Icons.Default.Favorite,
+                            contentDescription = "",
+                            tint = Color.Black
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Default.FavoriteBorder,
+                            contentDescription = "",
+                            tint = Color.Black
+                        )
+                    }
+                }
+            }
             Column(
                 modifier = Modifier
                     .height(35.dp)

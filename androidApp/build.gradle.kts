@@ -49,6 +49,7 @@ android {
             buildConfigField("String", "location", "\"https://fosdem.org/2024/practical/transportation/\"")
             buildConfigField("String", "scheduleSaturday", "\"https://fosdem.org/2024/schedule/day/saturday/\"")
             buildConfigField("String", "scheduleSunday", "\"https://fosdem.org/2024/schedule/day/sunday/\"")
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
