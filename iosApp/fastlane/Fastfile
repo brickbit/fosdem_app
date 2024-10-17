@@ -1,23 +1,102 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:ios)
 
 platform :ios do
-  desc "Description of what the lane does"
-  lane :custom_lane do
-    # add actions here: https://docs.fastlane.tools/actions
-  end
+  	# BEFORE EXECUTE LANES =====================================================================================================================
+  
+  	#PRE: Source code available
+  	desc "Update Fastlane to the latest version and establish the keychain database"
+  	before_all do
+    		update_fastlane()
+    		config_env
+  	end
+
+	# BEFORE COMPILE  PRIVATE LANES ==============================================================================================================
+  
+  	#PRE: None
+  	desc "Configure the environment and establish the keychain database."
+  	private_lane :config_env do
+    		Dir.chdir(ENV["PROJECT_DIRECTORY"]) do
+      			Actions.lane_context[Actions::SharedValues::ORIGINAL_DEFAULT_KEYCHAIN] = ENV["KEYCHAIN_NAME"]
+    		end
+  	end
+
+	# MANAGE CERTIFICATES LANES ==================================================================================================================
+  	
+	#PRE: None
+  	desc "Manage the app's certificates and app profiles, create, download and renew them"
+  	lane :manage_cerificates do
+		Dir.chdir(ENV["PROJECT_DIRECTORY"]) do
+    			if is_ci
+	      			unlock_keychain(path:ENV["KEYCHAIN_NAME"], password:ENV["KEYCHAIN_PASSWORD"])
+    				sh "security set-keychain-settings -t 3600 -l $HOME/Library/Keychains/#{ENV["KEYCHAIN_NAME"]}"
+    			end
+
+    			match(
+      				git_url: ENV["GIT_URL_CERTIFICATES"],
+				git_user_email: "GIT_USER",
+      				app_identifier: ENV["APP_IDENTIFIER"],
+      				username: ENV["APPLE_ID"],
+      				team_id: ENV["TEAM_ID"],
+      				type: ENV["ENV_TYPE"],
+      				git_branch: ENV["MATCH_GIT_BRANCH"],
+      				force_for_new_devices: true,
+      				keychain_name: File.basename(Actions.lane_context[Actions::SharedValues::ORIGINAL_DEFAULT_KEYCHAIN])
+    			)
+
+    			produce(
+				username: ENV["APPLE_ID_USERNAME"],
+      				app_identifier: ENV["APP_IDENTIFIER"],
+      				app_name: ENV["APP_NAME"],
+      				language: ENV["MAIN_LANGUAGE"],
+      				app_version: ENV["APP_VERSION"],
+      				sku: ENV["APP_IDENTIFIER"],
+      				team_id: ENV["TEAM_ID"] # only necessary when in multiple teams
+    			)
+    
+    			if is_ci
+      				sh "security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV["KEYCHAIN_PASSWORD"]} #{ENV["KEYCHAIN_NAME"]}"
+    			end
+		end
+  	end
+
+
+	# BUILD ADHOC =================================================================================================================================
+
+  	#PRE: manage_certificates lane must be execute at least once before execute this lane
+  	desc "Compile and archive the app, create the adhoc IPA  in the specified folder. Profiles and certificates must be updated"
+  	lane :build_adhoc do 
+    		Dir.chdir(ENV["PROJECT_DIRECTORY"]) do
+
+    		# Build and archive Adhoc
+			match(
+				git_url: ENV["GIT_URL_CERTIFICATES"],
+             			app_identifier: ENV["APP_IDENTIFIER"],
+             			username: ENV["APPLE_ID"],
+            			team_id: ENV["TEAM_ID"],
+             			type: "appstore",
+             			git_branch: ENV["MATCH_GIT_BRANCH"],
+            		 	force_for_new_devices: true,
+             			keychain_name: File.basename(Actions.lane_context[Actions::SharedValues::ORIGINAL_DEFAULT_KEYCHAIN])
+       			)
+    			update_project_team(path: ENV["XCODEPROJ_NAME"], teamid: ENV["TEAM_ID"])
+ 			gym(
+			workspace: ENV["WORKSPACE_NAME"],
+        			scheme: ENV["SCHEME"],
+        			export_team_id: ENV["TEAM_ID"],
+        			configuration: ENV["GYM_CONFIGURATION"],
+        			clean: true,
+        			include_symbols: true,
+        			output_directory: ENV["OUTPUT_IPA"],
+        			output_name: ENV["OUTPUT_NAME_ADHOC"],
+			export_options: {
+    				method: "ad-hoc",
+    				provisioningProfiles: { 
+      					ENV["APP_IDENTIFIER"] => "match AdHoc #{ENV["APP_IDENTIFIER"]}"
+    				}
+  			},
+    			xcargs: "PROVISIONING_PROFILE_SPECIFIER='match AdHoc #{ENV["APP_IDENTIFIER"]}' CODE_SIGN_IDENTITY='iPhone Distribution'"
+		)
+		end
+  	end
+
 end
