@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--SPLASH-->
+    <string name="splash_fosdem">Fosdem</string>
+    <string name="splash_fosdem_logo_description">Logo de Fosdem</string>
+    <!--ON_BOARDING-->
+    <string name="on_boarding_title_1">Tus tracks favoritos siempre a mano</string>
+    <string name="on_boarding_title_2">No te pierdas ninguna de tus charlas favoritas</string>
+    <string name="on_boarding_title_3">Encuentra fácilmente todas las charlas con los filtros</string>
+    <string name="on_boarding_description_1">Selecciona tus tracks preferidos para tenerlos en la página principal. Puedes cambiar tus tracks preferidos desde ajustes</string>
+    <string name="on_boarding_description_2">Marca tu charla como favorita y recibiras una notificación antes de que empiece</string>
+    <string name="on_boarding_description_3">Filtra las charlas por hora, por sala, por track o por día</string>
+    <string name="on_boarding_next_button">Continuar</string>
+    <!--FAVOURITE_TRACKS-->
+    <string name="favourite_tracks_track">Tracks</string>
+    <string name="favourite_tracks_track_subtitle">Selecciona los tracks en los que estés más interesado</string>
+    <string name="favourite_tracks_next_button">Continuar</string>
+    <string name="favourite_error">Error</string>
+    <string name="favourite_skip">Saltar</string>
+    <!--MAIN_TRACKS-->
+    <string name="main_date">Bruselas | 3 &amp; 4 Febrero 2024</string>
+    <string name="main_check_schedule">Consulta ahora la agenda completa</string>
+    <string name="main_right_now">Ahora mismo</string>
+    <string name="main_closest">Más cercanos</string>
+    <string name="main_your_favourite_tracks">Tus tracks favoritos</string>
+    <string name="main_your_favourites_talks">Tus charlas favoritas</string>
+    <string name="main_speakers">Speakers</string>
+    <string name="main_stands">Stands</string>
+    <string name="main_how_to_get">¿Cómo llegar?</string>
+    <string name="main_favourite_events">Tus charlas favoritas aparecerán aquí. Para guardar una charla pulsa el botó Guardar como favorito en su descripción</string>
+    <string name="main_talks_right_now">Aquí aparecerán las charlas que hayan empezado o vayan a empezar</string>
+    <string name="main_select_favourite_tracks">Tus tracks favoritos aparecerán aquí, puedes seleccionarlos desde la pantalla de ajustes</string>
+    <string name="main_saturday_schedule">Agenda del sábado (web)</string>
+    <string name="main_sunday_schedule">Agenda del domingo (web)</string>
+    <string name="main_see_all">ver todas</string>
+    <!--SETTINGS-->
+    <string name="settings">Ajustes</string>
+    <string name="settings_licenses">Licencias de terceros</string>
+    <string name="settings_app_license">Licencia de la app</string>
+    <string name="settings_developed_by">"Desarrollado por "</string>
+    <string name="settings_developer">Roberto García</string>
+    <string name="settings_source_code">" código disponible en "</string>
+    <string name="settings_github">GitHub</string>
+    <string name="settings_developer_tag">linkedIn</string>
+    <string name="settings_github_tag">gitHub</string>
+    <string name="settings_version">Versión %1$s</string>
+    <string name="settings_notification_time">Aviso de notificación</string>
+    <string name="settings_notification_time_selected">%1$s minutos antes</string>
+    <string name="settings_favourite_tracks">Tracks favoritos</string>
+    <string name="settings_minutes_before">%1$s minutos antes</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_notifications">Notificaciones</string>
+    <!--LANGUAGE-->
+    <string name="languages_no_languages">No se han encontrado idiomas</string>
+    <!--TALK-->
+    <string name="talk_speaker_header">%1$s  %2$s/%3$s</string>
+    <string name="talk_remove_alarm">Quitar favorito</string>
+    <string name="talk_set_alarm">Guardar como favorito</string>
+    <!--SCHEDULE-->
+    <string name="schedule">Agenda</string>
+    <string name="schedule_tracks">Tracks</string>
+    <string name="schedule_all">Todos</string>
+    <string name="schedule_hour">Horas</string>
+    <string name="schedule_filter_by">Filtrar por</string>
+    <string name="schedule_day">Día</string>
+    <string name="schedule_room">Sala</string>
+    <string name="schedule_filter">Filtrar</string>
+    <string name="schedule_rooms">Salas</string>
+    <string name="schedule_no_items_found">No se ha encontrado ningún elemento con los parámetros seleccionados</string>
+    <string name="schedule_saturday">Sábado</string>
+    <string name="schedule_sunday">Domingo</string>
+    <!--NOTIFICATION-->
+    <string name="notification_description">La charla empieza en breve en la sala %1$s</string>
+    <!--SPLASH-->
+    <string name="top_bar_fosdem">Fosdem</string>
+    <!--EVENT-->
+    <string name="event_saturday_mini">Sáb</string>
+    <string name="event_sunday_mini">Dom</string>
+    <!--NO CONNECTION-->
+    <string name="no_connection_description">No hay conexión o es de mala calidad. Puede continuar usando la app en modo offline pero no tendrá los datos más recientes</string>
+    <string name="use_offline_mode">Usar modo offline</string>
+</resources>

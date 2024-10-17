@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--SPLASH-->
+    <string name="splash_fosdem">Fosdem</string>
+    <string name="splash_fosdem_logo_description">Logo Fosdem</string>
+    <!--ON_BOARDING-->
+    <string name="on_boarding_title_1">Vos tracks préférés toujours à portée de main</string>
+    <string name="on_boarding_title_2">Ne manquez aucune de vos conférences préférées</string>
+    <string name="on_boarding_title_3">Trouvez facilement toutes les conférences avec des filtres</string>
+    <string name="on_boarding_description_1">Sélectionnez vos tracks préférés pour les avoir sur la page principale. Vous pouvez modifier vos tracks préférées à partir des paramètres</string>
+    <string name="on_boarding_description_2">Marquez votre conférence comme favorite et vous recevrez une notification avant qu\'elle  commence</string>
+    <string name="on_boarding_description_3">Filtrer les conférences par heure, par salle, par piste ou par jour</string>
+    <string name="on_boarding_next_button">Continuer</string>
+    <!--FAVOURITE_TRACKS-->
+    <string name="favourite_tracks_track">Tracks</string>
+    <string name="favourite_tracks_track_subtitle">Sélectionnez les tracks qui vous intéressent le plus</string>
+    <string name="favourite_tracks_next_button">Continuer</string>
+    <string name="favourite_error">Erreur</string>
+    <string name="favourite_skip">Sauter</string>
+    <!--MAIN_TRACKS-->
+    <string name="main_date">Bruxelles | 3 &amp; 4 février 2024</string>
+    <string name="main_check_schedule">Consultez dès maintenant l\'agenda complet</string>
+    <string name="main_right_now">Maintenant</string>
+    <string name="main_closest">Le plus proche</string>
+    <string name="main_your_favourite_tracks">Vos tracks préférés</string>
+    <string name="main_your_favourites_talks">Vos conférences préférées</string>
+    <string name="main_speakers">Speakers</string>
+    <string name="main_stands">Stands</string>
+    <string name="main_how_to_get">Comment arriver?</string>
+    <string name="main_favourite_events">Vos conférences préférées apparaîtront ici. Pour enregistrer une discussion, appuyez sur le bouton Enregistrer comme favori dans sa description</string>
+    <string name="main_talks_right_now">Les discussions qui ont commencé ou vont commencer apparaîtront ici</string>
+    <string name="main_select_favourite_tracks">Vos morceaux préférés apparaîtront ici, vous pouvez les sélectionner depuis l\'écran des paramètres</string>
+    <string name="main_saturday_schedule">Agenda du samedi (web)</string>
+    <string name="main_sunday_schedule">Agenda du dimanche (web)</string>
+    <string name="main_see_all">voir tout</string>
+    <!--SETTINGS-->
+    <string name="settings">Paramètres</string>
+    <string name="settings_licenses">Licences tierces</string>
+    <string name="settings_app_license">Licence d\'application</string>
+    <string name="settings_developed_by">"Développé par "</string>
+    <string name="settings_developer">Roberto García</string>
+    <string name="settings_source_code">" code disponible dans "</string>
+    <string name="settings_github">GitHub</string>
+    <string name="settings_developer_tag">linkedIn</string>
+    <string name="settings_github_tag">gitHub</string>
+    <string name="settings_version">Version %1$s</string>
+    <string name="settings_notification_time">Avis de notification</string>
+    <string name="settings_notification_time_selected">%1$s minutes avant</string>
+    <string name="settings_favourite_tracks">Tracks préférées</string>
+    <string name="settings_minutes_before">%1$s minutes avant</string>
+    <string name="settings_language">langage</string>
+    <string name="settings_notifications">Notifications</string>
+    <!--LANGUAGE-->
+    <string name="languages_no_languages">Aucune langue trouvée</string>
+    <!--TALK-->
+    <string name="talk_speaker_header">%1$s  %2$s/%3$s</string>
+    <string name="talk_remove_alarm">Supprimer le favori</string>
+    <string name="talk_set_alarm">Enregistrer comme favori</string>
+    <!--SCHEDULE-->
+    <string name="schedule">L \'agenda</string>
+    <string name="schedule_tracks">Tracks</string>
+    <string name="schedule_all">Tous</string>
+    <string name="schedule_hour">Heures</string>
+    <string name="schedule_filter_by">Filtrer par</string>
+    <string name="schedule_day">Jour</string>
+    <string name="schedule_room">Salle</string>
+    <string name="schedule_filter">Filtre</string>
+    <string name="schedule_rooms">Salle</string>
+    <string name="schedule_no_items_found">Aucun élément trouvé avec les paramètres sélectionnés</string>
+    <string name="schedule_saturday">Samedi</string>
+    <string name="schedule_sunday">Dimanche</string>
+    <!--NOTIFICATION-->
+    <string name="notification_description">La conférence commence bientôt dans la salle %1$s</string>
+    <!--SPLASH-->
+    <string name="top_bar_fosdem">Fosdem</string>
+    <!--EVENT-->
+    <string name="event_saturday_mini">Sam</string>
+    <string name="event_sunday_mini">Dim</string>
+    <!--NO CONNECTION-->
+    <string name="no_connection_description">Il n\'y a pas de connexion ou elle est de mauvaise qualité. Vous pouvez continuer à utiliser l\'application en mode offline mais vous n\'aurez pas les données les plus récentes</string>
+    <string name="use_offline_mode">Utiliser le mode offline</string>
+</resources>

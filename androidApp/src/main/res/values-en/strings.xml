@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--SPLASH-->
+    <string name="splash_fosdem">Fosdem</string>
+    <string name="splash_fosdem_logo_description">Fosdem logo</string>
+    <!--ON_BOARDING-->
+    <string name="on_boarding_title_1">Always have your favorite tracks on hand</string>
+    <string name="on_boarding_title_2">Don\'t miss any of your favorite talks</string>
+    <string name="on_boarding_title_3">Easily find all talks with filters</string>
+    <string name="on_boarding_description_1">Select your favorite tracks to see them on the main page. You can change your favorite tracks from the settings</string>
+    <string name="on_boarding_description_2">Mark your talk as a favorite and you will receive a notification before it starts</string>
+    <string name="on_boarding_description_3">Filter talks by time, by room, by track or by day</string>
+    <string name="on_boarding_next_button">Next</string>
+    <!--FAVOURITE_TRACKS-->
+    <string name="favourite_tracks_track">Tracks</string>
+    <string name="favourite_tracks_track_subtitle">Select the tracks you are most interested in</string>
+    <string name="favourite_tracks_next_button">Next</string>
+    <string name="favourite_error">Error</string>
+    <string name="favourite_skip">Skip</string>
+    <!--MAIN_TRACKS-->
+    <string name="main_date">Brussels | 3 &amp; 4 February 2024</string>
+    <string name="main_check_schedule">Check the complete schedule now</string>
+    <string name="main_right_now">Right now</string>
+    <string name="main_closest">Closest</string>
+    <string name="main_your_favourite_tracks">Your favorite tracks</string>
+    <string name="main_your_favourites_talks">Your favorite talks</string>
+    <string name="main_speakers">Speakers</string>
+    <string name="main_stands">Stands</string>
+    <string name="main_how_to_get">How to get there?</string>
+    <string name="main_favourite_events">Your favorite talks will appear here. To save a talk, press the Save as favorite button in its description</string>
+    <string name="main_talks_right_now">The talks that have started or are going to start will appear here</string>
+    <string name="main_select_favourite_tracks">Your favorite tracks will appear here, you can select them from the settings screen</string>
+    <string name="main_saturday_schedule">Saturday schedule (web)</string>
+    <string name="main_sunday_schedule">Sunday schedule (web)</string>
+    <string name="main_see_all">see all</string>
+    <!--SETTINGS-->
+    <string name="settings">Settings</string>
+    <string name="settings_licenses">Third Party Licenses</string>
+    <string name="settings_app_license">App license</string>
+    <string name="settings_developed_by">"Developed by "</string>
+    <string name="settings_developer">Roberto García</string>
+    <string name="settings_source_code">" code available in "</string>
+    <string name="settings_github">GitHub</string>
+    <string name="settings_developer_tag">linkedIn</string>
+    <string name="settings_github_tag">gitHub</string>
+    <string name="settings_version">Version %1$s</string>
+    <string name="settings_notification_time">Notification notice</string>
+    <string name="settings_notification_time_selected">%1$s minutes before</string>
+    <string name="settings_favourite_tracks">Favorite tracks</string>
+    <string name="settings_minutes_before">%1$s minutes before</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_notifications">Notifications</string>
+    <!--LANGUAGE-->
+    <string name="languages_no_languages">No languages found</string>
+    <!--TALK-->
+    <string name="talk_speaker_header">%1$s  %2$s/%3$s</string>
+    <string name="talk_remove_alarm">Remove favorite</string>
+    <string name="talk_set_alarm">Save as favorite</string>
+    <!--SCHEDULE-->
+    <string name="schedule">Schedule</string>
+    <string name="schedule_tracks">Tracks</string>
+    <string name="schedule_all">All</string>
+    <string name="schedule_hour">Hours</string>
+    <string name="schedule_filter_by">Filter by</string>
+    <string name="schedule_day">Day</string>
+    <string name="schedule_room">Room</string>
+    <string name="schedule_filter">Filter</string>
+    <string name="schedule_rooms">Rooms</string>
+    <string name="schedule_no_items_found">No item found with the selected parameters</string>
+    <string name="schedule_saturday">Saturday</string>
+    <string name="schedule_sunday">Sunday</string>
+    <!--NOTIFICATION-->
+    <string name="notification_description">The talk starts shortly in room %1$s</string>
+    <!--SPLASH-->
+    <string name="top_bar_fosdem">Fosdem</string>
+    <!--EVENT-->
+    <string name="event_saturday_mini">Sat</string>
+    <string name="event_sunday_mini">Sun</string>
+    <!--NO CONNECTION-->
+    <string name="no_connection_description">There is no connection or it is of poor quality. You can continue using the app in offline mode but you will not have the most recent data</string>
+    <string name="use_offline_mode">Use offline mode</string>
+</resources>
