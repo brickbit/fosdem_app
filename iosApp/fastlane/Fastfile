@@ -37,20 +37,21 @@ platform :ios do
 
   desc "Release a new build to Apple Store"
   lane :release_beta do
+    puts "*** #{Dir.pwd} ***"
+    commit = last_git_commit
+    puts "*** Starting iOS release for commit(#{commit[:abbreviated_commit_hash]}) ***"
+    #read api key from app_store_connect_api_key lane variable
+    api_key = lane_context[SharedValues::APP_STORE_CONNECT_API_KEY]
+    #sync certificates and profiles using match
+    sync_code_signing(
+      api_key: api_key,
+      git_url: ENV["GIT_URL_CERTIFICATES"],
+      app_identifier: ENV["APP_IDENTIFIER"],
+      type: "appstore",
+      readonly: true,
+    )
+    puts "*** Build and sign iOS app release ***"
     Dir.chdir('/Users/rupestre/Projects/fosdem_app/iosApp') do
-      commit = last_git_commit
-      puts "*** Starting iOS release for commit(#{commit[:abbreviated_commit_hash]}) ***"
-      #read api key from app_store_connect_api_key lane variable
-      api_key = lane_context[SharedValues::APP_STORE_CONNECT_API_KEY]
-      #sync certificates and profiles using match
-      sync_code_signing(
-        api_key: api_key,
-        git_url: ENV["GIT_URL_CERTIFICATES"],
-        app_identifier: ENV["APP_IDENTIFIER"],
-        type: "appstore",
-        readonly: true,
-      )
-      puts "*** Build and sign iOS app release ***"
       puts "*** #{Dir.pwd} ***"
       gym(
         scheme: ENV["SCHEME"],
