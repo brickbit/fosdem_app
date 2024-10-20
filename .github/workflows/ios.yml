@@ -1,0 +1,43 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ "develop","main" ]
+  pull_request:
+    branches: [ "develop","main" ]
+
+jobs:
+  build-and-deploy-ios:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: iosApp
+    steps:
+      - name: Set up git and fetch all history for all branches and tags
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "2.7"
+      - name: Bundle install for iOS Gemfile
+        timeout-minutes: 5
+        run: bundle install
+      - name: Build and Deploy to TestFlight
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.GIT_PAT_TOKEN }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+          GIT_URL_CERTIFICATES: ${{ secrets.GIT_URL_CERTIFICATES }}
+          APP_IDENTIFIER: ${{ secrets.APP_IDENTIFIER }}
+          WORKSPACE_NAME: ${{ secrets.WORKSPACE_NAME }}
+          SCHEME: ${{ secrets.SCHEME }}
+          TEAM_ID: ${{ secrets.SCHEME }}
+          GYM_CONFIGURATION: ${{ secrets.GYM_CONFIGURATION }}
+          OUTPUT_IPA: ${{ secrets.OUTPUT_IPA }}
+          OUTPUT_NAME_APPSTORE: ${{ secrets.OUTPUT_NAME_APPSTORE }}
+        run: |
+          bundle exec fastlane release_beta

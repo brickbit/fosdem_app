@@ -1,102 +1,70 @@
 default_platform(:ios)
 
 platform :ios do
-  	# BEFORE EXECUTE LANES =====================================================================================================================
-  
-  	#PRE: Source code available
-  	desc "Update Fastlane to the latest version and establish the keychain database"
-  	before_all do
-    		update_fastlane()
-    		config_env
-  	end
 
-	# BEFORE COMPILE  PRIVATE LANES ==============================================================================================================
-  
-  	#PRE: None
-  	desc "Configure the environment and establish the keychain database."
-  	private_lane :config_env do
-    		Dir.chdir(ENV["PROJECT_DIRECTORY"]) do
-      			Actions.lane_context[Actions::SharedValues::ORIGINAL_DEFAULT_KEYCHAIN] = ENV["KEYCHAIN_NAME"]
-    		end
-  	end
+  def bump_build_number()
+    latest_build_number = latest_testflight_build_number(initial_build_number: 0)
+    return (latest_build_number + 1)
+  end
 
-	# MANAGE CERTIFICATES LANES ==================================================================================================================
-  	
-	#PRE: None
-  	desc "Manage the app's certificates and app profiles, create, download and renew them"
-  	lane :manage_cerificates do
-		Dir.chdir(ENV["PROJECT_DIRECTORY"]) do
-    			if is_ci
-	      			unlock_keychain(path:ENV["KEYCHAIN_NAME"], password:ENV["KEYCHAIN_PASSWORD"])
-    				sh "security set-keychain-settings -t 3600 -l $HOME/Library/Keychains/#{ENV["KEYCHAIN_NAME"]}"
-    			end
+  def get_version_name()
+    version_name = lane_context[SharedValues::LATEST_TESTFLIGHT_VERSION]
 
-    			match(
-      				git_url: ENV["GIT_URL_CERTIFICATES"],
-				git_user_email: "GIT_USER",
-      				app_identifier: ENV["APP_IDENTIFIER"],
-      				username: ENV["APPLE_ID"],
-      				team_id: ENV["TEAM_ID"],
-      				type: ENV["ENV_TYPE"],
-      				git_branch: ENV["MATCH_GIT_BRANCH"],
-      				force_for_new_devices: true,
-      				keychain_name: File.basename(Actions.lane_context[Actions::SharedValues::ORIGINAL_DEFAULT_KEYCHAIN])
-    			)
+    if version_name.empty?
+      puts "*** Version name is empty, add version 1.0.0 ***"
+      version_name = "1.0.0"
+    end
 
-    			produce(
-				username: ENV["APPLE_ID_USERNAME"],
-      				app_identifier: ENV["APP_IDENTIFIER"],
-      				app_name: ENV["APP_NAME"],
-      				language: ENV["MAIN_LANGUAGE"],
-      				app_version: ENV["APP_VERSION"],
-      				sku: ENV["APP_IDENTIFIER"],
-      				team_id: ENV["TEAM_ID"] # only necessary when in multiple teams
-    			)
-    
-    			if is_ci
-      				sh "security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k #{ENV["KEYCHAIN_PASSWORD"]} #{ENV["KEYCHAIN_NAME"]}"
-    			end
-		end
-  	end
+    return version_name
+  end
 
 
-	# BUILD ADHOC =================================================================================================================================
 
-  	#PRE: manage_certificates lane must be execute at least once before execute this lane
-  	desc "Compile and archive the app, create the adhoc IPA  in the specified folder. Profiles and certificates must be updated"
-  	lane :build_adhoc do 
-    		Dir.chdir(ENV["PROJECT_DIRECTORY"]) do
+  before_all do
+    load_asc_api_token
+  end
 
-    		# Build and archive Adhoc
-			match(
-				git_url: ENV["GIT_URL_CERTIFICATES"],
-             			app_identifier: ENV["APP_IDENTIFIER"],
-             			username: ENV["APPLE_ID"],
-            			team_id: ENV["TEAM_ID"],
-             			type: "appstore",
-             			git_branch: ENV["MATCH_GIT_BRANCH"],
-            		 	force_for_new_devices: true,
-             			keychain_name: File.basename(Actions.lane_context[Actions::SharedValues::ORIGINAL_DEFAULT_KEYCHAIN])
-       			)
-    			update_project_team(path: ENV["XCODEPROJ_NAME"], teamid: ENV["TEAM_ID"])
- 			gym(
-			workspace: ENV["WORKSPACE_NAME"],
-        			scheme: ENV["SCHEME"],
-        			export_team_id: ENV["TEAM_ID"],
-        			configuration: ENV["GYM_CONFIGURATION"],
-        			clean: true,
-        			include_symbols: true,
-        			output_directory: ENV["OUTPUT_IPA"],
-        			output_name: ENV["OUTPUT_NAME_ADHOC"],
-			export_options: {
-    				method: "ad-hoc",
-    				provisioningProfiles: { 
-      					ENV["APP_IDENTIFIER"] => "match AdHoc #{ENV["APP_IDENTIFIER"]}"
-    				}
-  			},
-    			xcargs: "PROVISIONING_PROFILE_SPECIFIER='match AdHoc #{ENV["APP_IDENTIFIER"]}' CODE_SIGN_IDENTITY='iPhone Distribution'"
-		)
-		end
-  	end
+  desc "Load the App Store Connect API token"
+  lane :load_asc_api_token do
+    app_store_connect_api_key(
+      key_id: ENV["ASC_KEY_ID"],
+      issuer_id: ENV["ASC_ISSUER_ID"],
+      key_content: ENV["ASC_KEY_P8"],
+      is_key_content_base64: true,
+      in_house: false
+    )
+  end
+
+  desc "Release a new build to Apple Store"
+  lane :release_beta do
+    Dir.chdir('/Users/rupestre/Projects/fosdem_app/iosApp') do
+      commit = last_git_commit
+      puts "*** Starting iOS release for commit(#{commit[:abbreviated_commit_hash]}) ***"
+      #read api key from app_store_connect_api_key lane variable
+      api_key = lane_context[SharedValues::APP_STORE_CONNECT_API_KEY]
+      #sync certificates and profiles using match
+      sync_code_signing(
+        api_key: api_key,
+        git_url: ENV["GIT_URL_CERTIFICATES"],
+        app_identifier: ENV["APP_IDENTIFIER"],
+        type: "appstore",
+        readonly: true,
+      )
+      puts "*** Build and sign iOS app release ***"
+      puts "*** #{Dir.pwd} ***"
+      gym(
+        scheme: ENV["SCHEME"],
+        export_team_id: ENV["TEAM_ID"],
+        configuration: ENV["GYM_CONFIGURATION"],
+        clean: true,
+        include_symbols: true,
+        output_directory: ENV["OUTPUT_IPA"],
+        output_name: ENV["OUTPUT_NAME_APPSTORE"],
+        project: ENV["WORKSPACE_NAME"],
+      )
+    end
+    #puts "*** Upload app to testflight ***"
+    #upload_to_testflight(api_key: api_key)
+  end
 
 end

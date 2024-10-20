@@ -13,3 +13,13 @@ androidApp/release/
 *.klib
 
 .kotlin/sessions/
+
+iosApp/iosApp 2024-10-20 08-54-41/iosApp 20-10-24, 08.54.xcarchive/dSYMs/iosApp.app.dSYM/Contents/Resources/Relocations/aarch64/
+
+iosApp/iosApp 2024-10-20 08-54-41/iosApp 20-10-24, 08.54.xcarchive/dSYMs/iosApp.app.dSYM/Contents/Resources/DWARF/
+
+iosApp/iosApp 2024-10-20 08-54-41/iosApp 20-10-24, 08.54.xcarchive/dSYMs/iosApp.app.dSYM/Contents/
+
+*.ipa
+
+*.zip
